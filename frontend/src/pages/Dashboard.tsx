@@ -79,7 +79,6 @@ const Dashboard: React.FC = () => {
       </header>
 
       <div className="w-full max-w-7xl mx-auto px-5">
-        {/* Stats Grid */}
         {stats && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
             <div className="stat-card">
