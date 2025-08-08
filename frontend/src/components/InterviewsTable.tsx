@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { type Interview, apiService } from "../services/api";
+import {
+  type Interview,
+  InterviewType,
+  InterviewStatus,
+  apiService,
+} from "../services/api";
 
 const InterviewsTable: React.FC = () => {
   const [interviews, setInterviews] = useState<Interview[]>([]);
@@ -7,7 +12,9 @@ const InterviewsTable: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [sortField, setSortField] = useState<keyof Interview>("date");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
-  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [filterStatus, setFilterStatus] = useState<InterviewStatus | "all">(
+    "all"
+  );
 
   useEffect(() => {
     loadInterviews();
@@ -48,32 +55,32 @@ const InterviewsTable: React.FC = () => {
     }
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: InterviewStatus) => {
     switch (status) {
-      case "completed":
+      case InterviewStatus.Completed:
         return "bg-green-100 text-green-800";
-      case "scheduled":
+      case InterviewStatus.Scheduled:
         return "bg-blue-100 text-blue-800";
-      case "pending":
+      case InterviewStatus.Pending:
         return "bg-yellow-100 text-yellow-800";
-      case "cancelled":
+      case InterviewStatus.Cancelled:
         return "bg-red-100 text-red-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
   };
 
-  const getTypeIcon = (type: string) => {
+  const getTypeIcon = (type: InterviewType) => {
     switch (type) {
-      case "phone":
+      case InterviewType.Phone:
         return "📞";
-      case "video":
+      case InterviewType.Video:
         return "📹";
-      case "onsite":
+      case InterviewType.Onsite:
         return "🏢";
-      case "technical":
+      case InterviewType.Technical:
         return "💻";
-      case "behavioral":
+      case InterviewType.Behavioral:
         return "🤝";
       default:
         return "📋";
@@ -104,6 +111,9 @@ const InterviewsTable: React.FC = () => {
           : bValue.localeCompare(aValue);
       }
 
+      if (aValue === undefined && bValue === undefined) return 0;
+      if (aValue === undefined) return sortDirection === "asc" ? 1 : -1;
+      if (bValue === undefined) return sortDirection === "asc" ? -1 : 1;
       if (aValue < bValue) return sortDirection === "asc" ? -1 : 1;
       if (aValue > bValue) return sortDirection === "asc" ? 1 : -1;
       return 0;
@@ -142,14 +152,16 @@ const InterviewsTable: React.FC = () => {
           <div className="flex gap-2">
             <select
               value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
+              onChange={(e) =>
+                setFilterStatus(e.target.value as InterviewStatus | "all")
+              }
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="all">All Status</option>
-              <option value="scheduled">Scheduled</option>
-              <option value="completed">Completed</option>
-              <option value="pending">Pending</option>
-              <option value="cancelled">Cancelled</option>
+              <option value={InterviewStatus.Scheduled}>Scheduled</option>
+              <option value={InterviewStatus.Completed}>Completed</option>
+              <option value={InterviewStatus.Pending}>Pending</option>
+              <option value={InterviewStatus.Cancelled}>Cancelled</option>
             </select>
             <button
               onClick={loadInterviews}

@@ -1,12 +1,27 @@
 const API_BASE_URL = "http://localhost:3000";
 
+export enum InterviewStatus {
+  Scheduled = "scheduled",
+  Completed = "completed",
+  Cancelled = "cancelled",
+  Pending = "pending",
+}
+
+export enum InterviewType {
+  Phone = "phone",
+  Video = "video",
+  Onsite = "onsite",
+  Technical = "technical",
+  Behavioral = "behavioral",
+}
+
 export interface Interview {
   id: string;
   company: string;
   position: string;
   date: string;
-  status: "scheduled" | "completed" | "cancelled" | "pending";
-  type: "phone" | "video" | "onsite" | "technical" | "behavioral";
+  status: InterviewStatus;
+  type: InterviewType;
   interviewer?: string;
   notes?: string;
   feedback?: string;
@@ -20,8 +35,8 @@ export interface CreateInterviewDto {
   company: string;
   position: string;
   date: string;
-  status: "scheduled" | "completed" | "cancelled" | "pending";
-  type: "phone" | "video" | "onsite" | "technical" | "behavioral";
+  status: InterviewStatus;
+  type: InterviewType;
   interviewer?: string;
   notes?: string;
   feedback?: string;
@@ -33,8 +48,8 @@ export interface UpdateInterviewDto {
   company?: string;
   position?: string;
   date?: string;
-  status?: "scheduled" | "completed" | "cancelled" | "pending";
-  type?: "phone" | "video" | "onsite" | "technical" | "behavioral";
+  status?: InterviewStatus;
+  type?: InterviewType;
   interviewer?: string;
   notes?: string;
   feedback?: string;
