@@ -5,7 +5,7 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-500 via-primary-600 to-secondary-500 w-full overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden bg-gradient-to-r from-primary-800 to-indigo-700">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white/5 rounded-full blur-3xl"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
@@ -15,10 +15,10 @@ const Home: React.FC = () => {
       <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl mx-auto px-5 py-20 min-h-[90vh]">
         <div className="flex-1 text-white max-w-2xl mb-12 lg:mb-0">
           <div className="text-center lg:text-left">
-            <h1 className="text-5xl lg:text-7xl text-gray-700 font-bold mb-6 leading-tight">
+            <h1 className="text-5xl lg:text-7xl text-white-700 font-bold mb-6 leading-tight">
               Interview Tracker
             </h1>
-            <p className="text-lg lg:text-2xl mb-8 opacity-90 text-gray-700 leading-relaxed font-light">
+            <p className="text-lg lg:text-2xl mb-8 opacity-90 text-white-700 leading-relaxed font-light">
               Master your interview process with intelligent tracking,
               <span className="font-semibold text-yellow-300">
                 {" "}
@@ -31,8 +31,11 @@ const Home: React.FC = () => {
               </span>
             </p>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center lg:justify-start mb-12">
-              <Link to="/dashboard" className="btn-primary group">
-                <span className="flex text-gray-700 items-center justify-center gap-2">
+              <Link
+                to="/dashboard"
+                className="btn-primary group bg-primary-500 hover:bg-primary-600 text-white-700 px-6 py-3 rounded-lg"
+              >
+                <span className="flex text-white-700 items-center justify-center gap-2">
                   Get Started
                   <svg
                     className="w-5 h-5 transition-transform group-hover:translate-x-1"
@@ -49,7 +52,7 @@ const Home: React.FC = () => {
                   </svg>
                 </span>
               </Link>
-              <button className="btn-secondary group text-gray-700">
+              <button className="btn-secondary group text-white-700">
                 <span className="flex items-center justify-center gap-2">
                   Watch Demo
                   <svg
@@ -94,10 +97,10 @@ const Home: React.FC = () => {
         </div>
 
         <div className="flex-1 flex justify-center items-center w-full">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 max-w-4xl w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 max-w-4xl w-full text-white">
             <div className="feature-card text-center">
               <div className="text-4xl lg:text-5xl mb-4">📊</div>
-              <h3 className="text-lg lg:text-xl mb-3 font-semibold">
+              <h3 className="text-lg lg:text-xl mb-3  font-semibold">
                 Smart Analytics
               </h3>
               <p className="text-sm opacity-90 leading-relaxed">
@@ -226,7 +229,7 @@ const Home: React.FC = () => {
 
           {/* CTA Section */}
           <div className="text-center mt-12 lg:mt-16">
-            <div className="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-3xl p-8 lg:p-12 text-white">
+            <div className="bg-gradient-to-r from-primary-600 to-indigo-900 rounded-3xl p-8 lg:p-12 text-white">
               <h3 className="text-3xl lg:text-4xl font-bold mb-4">
                 Ready to Transform Your Interview Success?
               </h3>

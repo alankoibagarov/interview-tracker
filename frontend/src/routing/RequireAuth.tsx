@@ -11,7 +11,7 @@ const RequireAuth = ({ children }: { children: ReactNode }) => {
   const location = useLocation();
   if (!isAuthenticated()) {
     // Redirect to home or login page
-    return <Navigate to="/" state={{ from: location }} replace />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
   return <>{children}</>;
 };

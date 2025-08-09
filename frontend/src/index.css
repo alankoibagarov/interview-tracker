@@ -1,2 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
 @import "tailwindcss";
+
+@theme {
+  --color-primary-50: #f0f4ff;
+  --color-primary-100: #e0e9ff;
+  --color-primary-200: #c7d6ff;
+  --color-primary-300: #a5b8ff;
+  --color-primary-400: #8191ff;
+  --color-primary-500: #667eea;
+  --color-primary-600: #5a67d8;
+  --color-primary-700: #4c51bf;
+  --color-primary-800: #434190;
+  --color-primary-900: #3c366b;
+  --color-secondary: blue;
+  --font-inter: "Inter", sans-serif;
+}
