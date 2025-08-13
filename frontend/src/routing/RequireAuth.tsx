@@ -4,7 +4,7 @@ import { Navigate, useLocation } from "react-router-dom";
 // Dummy auth check. Replace with real logic as needed.
 const isAuthenticated = () => {
   // For demo: check localStorage for a token or flag
-  return !!localStorage.getItem("authToken");
+  return !!localStorage.getItem("token");
 };
 
 const RequireAuth = ({ children }: { children: ReactNode }) => {

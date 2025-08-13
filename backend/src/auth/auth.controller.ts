@@ -1,4 +1,10 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  BadRequestException,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -12,13 +18,13 @@ export class AuthController {
       body.password,
     );
     if (!user) {
-      return { success: false, message: 'Invalid credentials' };
+      throw new BadRequestException('Invalid credentials');
     }
     const token = this.authService.generateToken({
       userId: user.id,
       username: user.username,
     });
-    return { success: true, token };
+    return { success: true, token, statusCode: 200 };
   }
 
   @Get('users')

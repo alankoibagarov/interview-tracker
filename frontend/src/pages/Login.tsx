@@ -1,19 +1,21 @@
 import { useState } from "react";
 import bgImage from "../assets/backgrounds/glenn-carstens-peters-npxXWgQ33ZQ-unsplash.jpg";
+import { authService } from "../services/authApi";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const navigate = useNavigate();
+
   const handleLogin = async () => {
     try {
-      // Simulate login logic
-      if (username === "admin" && password === "password") {
-        // Redirect or perform login success actions
-        console.log("Login successful");
-      } else {
-        throw new Error("Invalid credentials");
+      const res = await authService.login(username, password);
+      if (res.success) {
+        localStorage.setItem("token", res.token);
+        navigate("/dashboard");
       }
     } catch (err) {
       console.error("Login error:", err);

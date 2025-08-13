@@ -1,8 +1,9 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Navigation: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <nav className="bg-white/95 backdrop-blur-md border-b border-white/20 fixed top-0 left-0 right-0 z-50 shadow-lg">
@@ -35,6 +36,16 @@ const Navigation: React.FC = () => {
           >
             Dashboard
           </Link>
+          <button
+            className={`px-4 py-2.5 rounded-lg font-medium transition-all 
+              duration-300 relative text-gray-700 hover:text-primary-500 hover:bg-primary-50`}
+            onClick={() => {
+              localStorage.removeItem("token");
+              navigate("/login");
+            }}
+          >
+            Logout
+          </button>
         </div>
       </div>
     </nav>

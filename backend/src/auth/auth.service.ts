@@ -26,8 +26,9 @@ const users: User[] = [
 export class AuthService {
   private readonly jwtSecret = process.env.JWT_SECRET || 'changeme';
   private readonly jwtExpiresIn = '1d';
+  private readonly jwtService: JwtService = new JwtService();
 
-  constructor(private jwtService: JwtService) {}
+  constructor() {}
 
   async validateUser(username: string, password: string): Promise<User | null> {
     const user = users.find((u) => u.username === username);

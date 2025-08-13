@@ -3,8 +3,8 @@ import {
   type Interview,
   InterviewType,
   InterviewStatus,
-  apiService,
-} from "../services/api";
+  interviewsApi,
+} from "../services/interviewsApi";
 
 const InterviewsTable: React.FC = () => {
   const [interviews, setInterviews] = useState<Interview[]>([]);
@@ -23,7 +23,7 @@ const InterviewsTable: React.FC = () => {
   const loadInterviews = async () => {
     try {
       setLoading(true);
-      const data = await apiService.getInterviews();
+      const data = await interviewsApi.getInterviews();
       setInterviews(data);
       setError(null);
     } catch (err) {
@@ -46,7 +46,7 @@ const InterviewsTable: React.FC = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this interview?")) {
       try {
-        await apiService.deleteInterview(id);
+        await interviewsApi.deleteInterview(id);
         setInterviews(interviews.filter((interview) => interview.id !== id));
       } catch (err) {
         setError("Failed to delete interview");

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { apiService } from "../services/api";
-import type { InterviewStats } from "../services/api";
+import { interviewsApi } from "../services/interviewsApi";
+import type { InterviewStats } from "../services/interviewsApi";
 import InterviewsTable from "../components/InterviewsTable";
 
 const Dashboard: React.FC = () => {
@@ -17,8 +17,8 @@ const Dashboard: React.FC = () => {
     try {
       setLoading(true);
       const [statsData, activityData] = await Promise.all([
-        apiService.getInterviewStats(),
-        apiService.getRecentActivity(),
+        interviewsApi.getInterviewStats(),
+        interviewsApi.getRecentActivity(),
       ]);
       setStats(statsData);
       setRecentActivity(activityData);
@@ -70,7 +70,7 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-500 to-secondary-500 py-5 w-full">
+    <div className="min-h-screen bg-gradient-to-br from-primary-500 to-secondary-500 pb-5 pt-[7rem] w-full">
       <header className="text-center text-white mb-10">
         <h1 className="text-5xl font-bold mb-3">Interview Tracker Dashboard</h1>
         <p className="text-xl opacity-90">
@@ -80,7 +80,7 @@ const Dashboard: React.FC = () => {
 
       <div className="w-full max-w-7xl mx-auto px-5">
         {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-10 bg-white rounded-2xl p-8 mb-10 shadow-xl">
             <div className="stat-card">
               <h3 className="text-gray-600 text-base mb-4 font-semibold">
                 Total Interviews
