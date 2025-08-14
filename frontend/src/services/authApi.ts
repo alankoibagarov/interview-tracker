@@ -1,9 +1,7 @@
 import { request, ResponseCodes } from "./api";
 
 export interface User {
-  id: string;
   username: string;
-  passwordHash: string;
 }
 
 interface LoginResponse {

@@ -2,11 +2,13 @@ import { useState } from "react";
 import bgImage from "../assets/backgrounds/glenn-carstens-peters-npxXWgQ33ZQ-unsplash.jpg";
 import { authService } from "../services/authApi";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "../store/userStore";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const setUser = useUserStore((state) => state.setUser);
 
   const navigate = useNavigate();
 
@@ -15,6 +17,7 @@ const Login = () => {
       const res = await authService.login(username, password);
       if (res.success) {
         localStorage.setItem("token", res.token);
+        setUser({ username });
         navigate("/dashboard");
       }
     } catch (err) {

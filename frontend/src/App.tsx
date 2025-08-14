@@ -1,25 +1,33 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-import Navigation from "./components/Navigation";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import RequireAuth from "./routing/RequireAuth";
 import "./App.css";
 import Login from "./pages/Login";
+import DashboardLayout from "./layouts/DashboardLayout";
+import HomeLayout from "./layouts/HomeLayout";
 
 function App() {
   return (
     <Router>
       <div className="App font-inter">
-        <Navigation />
         <main className="main-content">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route
+              path="/"
+              element={
+                <HomeLayout>
+                  <Home />
+                </HomeLayout>
+              }
+            />
             <Route
               path="/dashboard"
               element={
                 <RequireAuth>
-                  <Dashboard />
+                  <DashboardLayout>
+                    <Dashboard />
+                  </DashboardLayout>
                 </RequireAuth>
               }
             />
