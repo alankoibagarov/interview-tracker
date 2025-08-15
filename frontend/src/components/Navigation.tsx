@@ -34,7 +34,7 @@ const Navigation: React.FC<Props> = ({ type }) => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
         scrolled || type === NavigationType.DASHBOARD
           ? "bg-white/95 backdrop-blur-md border-b border-white/20 shadow-lg"
           : "bg-white/0"
