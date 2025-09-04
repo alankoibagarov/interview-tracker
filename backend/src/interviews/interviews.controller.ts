@@ -8,6 +8,7 @@ import {
   Param,
   HttpException,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { InterviewsService } from './interviews.service';
 import type {
@@ -15,11 +16,13 @@ import type {
   CreateInterviewDto,
   UpdateInterviewDto,
 } from './interview.entity';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('interviews')
 export class InterviewsController {
   constructor(private readonly interviewsService: InterviewsService) {}
 
+  @UseGuards(AuthGuard)
   @Get()
   findAll(): Interview[] {
     return this.interviewsService.findAll();

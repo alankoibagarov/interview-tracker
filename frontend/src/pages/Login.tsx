@@ -3,6 +3,7 @@ import bgImage from "../assets/backgrounds/glenn-carstens-peters-npxXWgQ33ZQ-uns
 import { authService } from "../services/authApi";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../store/userStore";
+import { ResponseCodes } from "../services/api";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -15,13 +16,13 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const res = await authService.login(username, password);
-      if (res.success) {
-        localStorage.setItem("token", res.token);
+      if (res.statusCode === ResponseCodes.OK) {
+        localStorage.setItem("access_token", res.access_token);
         setUser({ username });
         navigate("/dashboard");
       }
-    } catch (err) {
-      console.error("Login error:", err);
+    } catch {
+      console.error("Login error:");
       setError("Login failed");
     }
   };

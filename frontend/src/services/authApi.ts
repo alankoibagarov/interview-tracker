@@ -6,7 +6,7 @@ export interface User {
 
 interface LoginResponse {
   success: boolean;
-  token: string;
+  access_token: string;
   statusCode: ResponseCodes;
 }
 

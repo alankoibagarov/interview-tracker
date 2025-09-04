@@ -69,7 +69,11 @@ export interface InterviewStats {
 class InterviewsService {
   // Interviews
   async getInterviews(): Promise<Interview[]> {
-    return request<Interview[]>("/interviews");
+    return request<Interview[]>("/interviews", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    });
   }
 
   async getInterview(id: string): Promise<Interview> {

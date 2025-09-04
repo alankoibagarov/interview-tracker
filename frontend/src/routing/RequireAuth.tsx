@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
 const isAuthenticated = () => {
-  return !!localStorage.getItem("token");
+  return !!localStorage.getItem("access_token");
 };
 
 const RequireAuth = ({ children }: { children: ReactNode }) => {
