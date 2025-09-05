@@ -23,7 +23,7 @@ const Login = () => {
       }
     } catch {
       console.error("Login error:");
-      setError("Login failed");
+      setError("Invalid username or password");
     }
   };
 
@@ -50,6 +50,11 @@ const Login = () => {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleLogin();
+                }
+              }}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 text-gray-700"
             />
             <button

@@ -42,7 +42,7 @@ const Navigation: React.FC<Props> = ({ type }) => {
     >
       <div className="w-full max-w-7xl mx-auto px-5 flex justify-between items-center h-[70px]">
         <Link
-          to="/"
+          to={type === NavigationType.HOME ? "/" : "/dashboard"}
           className={`text-2xl font-bold hover:text-secondary-500 transition-colors duration-300 ${
             scrolled || type === NavigationType.DASHBOARD
               ? "text-primary-500"
