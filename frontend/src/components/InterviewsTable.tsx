@@ -17,6 +17,7 @@ const InterviewsTable: React.FC = () => {
   );
 
   useEffect(() => {
+    console.log("load");
     loadInterviews();
   }, []);
 

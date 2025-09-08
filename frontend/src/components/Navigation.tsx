@@ -14,11 +14,13 @@ const Navigation: React.FC<Props> = ({ type }) => {
   const [scrolled, setScrolled] = useState(false);
 
   const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
 
   const logout = () => {
     const confirmLogout = window.confirm("Are you sure you want to logout?");
     if (!confirmLogout) return;
     localStorage.removeItem("access_token");
+    setUser(null);
     if (location.pathname !== "/") {
       navigate("/login");
     }
