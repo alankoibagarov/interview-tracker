@@ -1,0 +1,21 @@
+FROM node:20-alpine
+
+# Install dependencies needed for node-gyp (optional; remove if not needed)
+RUN apk add --no-cache python3 make g++ bash
+
+WORKDIR /app
+
+# Only copy package files for better caching
+COPY package*.json ./
+
+# If you use pnpm or yarn, swap commands accordingly
+RUN npm ci
+
+# Copy the rest (src, tsconfig, etc.)
+COPY . .
+
+# Expose Nest default port
+EXPOSE 3000
+
+# Default dev command (hot reload)
+CMD ["npm", "run", "start:dev"]
