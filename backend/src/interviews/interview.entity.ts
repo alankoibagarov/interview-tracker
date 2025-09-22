@@ -14,7 +14,7 @@ export type InterviewType =
   | 'behavioral';
 
 export interface Interview {
-  id: string;
+  id?: number;
   company: string;
   position: string;
   date: string;
@@ -86,7 +86,7 @@ export class InterviewEntity {
   rating: number;
 
   @Column({ nullable: true })
-  followUpDate: Date;
+  followUpDate: string;
 
   @Column()
   createdAt: string;

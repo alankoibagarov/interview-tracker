@@ -55,6 +55,13 @@ const InterviewsTable: React.FC = () => {
     }
   };
 
+  const addInterview = () => {
+    const interviewsModal = document.getElementById(
+      "interviewsModal"
+    ) as HTMLDialogElement;
+    interviewsModal.showModal();
+  };
+
   const getStatusColor = (status: InterviewStatus) => {
     switch (status) {
       case InterviewStatus.Completed:
@@ -150,6 +157,12 @@ const InterviewsTable: React.FC = () => {
             Interview Records
           </h2>
           <div className="flex gap-2">
+            <button
+              onClick={addInterview}
+              className="px-4 py-2 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 transition-colors"
+            >
+              Add Interview
+            </button>
             <select
               value={filterStatus}
               onChange={(e) =>

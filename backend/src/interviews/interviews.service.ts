@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {
   // Interview,
-  // CreateInterviewDto,
+  CreateInterviewDto,
   // UpdateInterviewDto,
   InterviewEntity,
 } from './interview.entity';
@@ -23,17 +23,18 @@ export class InterviewsService {
     return await this.interviewRepo.findOne({ where: { id } });
   }
 
-  // create(createInterviewDto: CreateInterviewDto): Interview {
-  //   const newInterview: Interview = {
-  //     id: (this.interviews.length + 1).toString(),
-  //     ...createInterviewDto,
-  //     createdAt: new Date().toISOString(),
-  //     updatedAt: new Date().toISOString(),
-  //   };
+  async create(
+    createInterviewDto: CreateInterviewDto,
+  ): Promise<InterviewEntity> {
+    const newInterview = this.interviewRepo.create({
+      ...createInterviewDto,
+      followUpDate: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
 
-  //   this.interviews.push(newInterview);
-  //   return newInterview;
-  // }
+    return await this.interviewRepo.save(newInterview);
+  }
 
   // update(
   //   id: string,

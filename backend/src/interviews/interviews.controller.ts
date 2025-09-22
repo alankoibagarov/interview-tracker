@@ -1,10 +1,10 @@
 import {
   Controller,
   Get,
-  // Post,
+  Post,
   // Put,
   // Delete,
-  // Body,
+  Body,
   // Param,
   // HttpException,
   // HttpStatus,
@@ -12,8 +12,8 @@ import {
 } from '@nestjs/common';
 import { InterviewsService } from './interviews.service';
 import type {
-  // Interview,
-  // CreateInterviewDto,
+  //Interview,
+  CreateInterviewDto,
   // UpdateInterviewDto,
   InterviewEntity,
 } from './interview.entity';
@@ -48,10 +48,12 @@ export class InterviewsController {
   //   return interview;
   // }
 
-  // @Post()
-  // create(@Body() createInterviewDto: CreateInterviewDto): Interview {
-  //   return this.interviewsService.create(createInterviewDto);
-  // }
+  @Post()
+  async create(
+    @Body() createInterviewDto: CreateInterviewDto,
+  ): Promise<InterviewEntity> {
+    return await this.interviewsService.create(createInterviewDto);
+  }
 
   // @Put(':id')
   // update(
