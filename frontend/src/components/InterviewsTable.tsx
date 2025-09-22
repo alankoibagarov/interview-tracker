@@ -48,6 +48,7 @@ const InterviewsTable: React.FC = () => {
       try {
         await interviewsApi.deleteInterview(id);
         setInterviews(interviews.filter((interview) => interview.id !== id));
+        alert("Interview deleted successfully");
       } catch (err) {
         setError("Failed to delete interview");
         console.error("Error deleting interview:", err);

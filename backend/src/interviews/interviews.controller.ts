@@ -3,12 +3,12 @@ import {
   Get,
   Post,
   // Put,
-  // Delete,
   Body,
-  // Param,
-  // HttpException,
-  // HttpStatus,
+  Param,
+  HttpException,
+  HttpStatus,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { InterviewsService } from './interviews.service';
 import type {
@@ -29,15 +29,15 @@ export class InterviewsController {
     return this.interviewsService.findAll();
   }
 
-  // @Get('stats')
-  // getStats() {
-  //   return this.interviewsService.getStats();
-  // }
+  @Get('stats')
+  async getStats() {
+    return await this.interviewsService.getStats();
+  }
 
-  // @Get('recent')
-  // getRecentActivity() {
-  //   return this.interviewsService.getRecentActivity();
-  // }
+  @Get('recent')
+  async getRecentActivity() {
+    return await this.interviewsService.getRecentActivity();
+  }
 
   // @Get(':id')
   // findOne(@Param('id') id: string): Interview {
@@ -67,12 +67,12 @@ export class InterviewsController {
   //   return interview;
   // }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string): { message: string } {
-  //   const deleted = this.interviewsService.remove(id);
-  //   if (!deleted) {
-  //     throw new HttpException('Interview not found', HttpStatus.NOT_FOUND);
-  //   }
-  //   return { message: 'Interview deleted successfully' };
-  // }
+  @Delete(':id')
+  async remove(@Param('id') id: number): Promise<{ message: string }> {
+    const deleted = await this.interviewsService.remove(id);
+    if (!deleted) {
+      throw new HttpException('Interview not found', HttpStatus.NOT_FOUND);
+    }
+    return { message: 'Interview deleted successfully' };
+  }
 }

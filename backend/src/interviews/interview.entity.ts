@@ -53,6 +53,15 @@ export interface UpdateInterviewDto {
   followUpDate?: string;
 }
 
+export interface InterviewStats {
+  total: number;
+  completed: number;
+  scheduled: number;
+  pending: number;
+  cancelled: number;
+  successRate: number;
+}
+
 @Entity()
 export class InterviewEntity {
   @PrimaryGeneratedColumn()

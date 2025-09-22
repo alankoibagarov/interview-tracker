@@ -4,6 +4,7 @@ import {
   CreateInterviewDto,
   // UpdateInterviewDto,
   InterviewEntity,
+  InterviewStats,
 } from './interview.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -54,50 +55,55 @@ export class InterviewsService {
   //   return this.interviews[index];
   // }
 
-  // remove(id: string): boolean {
-  //   const index = this.interviews.findIndex((interview) => interview.id === id);
-  //   if (index === -1) {
-  //     return false;
-  //   }
+  async remove(id: number): Promise<boolean> {
+    const result = await this.interviewRepo.delete(id);
+    return result.affected !== 0;
+  }
 
-  //   this.interviews.splice(index, 1);
-  //   return true;
-  // }
+  async getStats(): Promise<InterviewStats> {
+    const result: InterviewStats | undefined = await this.interviewRepo
+      .createQueryBuilder('interview')
+      .select('COUNT(*)', 'total')
+      .addSelect(
+        `COUNT(*) FILTER (WHERE interview.status = 'completed')`,
+        'completed',
+      )
+      .addSelect(
+        `COUNT(*) FILTER (WHERE interview.status = 'scheduled')`,
+        'scheduled',
+      )
+      .addSelect(
+        `COUNT(*) FILTER (WHERE interview.status = 'pending')`,
+        'pending',
+      )
+      .addSelect(
+        `COUNT(*) FILTER (WHERE interview.status = 'cancelled')`,
+        'cancelled',
+      )
+      .getRawOne();
 
-  // getStats() {
-  //   const total = this.interviews.length;
-  //   const completed = this.interviews.filter(
-  //     (i) => i.status === 'completed',
-  //   ).length;
-  //   const scheduled = this.interviews.filter(
-  //     (i) => i.status === 'scheduled',
-  //   ).length;
-  //   const pending = this.interviews.filter(
-  //     (i) => i.status === 'pending',
-  //   ).length;
-  //   const cancelled = this.interviews.filter(
-  //     (i) => i.status === 'cancelled',
-  //   ).length;
+    const total = Number(result?.total);
+    const completed = Number(result?.completed);
+    const scheduled = Number(result?.scheduled);
+    const pending = Number(result?.pending);
+    const cancelled = Number(result?.cancelled);
 
-  //   const successRate =
-  //     completed > 0 ? Math.round((completed / total) * 100) : 0;
+    const successRate = total > 0 ? Math.round((completed / total) * 100) : 0;
 
-  //   return {
-  //     total,
-  //     completed,
-  //     scheduled,
-  //     pending,
-  //     cancelled,
-  //     successRate,
-  //   };
-  // }
+    return {
+      total,
+      completed,
+      scheduled,
+      pending,
+      cancelled,
+      successRate,
+    };
+  }
 
-  // getRecentActivity() {
-  //   return this.interviews
-  //     .sort(
-  //       (a, b) =>
-  //         new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-  //     )
-  //     .slice(0, 5);
-  // }
+  async getRecentActivity(): Promise<InterviewEntity[]> {
+    return await this.interviewRepo.find({
+      order: { updatedAt: 'DESC' },
+      take: 5,
+    });
+  }
 }
