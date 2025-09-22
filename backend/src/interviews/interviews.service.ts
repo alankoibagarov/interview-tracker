@@ -5,6 +5,7 @@ import {
   // UpdateInterviewDto,
   InterviewEntity,
   InterviewStats,
+  UpdateInterviewDto,
 } from './interview.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -37,23 +38,17 @@ export class InterviewsService {
     return await this.interviewRepo.save(newInterview);
   }
 
-  // update(
-  //   id: string,
-  //   updateInterviewDto: UpdateInterviewDto,
-  // ): Interview | undefined {
-  //   const index = this.interviews.findIndex((interview) => interview.id === id);
-  //   if (index === -1) {
-  //     return undefined;
-  //   }
-
-  //   this.interviews[index] = {
-  //     ...this.interviews[index],
-  //     ...updateInterviewDto,
-  //     updatedAt: new Date().toISOString(),
-  //   };
-
-  //   return this.interviews[index];
-  // }
+  async update(
+    id: number,
+    updateInterviewDto: UpdateInterviewDto,
+  ): Promise<InterviewEntity | null> {
+    const interview = await this.interviewRepo.findOne({ where: { id } });
+    if (!interview) {
+      return null;
+    }
+    Object.assign(interview, updateInterviewDto, { updatedAt: new Date() });
+    return await this.interviewRepo.save(interview);
+  }
 
   async remove(id: number): Promise<boolean> {
     const result = await this.interviewRepo.delete(id);

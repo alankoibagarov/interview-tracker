@@ -5,9 +5,13 @@ import {
   InterviewStatus,
   interviewsApi,
 } from "../services/interviewsApi";
+import { useInterviewsStore } from "../store/interviewsStore";
 
-const InterviewsTable: React.FC = () => {
-  const [interviews, setInterviews] = useState<Interview[]>([]);
+interface InterviewsTableProps {
+  openDialog: () => void;
+}
+
+const InterviewsTable: React.FC<InterviewsTableProps> = ({ openDialog }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [sortField, setSortField] = useState<keyof Interview>("date");
@@ -15,6 +19,9 @@ const InterviewsTable: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<InterviewStatus | "all">(
     "all"
   );
+  const interviewsStore = useInterviewsStore();
+  const interviews = interviewsStore.interviews;
+  const { setInterviews, setSelectedInterview } = interviewsStore;
 
   useEffect(() => {
     loadInterviews();
@@ -43,7 +50,7 @@ const InterviewsTable: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     if (window.confirm("Are you sure you want to delete this interview?")) {
       try {
         await interviewsApi.deleteInterview(id);
@@ -56,11 +63,14 @@ const InterviewsTable: React.FC = () => {
     }
   };
 
+  const handleEdit = async (interview: Interview) => {
+    setSelectedInterview(interview);
+
+    openDialog();
+  };
+
   const addInterview = () => {
-    const interviewsModal = document.getElementById(
-      "interviewsModal"
-    ) as HTMLDialogElement;
-    interviewsModal.showModal();
+    openDialog();
   };
 
   const getStatusColor = (status: InterviewStatus) => {
@@ -312,8 +322,15 @@ const InterviewsTable: React.FC = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div className="flex justify-end gap-2">
                     <button
+                      onClick={() => handleEdit(interview)}
+                      className="text-red-600 hover:text-red-900 transition-colors cursor-pointer"
+                      title="Edit"
+                    >
+                      ✏️
+                    </button>
+                    <button
                       onClick={() => handleDelete(interview.id)}
-                      className="text-red-600 hover:text-red-900 transition-colors"
+                      className="text-red-600 hover:text-red-900 transition-colors cursor-pointer"
                       title="Delete"
                     >
                       🗑️

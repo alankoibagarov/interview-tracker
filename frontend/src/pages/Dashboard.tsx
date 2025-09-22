@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { interviewsApi } from "../services/interviewsApi";
 import type { InterviewStats } from "../services/interviewsApi";
 import InterviewsTable from "../components/InterviewsTable";
@@ -9,6 +9,8 @@ const Dashboard: React.FC = () => {
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const modalRef = useRef<{ openDialog: () => void }>(null);
 
   useEffect(() => {
     loadDashboardData();
@@ -205,11 +207,13 @@ const Dashboard: React.FC = () => {
 
           {/* Interviews Table */}
           <div className="mb-10">
-            <InterviewsTable />
+            <InterviewsTable
+              openDialog={() => modalRef.current?.openDialog()}
+            />
           </div>
         </div>
       </div>
-      <InterviewsModal />
+      <InterviewsModal ref={modalRef} />
     </>
   );
 };

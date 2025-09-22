@@ -1,11 +1,19 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import {
   InterviewStatus,
   InterviewType,
   type CreateInterviewDto,
+  type Interview,
 } from "../services/interviewsApi";
 import { interviewsApi } from "../services/interviewsApi";
+import { useInterviewsStore } from "../store/interviewsStore";
+
+type InterviewsModalProps = {};
 
 const initialForm: CreateInterviewDto = {
   company: "",
@@ -20,9 +28,19 @@ const initialForm: CreateInterviewDto = {
   followUpDate: "",
 };
 
-const InterviewsModal: React.FC = () => {
+const InterviewsModal = forwardRef<
+  { openDialog: () => void },
+  InterviewsModalProps
+>((props, ref) => {
   const dialogRef = React.useRef<HTMLDialogElement>(null);
   const [form, setForm] = useState(initialForm);
+
+  const interviewsStore = useInterviewsStore();
+  const { setInterviews, selectedInterview } = interviewsStore;
+
+  const openDialog = () => {
+    dialogRef.current?.showModal();
+  };
 
   const closeDialog = () => {
     const interviewsModal = document.getElementById(
@@ -33,22 +51,43 @@ const InterviewsModal: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await interviewsApi.createInterview(form);
-    // Handle form submission logic here
+    if (selectedInterview) {
+      await interviewsApi.updateInterview(selectedInterview.id, form);
+    } else {
+      await interviewsApi.createInterview(form);
+    }
+    const data = await interviewsApi.getInterviews();
+    setInterviews(data);
     closeDialog();
   };
 
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
+  useImperativeHandle(ref, () => ({
+    openDialog,
+  }));
 
+  useEffect(() => {
     const handleOpen = () => {
-      setForm(initialForm);
+      if (selectedInterview) {
+        const selected: Interview = selectedInterview;
+        setForm({
+          company: selected.company,
+          position: selected.position,
+          date: selected.date,
+          status: selected.status,
+          type: selected.type,
+          interviewer: selected.interviewer || "",
+          notes: selected.notes || "",
+          feedback: selected.feedback || "",
+          rating: selected.rating || 0,
+          followUpDate: selected.followUpDate || "",
+        });
+      } else {
+        setForm(initialForm);
+      }
     };
 
-    dialog.addEventListener("open", handleOpen);
-    return () => dialog.removeEventListener("open", handleOpen);
-  }, []);
+    handleOpen();
+  }, [selectedInterview]);
 
   return (
     <dialog
@@ -196,6 +235,6 @@ const InterviewsModal: React.FC = () => {
       </div>
     </dialog>
   );
-};
+});
 
 export default InterviewsModal;

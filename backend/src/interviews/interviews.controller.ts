@@ -2,7 +2,7 @@ import {
   Controller,
   Get,
   Post,
-  // Put,
+  Put,
   Body,
   Param,
   HttpException,
@@ -12,9 +12,8 @@ import {
 } from '@nestjs/common';
 import { InterviewsService } from './interviews.service';
 import type {
-  //Interview,
   CreateInterviewDto,
-  // UpdateInterviewDto,
+  UpdateInterviewDto,
   InterviewEntity,
 } from './interview.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -55,17 +54,20 @@ export class InterviewsController {
     return await this.interviewsService.create(createInterviewDto);
   }
 
-  // @Put(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updateInterviewDto: UpdateInterviewDto,
-  // ): Interview {
-  //   const interview = this.interviewsService.update(id, updateInterviewDto);
-  //   if (!interview) {
-  //     throw new HttpException('Interview not found', HttpStatus.NOT_FOUND);
-  //   }
-  //   return interview;
-  // }
+  @Put(':id')
+  async update(
+    @Param('id') id: number,
+    @Body() updateInterviewDto: UpdateInterviewDto,
+  ): Promise<InterviewEntity> {
+    const interview = await this.interviewsService.update(
+      id,
+      updateInterviewDto,
+    );
+    if (!interview) {
+      throw new HttpException('Interview not found', HttpStatus.NOT_FOUND);
+    }
+    return interview;
+  }
 
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<{ message: string }> {

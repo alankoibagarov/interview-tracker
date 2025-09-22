@@ -16,7 +16,7 @@ export enum InterviewType {
 }
 
 export interface Interview {
-  id: string;
+  id: number;
   company: string;
   position: string;
   date: string;
@@ -88,7 +88,7 @@ class InterviewsService {
   }
 
   async updateInterview(
-    id: string,
+    id: number,
     data: UpdateInterviewDto
   ): Promise<Interview> {
     return request<Interview>(`/interviews/${id}`, {
@@ -97,7 +97,7 @@ class InterviewsService {
     });
   }
 
-  async deleteInterview(id: string): Promise<{ message: string }> {
+  async deleteInterview(id: number): Promise<{ message: string }> {
     return request<{ message: string }>(`/interviews/${id}`, {
       method: "DELETE",
     });
