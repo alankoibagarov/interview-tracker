@@ -13,6 +13,8 @@ export type InterviewType =
   | 'technical'
   | 'behavioral';
 
+export type InterviewRating = 1 | 2 | 3 | 4 | 5;
+
 export interface Interview {
   id?: number;
   company: string;
@@ -23,7 +25,7 @@ export interface Interview {
   interviewer?: string;
   notes?: string;
   feedback?: string;
-  rating?: number;
+  rating?: InterviewRating;
   followUpDate?: string;
   createdAt: string;
   updatedAt: string;
