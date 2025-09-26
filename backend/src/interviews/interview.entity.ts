@@ -70,6 +70,9 @@ export class InterviewEntity {
   id: number;
 
   @Column()
+  userId: number;
+
+  @Column()
   company: string;
 
   @Column()

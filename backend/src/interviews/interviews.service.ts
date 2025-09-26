@@ -17,8 +17,8 @@ export class InterviewsService {
     private readonly interviewRepo: Repository<InterviewEntity>,
   ) {}
 
-  async findAll(): Promise<InterviewEntity[]> {
-    return await this.interviewRepo.find();
+  async findAll(userId: number): Promise<InterviewEntity[]> {
+    return await this.interviewRepo.find({ where: { userId } });
   }
 
   async findOne(id: number): Promise<InterviewEntity | null> {
@@ -27,9 +27,11 @@ export class InterviewsService {
 
   async create(
     createInterviewDto: CreateInterviewDto,
+    userId: number,
   ): Promise<InterviewEntity> {
     const newInterview = this.interviewRepo.create({
       ...createInterviewDto,
+      userId,
       followUpDate: new Date().toISOString(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

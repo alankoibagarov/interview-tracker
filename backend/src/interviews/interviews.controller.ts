@@ -9,6 +9,7 @@ import {
   HttpStatus,
   UseGuards,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { InterviewsService } from './interviews.service';
 import type {
@@ -24,8 +25,11 @@ export class InterviewsController {
 
   @UseGuards(AuthGuard)
   @Get()
-  async findAll(): Promise<InterviewEntity[]> {
-    return this.interviewsService.findAll();
+  async findAll(
+    @Req() req: Request & { user: { sub: number; username: string } },
+  ): Promise<InterviewEntity[]> {
+    const userId = req.user.sub;
+    return this.interviewsService.findAll(userId);
   }
 
   @Get('stats')
@@ -50,8 +54,10 @@ export class InterviewsController {
   @Post()
   async create(
     @Body() createInterviewDto: CreateInterviewDto,
+    @Req() req: Request & { user: { sub: number; username: string } },
   ): Promise<InterviewEntity> {
-    return await this.interviewsService.create(createInterviewDto);
+    const userId = req.user.sub;
+    return await this.interviewsService.create(createInterviewDto, userId);
   }
 
   @Put(':id')
