@@ -70,6 +70,8 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({ openDialog }) => {
   };
 
   const addInterview = () => {
+    setSelectedInterview(null);
+
     openDialog();
   };
 

@@ -10,7 +10,7 @@ interface InterviewsState {
   deleteInterview: (id: number) => void;
 
   selectedInterview: Interview | null;
-  setSelectedInterview: (interview: Interview) => void;
+  setSelectedInterview: (interview: Interview | null) => void;
 }
 
 export const useInterviewsStore = create<InterviewsState>()(
