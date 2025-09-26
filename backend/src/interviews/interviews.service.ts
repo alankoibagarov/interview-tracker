@@ -57,7 +57,7 @@ export class InterviewsService {
     return result.affected !== 0;
   }
 
-  async getStats(): Promise<InterviewStats> {
+  async getStats(userId: number): Promise<InterviewStats> {
     const result: InterviewStats | undefined = await this.interviewRepo
       .createQueryBuilder('interview')
       .select('COUNT(*)', 'total')
@@ -77,6 +77,7 @@ export class InterviewsService {
         `COUNT(*) FILTER (WHERE interview.status = 'cancelled')`,
         'cancelled',
       )
+      .where('interview.userId = :userId', { userId })
       .getRawOne();
 
     const total = Number(result?.total);
@@ -97,10 +98,11 @@ export class InterviewsService {
     };
   }
 
-  async getRecentActivity(): Promise<InterviewEntity[]> {
+  async getRecentActivity(userId: number): Promise<InterviewEntity[]> {
     return await this.interviewRepo.find({
       order: { updatedAt: 'DESC' },
       take: 5,
+      where: { userId },
     });
   }
 }

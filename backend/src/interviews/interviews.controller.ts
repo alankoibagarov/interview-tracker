@@ -32,14 +32,22 @@ export class InterviewsController {
     return this.interviewsService.findAll(userId);
   }
 
+  @UseGuards(AuthGuard)
   @Get('stats')
-  async getStats() {
-    return await this.interviewsService.getStats();
+  async getStats(
+    @Req() req: Request & { user: { sub: number; username: string } },
+  ) {
+    const userId = req.user.sub;
+    return await this.interviewsService.getStats(userId);
   }
 
+  @UseGuards(AuthGuard)
   @Get('recent')
-  async getRecentActivity() {
-    return await this.interviewsService.getRecentActivity();
+  async getRecentActivity(
+    @Req() req: Request & { user: { sub: number; username: string } },
+  ) {
+    const userId = req.user.sub;
+    return await this.interviewsService.getRecentActivity(userId);
   }
 
   // @Get(':id')

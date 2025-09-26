@@ -104,11 +104,19 @@ class InterviewsService {
   }
 
   async getInterviewStats(): Promise<InterviewStats> {
-    return request<InterviewStats>("/interviews/stats");
+    return request<InterviewStats>("/interviews/stats", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    });
   }
 
   async getRecentActivity(): Promise<Interview[]> {
-    return request<Interview[]>("/interviews/recent");
+    return request<Interview[]>("/interviews/recent", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    });
   }
 }
 
