@@ -1,6 +1,6 @@
-# Interview Tracker
+# Interview Flow
 
-Interview Tracker is a full-stack web application designed to help users manage, track, and analyze upcoming and past interviews. It features a dashboard, statistics, and a user-friendly interface for efficient interview management.
+Interview Flow is a full-stack web application designed to help users manage, track, and analyze upcoming and past interviews. It features a dashboard, statistics, and a user-friendly interface for efficient interview management.
 
 ## Packages
 

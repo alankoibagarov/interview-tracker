@@ -6,12 +6,13 @@ import "./App.css";
 import Login from "./pages/Login";
 import DashboardLayout from "./layouts/DashboardLayout";
 import HomeLayout from "./layouts/HomeLayout";
+import Interviews from "./pages/Interviews";
 
 function App() {
   return (
     <Router>
-      <div className="App font-inter">
-        <main className="main-content">
+      <div className="App font-inter h-screen">
+        <main className="main-content h-screen">
           <Routes>
             <Route
               path="/"
@@ -27,6 +28,16 @@ function App() {
                 <RequireAuth>
                   <DashboardLayout>
                     <Dashboard />
+                  </DashboardLayout>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/interviews"
+              element={
+                <RequireAuth>
+                  <DashboardLayout>
+                    <Interviews />
                   </DashboardLayout>
                 </RequireAuth>
               }

@@ -37,7 +37,7 @@ export const useInterviewsStore = create<InterviewsState>()(
         })),
 
       selectedInterview: null,
-      setSelectedInterview: (interview: Interview) =>
+      setSelectedInterview: (interview: Interview | null) =>
         set({ selectedInterview: interview }),
     }),
     { name: "interviews-storage" }

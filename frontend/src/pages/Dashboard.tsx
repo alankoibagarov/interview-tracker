@@ -1,16 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { interviewsApi } from "../services/interviewsApi";
 import type { InterviewStats } from "../services/interviewsApi";
-import InterviewsTable from "../components/InterviewsTable";
-import InterviewsModal from "../components/InterviewsModal";
 
 const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<InterviewStats | null>(null);
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const modalRef = useRef<{ openDialog: () => void }>(null);
 
   useEffect(() => {
     loadDashboardData();
@@ -64,7 +60,7 @@ const Dashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary-500 to-secondary-500 py-5 w-full">
+      <div className="bg-gradient-to-br from-primary-500 to-secondary-500 py-5 w-full">
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
         </div>
@@ -74,11 +70,9 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-primary-500 to-secondary-500 pb-5 pt-[7rem] w-full">
+      <div className="bg-slate-900 pb-5 pt-[7rem] w-full h-fit">
         <header className="text-center text-white mb-10">
-          <h1 className="text-5xl font-bold mb-3">
-            Interview Tracker Dashboard
-          </h1>
+          <h1 className="text-5xl font-bold mb-3">Interview Flow Dashboard</h1>
           <p className="text-xl opacity-90">
             Manage your interview process and track your progress
           </p>
@@ -183,37 +177,8 @@ const Dashboard: React.FC = () => {
               )}
             </div>
           </div>
-
-          {/* Quick Actions */}
-          <div className="bg-white rounded-2xl p-8 mb-10 shadow-xl">
-            <h2 className="text-gray-800 text-2xl font-semibold mb-6">
-              Quick Actions
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <button className="action-btn action-btn-primary">
-                Schedule Interview
-              </button>
-              <button className="action-btn action-btn-secondary">
-                Add Notes
-              </button>
-              <button className="action-btn action-btn-secondary">
-                View Calendar
-              </button>
-              <button className="action-btn action-btn-secondary">
-                Export Data
-              </button>
-            </div>
-          </div>
-
-          {/* Interviews Table */}
-          <div className="mb-10">
-            <InterviewsTable
-              openDialog={() => modalRef.current?.openDialog()}
-            />
-          </div>
         </div>
       </div>
-      <InterviewsModal ref={modalRef} />
     </>
   );
 };

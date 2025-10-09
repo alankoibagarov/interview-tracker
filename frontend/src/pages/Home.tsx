@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 const Home: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-500 via-primary-600 to-secondary-500 w-full overflow-hidden">
+    <div className="min-h-screen bg-slate-950 w-full overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden bg-gradient-to-r from-primary-800 to-indigo-700">
+      <div className="absolute inset-0 overflow-hidden bg-slate-950">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white/5 rounded-full blur-3xl"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
@@ -16,7 +16,7 @@ const Home: React.FC = () => {
         <div className="flex-1 text-white max-w-2xl mb-12 lg:mb-0">
           <div className="text-center lg:text-left">
             <h1 className="text-5xl lg:text-7xl text-white-700 font-bold mb-6 leading-tight">
-              Interview Tracker
+              Interview Flow
             </h1>
             <p className="text-lg lg:text-2xl mb-8 opacity-90 text-white-700 leading-relaxed font-light">
               Master your interview process with intelligent tracking,
@@ -161,7 +161,7 @@ const Home: React.FC = () => {
         <div className="w-full max-w-7xl mx-auto px-5">
           <div className="text-center mb-12 lg:mb-16">
             <h2 className="text-4xl lg:text-6xl font-bold text-gray-800 mb-4 lg:mb-6">
-              Why Choose Interview Tracker?
+              Why Choose Interview Flow?
             </h2>
             <p className="text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Join thousands of professionals who have transformed their
