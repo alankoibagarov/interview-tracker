@@ -4,42 +4,31 @@ import { AuthService } from './auth.service';
 
 describe('AuthController', () => {
   let controller: AuthController;
-  let service: AuthService;
+  let authService: { signIn: jest.Mock };
 
   beforeEach(async () => {
+    authService = {
+      signIn: jest
+        .fn()
+        .mockResolvedValue({ statusCode: 200, access_token: 'jwt' }),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [AuthService],
+      providers: [{ provide: AuthService, useValue: authService }],
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
-    service = module.get<AuthService>(AuthService);
   });
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
 
-  it('should return a token for valid login', async () => {
-    const result = await controller.login({
-      username: 'testuser',
-      password: 'password',
-    });
-    expect(result.success).toBe(true);
-    expect(result.token).toBeDefined();
-  });
-
-  it('should fail for invalid login', async () => {
-    const result = await controller.login({
-      username: 'wrong',
-      password: 'wrong',
-    });
-    expect(result.success).toBe(false);
-  });
-
-  it('should return users', () => {
-    const users = controller.getUsers();
-    expect(Array.isArray(users)).toBe(true);
-    expect(users.length).toBeGreaterThan(0);
+  it('POST /auth/login delegates to AuthService.signIn and returns token payload', async () => {
+    const body = { username: 'user', password: 'pass' } as Record<string, any>;
+    const result = await controller.signIn(body);
+    expect(authService.signIn).toHaveBeenCalledWith('user', 'pass');
+    expect(result).toEqual({ statusCode: 200, access_token: 'jwt' });
   });
 });
