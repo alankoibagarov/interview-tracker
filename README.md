@@ -1,114 +1,153 @@
-# Interview Flow
+# Interview Tracker
 
-Interview Flow is a full-stack web application designed to help users manage, track, and analyze upcoming and past interviews. It features a dashboard, statistics, and a user-friendly interface for efficient interview management.
+A full‑stack web application to manage, track, and analyze interviews. It includes authentication, a dashboard with stats, and CRUD operations for interviews.
 
-## Packages
+## Tech Stack
 
-### Backend
+- Backend: NestJS, TypeORM, PostgreSQL, JWT, Config Module
+- Frontend: React + Vite, TypeScript, Tailwind CSS
+- Testing: Jest, Supertest
+- Dev: Docker (optional), ESLint + Prettier
 
-- [NestJS](https://nestjs.com/) - Node.js framework
-- [Jest](https://jestjs.io/) - Testing framework
-
-### Frontend
-
-- [React](https://react.dev/) - UI library
-- [Vite](https://vitejs.dev/) - Frontend build tool
-- [TypeScript](https://www.typescriptlang.org/) - Typed JavaScript
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-
-## Folder Structure
+## Repository Structure
 
 ```
 interview-tracker/
-├── backend/         # NestJS backend API
-│   ├── src/
-│   │   ├── app.controller.ts
-│   │   ├── app.service.ts
-│   │   ├── main.ts
-│   │   └── interviews/
-│   │       ├── interview.entity.ts
-│   │       ├── interviews.controller.ts
-│   │       ├── interviews.module.ts
-│   │       └── interviews.service.ts
-│   ├── test/
-│   ├── package.json
-│   └── ...
-├── frontend/        # React + Vite frontend
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── InterviewsTable.tsx
-│   │   │   └── Navigation.tsx
-│   │   ├── pages/
-│   │   │   ├── Dashboard.tsx
-│   │   │   └── Home.tsx
-│   │   ├── services/
-│   │   │   └── api.ts
-│   │   └── ...
-│   ├── public/
-│   ├── package.json
-│   └── ...
-├── README.md        # Project overview
-└── ...
+├─ backend/                     # NestJS API
+│  ├─ src/
+│  │  ├─ app.controller.ts
+│  │  ├─ app.module.ts
+│  │  ├─ app.service.ts
+│  │  ├─ auth/                 # Auth module (JWT)
+│  │  ├─ interviews/           # Interviews module
+│  │  └─ users/                # Users service/entity
+│  ├─ test/                    # e2e tests
+│  ├─ package.json
+│  └─ ...
+├─ frontend/                   # React client
+│  ├─ src/
+│  │  ├─ components/
+│  │  ├─ layouts/
+│  │  ├─ pages/
+│  │  ├─ services/
+│  │  └─ store/
+│  ├─ index.html
+│  ├─ package.json
+│  └─ ...
+├─ README.md
+└─ LICENSE
 ```
 
-## How to Run the Application
+## Quick Start
 
 ### Prerequisites
 
-- Node.js (v18 or higher recommended)
-- npm (comes with Node.js)
+- Node.js 18+
+- npm 9+
+- PostgreSQL (local or Docker)
 
-### 1. Clone the Repository
+### 1) Clone
 
 ```sh
 git clone https://github.com/alankoibagarov/interview-tracker.git
 cd interview-tracker
 ```
 
-### 2. Install Dependencies
+### 2) Environment
 
-Install backend dependencies:
+Create `backend/.env`:
 
-```sh
-cd backend
-npm install
+```ini
+# App
+PORT=3000
+NODE_ENV=development
+JWT_SECRET=ABCD1234
+
+# Database
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASS=postgres
+DB_NAME=mydb
+
+# Typical Postgres URL used by ORMs (Prisma/TypeORM/etc.)
+DATABASE_URL=postgresql://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}
 ```
 
-Install frontend dependencies:
+These map to `TypeOrmModule.forRoot` in `backend/src/app.module.ts`.
 
-```sh
-cd ../frontend
-npm install
+Create `frontend/.env`:
+
+```ini
+VITE_API_LINK=http://localhost:3000
 ```
 
-### 3. Run the Backend
+### 3) Install
+
+```sh
+cd backend && npm install
+cd ../frontend && npm install
+```
+
+### 4) Run
+
+Backend (http://localhost:3000):
 
 ```sh
 cd backend
 npm run start:dev
 ```
 
-The backend server will start on [http://localhost:3000](http://localhost:3000).
-
-### 4. Run the Frontend
+Frontend (http://localhost:5173):
 
 ```sh
 cd frontend
 npm run dev
 ```
 
-The frontend will start on [http://localhost:5173](http://localhost:5173) by default.
+## Useful npm Scripts
 
-## Features
+Backend:
 
-- Dashboard for upcoming and past interviews
-- Interview CRUD operations
-- Statistics and analytics
-- Modern UI with React and Tailwind CSS
+- `npm run start:dev` – run Nest in watch mode
+- `npm run test` – unit tests
+- `npm run test:e2e` – end‑to‑end tests (Supertest)
+- `npm run lint` – run ESLint
+
+Frontend:
+
+- `npm run dev` – start Vite dev server
+- `npm run build` – build for production
+
+## API Overview (Backend)
+
+- `POST /auth/login` – returns `{ access_token }` for valid credentials
+- `GET /interviews` – list user interviews (auth required)
+- Additional CRUD endpoints exist under `/interviews`.
+
+## Development Notes
+
+- TypeORM runs with `synchronize: true` in development; disable for production.
+
+## Testing
+
+Run unit tests:
+
+```sh
+cd backend
+npm run test
+```
+
+Run e2e tests:
+
+```sh
+cd backend
+npm run test:e2e
+```
 
 ## Contributing
 
-Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+Issues and PRs are welcome. Please run lint and tests before submitting.
 
 ## License
 
