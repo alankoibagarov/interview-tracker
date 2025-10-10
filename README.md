@@ -6,6 +6,7 @@ A full‑stack web application to manage, track, and analyze interviews. It incl
 
 - Backend: NestJS, TypeORM, PostgreSQL, JWT, Config Module
 - Frontend: React + Vite, TypeScript, Tailwind CSS
+- Frontend: React + Vite, TypeScript, Tailwind CSS, @heroicons/react (icons)
 - Testing: Jest, Supertest
 - Dev: Docker (optional), ESLint + Prettier
 
