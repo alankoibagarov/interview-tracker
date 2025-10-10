@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import DashboardLayout from "./layouts/DashboardLayout";
 import HomeLayout from "./layouts/HomeLayout";
 import Interviews from "./pages/Interviews";
+import Calendar from "./pages/Calendar";
 
 function App() {
   return (
@@ -38,6 +39,16 @@ function App() {
                 <RequireAuth>
                   <DashboardLayout>
                     <Interviews />
+                  </DashboardLayout>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/calendar"
+              element={
+                <RequireAuth>
+                  <DashboardLayout>
+                    <Calendar />
                   </DashboardLayout>
                 </RequireAuth>
               }

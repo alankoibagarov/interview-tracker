@@ -7,17 +7,10 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
-      <div className="bg-slate-900 pb-5 pt-[7rem] w-full h-fit">
-        <header className="text-center text-white mb-10">
-          <h1 className="text-5xl font-bold mb-3">Interviews</h1>
-          <p className="text-xl opacity-90">
-            Manage your interview process and track your progress
-          </p>
-        </header>
-
-        <div className="w-full max-w-7xl mx-auto px-5">
+      <div className="bg-slate-900 p-5 w-full h-fit">
+        <div className="w-full mx-auto">
           {/* Quick Actions */}
-          <div className="bg-white rounded-2xl p-8 mb-10 shadow-xl">
+          {/* <div className="bg-white rounded-2xl p-8 mb-10 shadow-xl">
             <h2 className="text-gray-800 text-2xl font-semibold mb-6">
               Quick Actions
             </h2>
@@ -35,7 +28,7 @@ const Dashboard: React.FC = () => {
                 Export Data
               </button>
             </div>
-          </div>
+          </div> */}
 
           {/* Interviews Table */}
           <div className="mb-10">

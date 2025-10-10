@@ -70,15 +70,8 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
-      <div className="bg-slate-900 pb-5 pt-[7rem] w-full h-fit">
-        <header className="text-center text-white mb-10">
-          <h1 className="text-5xl font-bold mb-3">Interview Flow Dashboard</h1>
-          <p className="text-xl opacity-90">
-            Manage your interview process and track your progress
-          </p>
-        </header>
-
-        <div className="w-full max-w-7xl mx-auto px-5">
+      <div className="bg-slate-900 p-5 w-full h-fit">
+        <div className="w-full mx-auto">
           {stats && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-10 bg-white rounded-2xl p-8 mb-10 shadow-xl">
               <div className="stat-card">
