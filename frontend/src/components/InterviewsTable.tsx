@@ -6,6 +6,14 @@ import {
   interviewsApi,
 } from "../services/interviewsApi";
 import { useInterviewsStore } from "../store/interviewsStore";
+import {
+  ArrowPathIcon,
+  PencilSquareIcon,
+  TrashIcon,
+  ArrowDownTrayIcon,
+  StarIcon,
+} from "@heroicons/react/24/solid";
+import { capitalize } from "../helpers";
 
 interface InterviewsTableProps {
   openDialog: () => void;
@@ -73,6 +81,10 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({ openDialog }) => {
     setSelectedInterview(null);
 
     openDialog();
+  };
+
+  const exportToExcel = async () => {
+    alert("Export to Excel functionality is not implemented yet.");
   };
 
   const getStatusColor = (status: InterviewStatus) => {
@@ -183,17 +195,27 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({ openDialog }) => {
               }
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
-              <option value="all">All Status</option>
-              <option value={InterviewStatus.Scheduled}>Scheduled</option>
-              <option value={InterviewStatus.Completed}>Completed</option>
-              <option value={InterviewStatus.Pending}>Pending</option>
-              <option value={InterviewStatus.Cancelled}>Cancelled</option>
+              <option value="all">All Statuses</option>
+              {Object.values(InterviewStatus).map((val) => (
+                <option key={val} value={val}>
+                  {capitalize(val)}
+                </option>
+              ))}
             </select>
             <button
               onClick={loadInterviews}
               className="px-4 py-2 bg-primary-500 text-white rounded-lg text-sm hover:bg-primary-600 transition-colors"
             >
-              Refresh
+              <ArrowPathIcon title="Refresh" className="h-5 w-5" />
+            </button>
+            <button
+              onClick={exportToExcel}
+              className="px-4 py-2 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 transition-colors"
+            >
+              <ArrowDownTrayIcon
+                title="Download Excel file"
+                className="h-5 w-5"
+              />
             </button>
           </div>
         </div>
@@ -288,7 +310,7 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({ openDialog }) => {
                       interview.status
                     )}`}
                   >
-                    {interview.status}
+                    {capitalize(interview.status)}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -312,7 +334,7 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({ openDialog }) => {
                                 : "text-gray-300"
                             }`}
                           >
-                            ★
+                            <StarIcon className="h-4 w-4" />
                           </span>
                         ))}
                       </div>
@@ -325,17 +347,17 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({ openDialog }) => {
                   <div className="flex justify-end gap-2">
                     <button
                       onClick={() => handleEdit(interview)}
-                      className="text-red-600 hover:text-red-900 transition-colors cursor-pointer"
+                      className="text-yellow-600 hover:text-yellow-900 transition-colors cursor-pointer"
                       title="Edit"
                     >
-                      ✏️
+                      <PencilSquareIcon className="h-5 w-5" />
                     </button>
                     <button
                       onClick={() => handleDelete(interview.id)}
                       className="text-red-600 hover:text-red-900 transition-colors cursor-pointer"
                       title="Delete"
                     >
-                      🗑️
+                      <TrashIcon className="h-5 w-5" />
                     </button>
                   </div>
                 </td>

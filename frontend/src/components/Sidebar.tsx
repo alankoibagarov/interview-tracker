@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import {
   HomeIcon,
   ListBulletIcon,
-  CalendarDaysIcon,
+  // CalendarDaysIcon,
 } from "@heroicons/react/24/solid";
 
 interface SidebarProps {
@@ -38,12 +38,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       icon: ListBulletIcon,
       path: "/interviews",
     },
-    {
-      id: "calendar",
-      label: "Calendar",
-      icon: CalendarDaysIcon,
-      path: "/calendar",
-    },
+    // {
+    //   id: "calendar",
+    //   label: "Calendar",
+    //   icon: CalendarDaysIcon,
+    //   path: "/calendar",
+    // },
     // {
     //   id: "companies",
     //   label: "Companies",
@@ -81,7 +81,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
       {/* Sidebar */}
       <div
-        className={`h-[calc(100vh-71px)] w-20 bg-slate-950 shadow-xl transform transition-transform duration-300 ease-in-out z-50 ${
+        className={`h-[calc(100vh-70px)] w-20 bg-slate-950 shadow-xl transform transition-transform duration-300 ease-in-out z-50 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 lg:shadow-none lg:border-r lg:border-slate-950`}
       >

@@ -1,3 +1,5 @@
+import { useUserStore } from "../store/userStore";
+
 export enum ResponseCodes {
   OK = 200,
   Created = 201,
@@ -6,11 +8,20 @@ export enum ResponseCodes {
   Unauthorized = 401,
 }
 
+const logoutUser = () => {
+  localStorage.removeItem("access_token");
+  useUserStore.getState().setUser(null);
+  if (location.pathname !== "/") {
+    window.location.replace("/");
+  }
+};
+
 export async function request<T>(
   endpoint: string,
   options?: RequestInit
 ): Promise<T> {
   const baseUrl = import.meta.env.VITE_API_LINK;
+
   const response = await fetch(`${baseUrl}${endpoint}`, {
     headers: {
       "Content-Type": "application/json",
@@ -18,6 +29,10 @@ export async function request<T>(
     },
     ...options,
   });
+
+  if (response.status === ResponseCodes.Unauthorized) {
+    logoutUser();
+  }
 
   return response.json();
 }

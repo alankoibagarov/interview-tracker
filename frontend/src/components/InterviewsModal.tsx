@@ -93,12 +93,12 @@ const InterviewsModal = forwardRef<
     <dialog
       ref={dialogRef}
       id="interviewsModal"
-      className="w-full max-w-full xl:max-w-7xl max-h-fit h-screen mx-auto hidden open:flex flex-col items-center justify-center self-center"
+      className="w-full backdrop:bg-slate-950/50 max-w-full xl:max-w-7xl max-h-fit h-screen mx-auto hidden open:flex flex-col items-center justify-center self-center rounded"
     >
-      <header className="modal-header flex justify-between items-center w-full mb-4 py-2 border-b px-8">
+      <header className="modal-header flex justify-between items-center w-full mb-4 py-4 border-b border-slate-400 px-8">
         <h2 className="text-lg">Add Interview</h2>
         <button
-          className="close-modal-btn cursor-pointer text-lg"
+          className="close-modal-btn cursor-pointer text-lg focus-visible:outline-none"
           onClick={closeDialog}
         >
           ×

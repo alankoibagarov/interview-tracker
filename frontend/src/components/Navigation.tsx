@@ -1,7 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { NavigationType } from "../const";
 import { useUserStore } from "../store/userStore";
+import {
+  Cog6ToothIcon,
+  UserIcon,
+  ArrowRightStartOnRectangleIcon,
+} from "@heroicons/react/24/solid";
 
 type Props = {
   type?: NavigationType;
@@ -12,8 +17,6 @@ const Navigation: React.FC<Props> = ({ type }) => {
   const navigate = useNavigate();
 
   const [scrolled, setScrolled] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const userMenuRef = useRef<HTMLDivElement | null>(null);
 
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
@@ -35,23 +38,6 @@ const Navigation: React.FC<Props> = ({ type }) => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  // Close dropdown on outside click
-  useEffect(() => {
-    const onDocClick = (e: MouseEvent) => {
-      if (!userMenuRef.current) return;
-      if (!userMenuRef.current.contains(e.target as Node)) {
-        setUserMenuOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", onDocClick);
-    return () => document.removeEventListener("mousedown", onDocClick);
-  }, []);
-
-  // Close dropdown on route change
-  useEffect(() => {
-    setUserMenuOpen(false);
-  }, [location.pathname]);
 
   return (
     <nav
@@ -78,7 +64,7 @@ const Navigation: React.FC<Props> = ({ type }) => {
           Interview Flow
         </Link>
 
-        <div className="flex gap-6 items-center">
+        <div className="flex gap-3 items-center">
           {type !== NavigationType.DASHBOARD && (
             <Link
               to="/dashboard"
@@ -110,77 +96,42 @@ const Navigation: React.FC<Props> = ({ type }) => {
             </Link>
           )}
 
-          {/* User Dropdown */}
+          {/* User Panel */}
           {user && (
-            <div className="relative" ref={userMenuRef}>
-              <button
-                onClick={() => setUserMenuOpen((v) => !v)}
-                className="flex items-center gap-3 px-2 py-1 rounded-lg hover:bg-white/10 transition-colors"
-                aria-haspopup="menu"
-                aria-expanded={userMenuOpen}
-              >
-                <div className="w-9 h-9 bg-primary-500 rounded-full flex items-center justify-center text-white font-semibold">
-                  {user.username?.charAt(0).toUpperCase() || "U"}
-                </div>
-                <div className="hidden sm:flex flex-col items-start">
-                  <span className="text-sm font-medium text-white">
-                    {user.username || "User"}
-                  </span>
-                  <span className="text-xs text-gray-400">
-                    {user.username || ""}
-                  </span>
-                </div>
-                <span
-                  className={`text-white transition-transform ${
-                    userMenuOpen ? "rotate-180" : ""
-                  }`}
-                >
-                  ▼
-                </span>
-              </button>
-
-              {userMenuOpen && (
-                <div
-                  role="menu"
-                  className="absolute right-0 mt-2 w-56 rounded-xl border border-white/10 bg-slate-900 text-white shadow-xl z-50 overflow-hidden"
-                >
-                  <div className="px-4 py-3 border-b border-white/10">
-                    <p className="text-sm text-gray-300">Signed in as</p>
-                    <p className="text-sm font-semibold truncate">
-                      {user.email || user.username}
-                    </p>
+            <>
+              <div className="flex gap-3">
+                <Cog6ToothIcon
+                  title="Settings"
+                  className="h-6 w-6 text-white cursor-pointer"
+                />
+                <UserIcon
+                  title="Profile"
+                  className="h-6 w-6 text-white cursor-pointer"
+                />
+              </div>
+              <div className="relative">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 bg-primary-500 rounded-full flex items-center justify-center text-white font-semibold">
+                    {user.username?.charAt(0).toUpperCase() || "U"}
                   </div>
-
-                  <div className="py-1">
-                    <button
-                      role="menuitem"
-                      className="w-full text-left px-4 py-2 text-sm hover:bg-white/10"
-                      onClick={() => setUserMenuOpen(false)}
-                    >
-                      Profile
-                    </button>
-                    <Link
-                      role="menuitem"
-                      to="/settings"
-                      className="block px-4 py-2 text-sm hover:bg-white/10"
-                      onClick={() => setUserMenuOpen(false)}
-                    >
-                      Settings
-                    </Link>
-                  </div>
-
-                  <div className="border-t border-white/10">
-                    <button
-                      role="menuitem"
-                      className="w-full text-left px-4 py-2 text-sm text-red-300 hover:bg-red-500/10 hover:text-red-200"
-                      onClick={logout}
-                    >
-                      Logout
-                    </button>
+                  <div className="hidden sm:flex flex-col items-start">
+                    <span className="text-sm font-medium text-white">
+                      {user.username || "User"}
+                    </span>
+                    <span className="text-xs text-gray-400">
+                      {user.username || ""}
+                    </span>
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+              <div className="flex gap-3">
+                <ArrowRightStartOnRectangleIcon
+                  title="Logout"
+                  className="h-6 w-6 text-white cursor-pointer"
+                  onClick={logout}
+                />
+              </div>
+            </>
           )}
         </div>
       </div>
