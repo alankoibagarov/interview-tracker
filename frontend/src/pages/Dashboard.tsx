@@ -95,154 +95,178 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="bg-slate-900 p-5 w-full h-fit">
+    <div className="bg-white dark:bg-slate-900 p-5 w-full h-fit rounded">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
         <div className="grid gap-5">
           {/* Statistics Cards */}
-          <div className="bg-white rounded-2xl p-8 shadow-xl">
-            <h2 className="text-gray-800 text-2xl font-semibold mb-6">
+          <div className="bg-slate-900 dark:bg-white rounded-2xl p-8 shadow-xl">
+            <h2 className="text-white dark:text-gray-800 text-2xl font-semibold mb-6">
               Interview Statistics
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 auto-rows-fr">
               <div className="stat-card">
-                <h3 className="text-gray-600 text-base mb-4 font-semibold">
+                <h3 className="text-white text-gray-600 text-base mb-4 font-semibold">
                   Total Interviews
                 </h3>
                 <div className="text-5xl font-bold text-primary-500 mb-3">
                   {stats.total}
                 </div>
-                <p className="text-gray-500 text-sm">Interviews tracked</p>
+                <p className="text-white dark:text-gray-500 text-sm">
+                  Interviews tracked
+                </p>
               </div>
 
               <div className="stat-card">
-                <h3 className="text-gray-600 text-base mb-4 font-semibold">
+                <h3 className="text-white dark:text-gray-600 text-base mb-4 font-semibold">
                   Completed
                 </h3>
                 <div className="text-5xl font-bold text-primary-500 mb-3">
                   {stats.completed}
                 </div>
-                <p className="text-gray-500 text-sm">Interviews finished</p>
+                <p className="text-white dark:text-gray-500 text-sm">
+                  Interviews finished
+                </p>
               </div>
 
               <div className="stat-card">
-                <h3 className="text-gray-600 text-base mb-4 font-semibold">
+                <h3 className="text-white dark:text-gray-600 text-base mb-4 font-semibold">
                   Scheduled
                 </h3>
                 <div className="text-5xl font-bold text-primary-500 mb-3">
                   {stats.scheduled}
                 </div>
-                <p className="text-gray-500 text-sm">Upcoming interviews</p>
+                <p className="text-white dark:text-gray-500 text-sm">
+                  Upcoming interviews
+                </p>
               </div>
 
               <div className="stat-card">
-                <h3 className="text-gray-600 text-base mb-4 font-semibold">
+                <h3 className="text-white dark:text-gray-600 text-base mb-4 font-semibold">
                   Success Rate
                 </h3>
                 <div className="text-5xl font-bold text-primary-500 mb-3">
                   {stats.successRate}%
                 </div>
-                <p className="text-gray-500 text-sm">Positive outcomes</p>
+                <p className="text-white dark:text-gray-500 text-sm">
+                  Positive outcomes
+                </p>
               </div>
             </div>
           </div>
           {/* Statistics Cards */}
-          <div className="bg-white rounded-2xl p-8 shadow-xl">
-            <h2 className="text-gray-800 text-2xl font-semibold mb-6">
+          <div className="bg-slate-900 dark:bg-white rounded-2xl p-8 shadow-xl">
+            <h2 className="text-white dark:text-gray-800 text-2xl font-semibold mb-6">
               Interview Statistics
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 auto-rows-fr">
               <div className="stat-card">
-                <h3 className="text-gray-600 text-base mb-4 font-semibold">
+                <h3 className="text-white text-gray-600 text-base mb-4 font-semibold">
                   Total Interviews
                 </h3>
                 <div className="text-5xl font-bold text-primary-500 mb-3">
                   {stats.total}
                 </div>
-                <p className="text-gray-500 text-sm">Interviews tracked</p>
+                <p className="text-white dark:text-gray-500 text-sm">
+                  Interviews tracked
+                </p>
               </div>
 
               <div className="stat-card">
-                <h3 className="text-gray-600 text-base mb-4 font-semibold">
+                <h3 className="text-white dark:text-gray-600 text-base mb-4 font-semibold">
                   Completed
                 </h3>
                 <div className="text-5xl font-bold text-primary-500 mb-3">
                   {stats.completed}
                 </div>
-                <p className="text-gray-500 text-sm">Interviews finished</p>
+                <p className="text-white dark:text-gray-500 text-sm">
+                  Interviews finished
+                </p>
               </div>
 
               <div className="stat-card">
-                <h3 className="text-gray-600 text-base mb-4 font-semibold">
+                <h3 className="text-white dark:text-gray-600 text-base mb-4 font-semibold">
                   Scheduled
                 </h3>
                 <div className="text-5xl font-bold text-primary-500 mb-3">
                   {stats.scheduled}
                 </div>
-                <p className="text-gray-500 text-sm">Upcoming interviews</p>
+                <p className="text-white dark:text-gray-500 text-sm">
+                  Upcoming interviews
+                </p>
               </div>
 
               <div className="stat-card">
-                <h3 className="text-gray-600 text-base mb-4 font-semibold">
+                <h3 className="text-white dark:text-gray-600 text-base mb-4 font-semibold">
                   Success Rate
                 </h3>
                 <div className="text-5xl font-bold text-primary-500 mb-3">
                   {stats.successRate}%
                 </div>
-                <p className="text-gray-500 text-sm">Positive outcomes</p>
+                <p className="text-white dark:text-gray-500 text-sm">
+                  Positive outcomes
+                </p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-2xl p-8 shadow-xl">
-            <h2 className="text-gray-800 text-2xl font-semibold mb-6">
+          <div className="bg-slate-900 dark:bg-white rounded-2xl p-8 shadow-xl">
+            <h2 className="text-white dark:text-gray-800 text-2xl font-semibold mb-6">
               Interview Statistics
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 auto-rows-fr">
               <div className="stat-card">
-                <h3 className="text-gray-600 text-base mb-4 font-semibold">
+                <h3 className="text-white text-gray-600 text-base mb-4 font-semibold">
                   Total Interviews
                 </h3>
                 <div className="text-5xl font-bold text-primary-500 mb-3">
                   {stats.total}
                 </div>
-                <p className="text-gray-500 text-sm">Interviews tracked</p>
+                <p className="text-white dark:text-gray-500 text-sm">
+                  Interviews tracked
+                </p>
               </div>
 
               <div className="stat-card">
-                <h3 className="text-gray-600 text-base mb-4 font-semibold">
+                <h3 className="text-white dark:text-gray-600 text-base mb-4 font-semibold">
                   Completed
                 </h3>
                 <div className="text-5xl font-bold text-primary-500 mb-3">
                   {stats.completed}
                 </div>
-                <p className="text-gray-500 text-sm">Interviews finished</p>
+                <p className="text-white dark:text-gray-500 text-sm">
+                  Interviews finished
+                </p>
               </div>
 
               <div className="stat-card">
-                <h3 className="text-gray-600 text-base mb-4 font-semibold">
+                <h3 className="text-white dark:text-gray-600 text-base mb-4 font-semibold">
                   Scheduled
                 </h3>
                 <div className="text-5xl font-bold text-primary-500 mb-3">
                   {stats.scheduled}
                 </div>
-                <p className="text-gray-500 text-sm">Upcoming interviews</p>
+                <p className="text-white dark:text-gray-500 text-sm">
+                  Upcoming interviews
+                </p>
               </div>
 
               <div className="stat-card">
-                <h3 className="text-gray-600 text-base mb-4 font-semibold">
+                <h3 className="text-white dark:text-gray-600 text-base mb-4 font-semibold">
                   Success Rate
                 </h3>
                 <div className="text-5xl font-bold text-primary-500 mb-3">
                   {stats.successRate}%
                 </div>
-                <p className="text-gray-500 text-sm">Positive outcomes</p>
+                <p className="text-white dark:text-gray-500 text-sm">
+                  Positive outcomes
+                </p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-white rounded-2xl p-8 mb-10 shadow-xl">
-          <h2 className="text-gray-800 text-2xl font-semibold mb-6">
+        <div className="bg-slate-900 dark:bg-white rounded-2xl p-8 mb-10 shadow-xl">
+          <h2 className="text-white dark:text-gray-800 text-2xl font-semibold mb-6">
             Recent Activity
           </h2>
           <div className="grid grid-cols-1 gap-5 mb-10 bg-white rounded-2xl p-8 shadow-xl">

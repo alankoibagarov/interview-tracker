@@ -9,7 +9,7 @@ export enum ResponseCodes {
 }
 
 const logoutUser = () => {
-  localStorage.removeItem("access_token");
+  localStorage.clear();
   useUserStore.getState().setUser(null);
   if (location.pathname !== "/") {
     window.location.replace("/");

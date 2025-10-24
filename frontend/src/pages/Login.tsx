@@ -18,7 +18,11 @@ const Login = () => {
       const res = await authService.login(username, password);
       if (res.statusCode === ResponseCodes.OK) {
         localStorage.setItem("access_token", res.access_token);
-        setUser({ username });
+        setUser({
+          username,
+          email: res.email,
+          themeDarkMode: res.themeDarkMode,
+        });
         navigate("/dashboard");
       }
     } catch {

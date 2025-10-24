@@ -13,7 +13,12 @@ export class AuthService {
   async signIn(
     username: string,
     pass: string,
-  ): Promise<{ access_token: string; statusCode: number }> {
+  ): Promise<{
+    access_token: string;
+    statusCode: number;
+    themeDarkMode: boolean;
+    email: string;
+  }> {
     const user = await this.usersService.findOne(username);
 
     if (!user || !(await bcrypt.compare(pass, user.passwordHash))) {
@@ -23,6 +28,8 @@ export class AuthService {
     return {
       statusCode: 200,
       access_token: await this.jwtService.signAsync(payload),
+      themeDarkMode: user.themeDarkMode,
+      email: user.email,
     };
   }
 }

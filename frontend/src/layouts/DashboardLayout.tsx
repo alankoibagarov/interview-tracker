@@ -11,7 +11,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       <Navigation type={NavigationType.DASHBOARD} />
       <div className="flex h-[calc(100vh-70px)]">
         <Sidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />
-        <main className="p-3 overflow-auto flex flex-1 bg-slate-950">
+        <main className="p-3 overflow-auto flex flex-1 bg-gray-100 dark:bg-slate-950">
           {children}
         </main>
       </div>

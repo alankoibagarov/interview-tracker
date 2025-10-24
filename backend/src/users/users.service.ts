@@ -22,4 +22,17 @@ export class UsersService {
   findAll() {
     return this.userRepo.find();
   }
+
+  async setTheme(username: string, themeDarkMode: boolean) {
+    const user = await this.userRepo.findOne({ where: { username } });
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    await this.userRepo.update(user?.id, { themeDarkMode });
+
+    return {
+      statusCode: 200,
+    };
+  }
 }

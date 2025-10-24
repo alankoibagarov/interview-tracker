@@ -6,7 +6,10 @@ import {
   Cog6ToothIcon,
   UserIcon,
   ArrowRightStartOnRectangleIcon,
+  MoonIcon,
+  SunIcon,
 } from "@heroicons/react/24/solid";
+import { authService } from "../services/authApi";
 
 type Props = {
   type?: NavigationType;
@@ -31,6 +34,18 @@ const Navigation: React.FC<Props> = ({ type }) => {
     }
   };
 
+  const switchTheme = async () => {
+    if (user) {
+      const res = await authService.setTheme(
+        user.username,
+        !user.themeDarkMode
+      );
+      if (res.statusCode === 200) {
+        await setUser({ ...user, themeDarkMode: !user.themeDarkMode });
+      }
+    }
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 0);
@@ -48,17 +63,19 @@ const Navigation: React.FC<Props> = ({ type }) => {
       }
       ${
         scrolled &&
-        "w-full flex fixed bg-white/90 backdrop-blur-md border-b border-white/20 shadow-lg"
+        "w-full flex fixed bg-white/90 backdrop-blur-md border-b border-slate-300 dark:border-white/20 shadow-lg"
       }  ${
         type === NavigationType.DASHBOARD &&
-        "bg-slate-950 backdrop-blur-md border-b border-white/20 shadow-lg"
+        "bg-white dark:bg-slate-950 backdrop-blur-md border-b border-slate-300 dark:border-white/20 shadow-lg"
       }`}
     >
       <div className="w-full mx-auto px-5 flex justify-between items-center h-[70px]">
         <Link
           to={type === NavigationType.HOME ? "/" : "/dashboard"}
           className={`text-2xl font-bold hover:text-secondary-500 transition-colors duration-300 outline-none ${
-            scrolled ? "text-slate-950" : "text-white"
+            scrolled
+              ? "text-white dark:text-slate-950"
+              : "text-slate-950 dark:text-white"
           }`}
         >
           Interview Flow
@@ -100,22 +117,35 @@ const Navigation: React.FC<Props> = ({ type }) => {
           {user && (
             <>
               <div className="flex gap-3">
+                {user.themeDarkMode ? (
+                  <MoonIcon
+                    title="Switch to Light Mode"
+                    className="h-6 w-6 text-slate-900 dark:text-white cursor-pointer"
+                    onClick={switchTheme}
+                  />
+                ) : (
+                  <SunIcon
+                    title="Switch to Dark Mode"
+                    className="h-6 w-6 text-slate-900 dark:text-white cursor-pointer"
+                    onClick={switchTheme}
+                  />
+                )}
                 <Cog6ToothIcon
                   title="Settings"
-                  className="h-6 w-6 text-white cursor-pointer"
+                  className="h-6 w-6 text-slate-900 dark:text-white cursor-pointer"
                 />
                 <UserIcon
                   title="Profile"
-                  className="h-6 w-6 text-white cursor-pointer"
+                  className="h-6 w-6 text-slate-900 dark:text-white cursor-pointer"
                 />
               </div>
               <div className="relative">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-primary-500 rounded-full flex items-center justify-center text-white font-semibold">
+                  <div className="w-9 h-9 bg-primary-500 rounded-full flex items-center justify-center text-slate-900 dark:text-white font-semibold">
                     {user.username?.charAt(0).toUpperCase() || "U"}
                   </div>
                   <div className="hidden sm:flex flex-col items-start">
-                    <span className="text-sm font-medium text-white">
+                    <span className="text-sm font-medium text-slate-900 dark:text-white">
                       {user.username || "User"}
                     </span>
                     <span className="text-xs text-gray-400">
@@ -127,7 +157,7 @@ const Navigation: React.FC<Props> = ({ type }) => {
               <div className="flex gap-3">
                 <ArrowRightStartOnRectangleIcon
                   title="Logout"
-                  className="h-6 w-6 text-white cursor-pointer"
+                  className="h-6 w-6 text-slate-900 dark:text-white cursor-pointer"
                   onClick={logout}
                 />
               </div>

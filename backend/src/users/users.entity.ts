@@ -10,4 +10,16 @@ export class User {
 
   @Column({ unique: true })
   passwordHash: string;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: string;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: string;
+
+  @Column({ default: true })
+  themeDarkMode: boolean;
+
+  @Column({ nullable: true })
+  email: string;
 }

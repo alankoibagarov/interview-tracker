@@ -8,11 +8,18 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import HomeLayout from "./layouts/HomeLayout";
 import Interviews from "./pages/Interviews";
 import Calendar from "./pages/Calendar";
+import { useUserStore } from "./store/userStore";
 
 function App() {
+  const user = useUserStore((state) => state.user);
+
   return (
     <Router>
-      <div className="App font-inter h-screen">
+      <div
+        className={
+          "App font-inter h-screen" + `${user?.themeDarkMode ? " dark" : ""}`
+        }
+      >
         <main className="main-content h-screen">
           <Routes>
             <Route

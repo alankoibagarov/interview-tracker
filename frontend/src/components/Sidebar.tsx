@@ -81,9 +81,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
       {/* Sidebar */}
       <div
-        className={`h-[calc(100vh-70px)] w-20 bg-slate-950 shadow-xl transform transition-transform duration-300 ease-in-out z-50 ${
+        className={`hidden md:block h-[calc(100vh-70px)] w-20 bg-white dark:bg-slate-950 shadow-xl transform transition-transform duration-300 ease-in-out z-50 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 lg:shadow-none lg:border-r lg:border-slate-950`}
+        } lg:translate-x-0 lg:shadow-none`}
       >
         {/* Navigation Items */}
         <nav className="flex-1 pt-4">
@@ -100,7 +100,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                   }`}
                 >
                   <div
-                    className={`flex items-center justify-center space-x-3 rounded-sm w-8 h-8 mb-1 ${
+                    className={`flex items-center justify-center space-x-3 rounded-sm w-8 h-8 mb-1 text-slate-900 dark:text-white ${
                       activeItem === item.path && "bg-yellow-500"
                     }`}
                   >
@@ -109,7 +109,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                     </span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <span className="font-medium">{item.label}</span>
+                    <span className="font-medium text-slate-900 dark:text-white">
+                      {item.label}
+                    </span>
                   </div>
                 </Link>
               </li>

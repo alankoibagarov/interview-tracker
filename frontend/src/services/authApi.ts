@@ -2,12 +2,15 @@ import { request, ResponseCodes } from "./api";
 
 export interface User {
   username: string;
+  email: string;
+  themeDarkMode: boolean;
 }
 
 interface LoginResponse {
-  success: boolean;
   access_token: string;
   statusCode: ResponseCodes;
+  themeDarkMode: boolean;
+  email: string;
 }
 
 class AuthService {
@@ -15,6 +18,25 @@ class AuthService {
     const response = await request<LoginResponse>("/auth/login", {
       method: "POST",
       body: JSON.stringify({ username, password }),
+    });
+
+    switch (response.statusCode) {
+      case ResponseCodes.BadRequest:
+        throw new Error("Invalid credentials");
+      case ResponseCodes.OK:
+        return response;
+      default:
+        throw new Error("Login failed");
+    }
+  }
+
+  async setTheme(
+    username: string,
+    themeDarkMode: boolean
+  ): Promise<LoginResponse> {
+    const response = await request<LoginResponse>("/users/setTheme", {
+      method: "POST",
+      body: JSON.stringify({ username, themeDarkMode }),
     });
 
     switch (response.statusCode) {
