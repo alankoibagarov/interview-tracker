@@ -5,11 +5,12 @@ import { InterviewsModule } from './interviews/interviews.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import path from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // makes process.env available everywhere
-      envFilePath: ['.env', '.env.local'], // adjust if you use custom paths
+      envFilePath: path.resolve(__dirname, '../../.env'), // adjust if you use custom paths
     }),
     InterviewsModule,
     AuthModule,

@@ -56,7 +56,7 @@ cd interview-tracker
 
 ### 2) Environment
 
-Create `backend/.env`:
+Create `.env` in root folder:
 
 ```ini
 # App
@@ -73,15 +73,12 @@ DB_NAME=mydb
 
 # Typical Postgres URL used by ORMs (Prisma/TypeORM/etc.)
 DATABASE_URL=postgresql://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}
+
+# Frontend
+VITE_API_LINK=http://localhost:3000
 ```
 
 These map to `TypeOrmModule.forRoot` in `backend/src/app.module.ts`.
-
-Create `frontend/.env`:
-
-```ini
-VITE_API_LINK=http://localhost:3000
-```
 
 ### 3) Install
 

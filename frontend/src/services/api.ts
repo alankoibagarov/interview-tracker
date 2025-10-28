@@ -20,7 +20,7 @@ export async function request<T>(
   endpoint: string,
   options?: RequestInit
 ): Promise<T> {
-  const baseUrl = import.meta.env.VITE_API_LINK;
+  const baseUrl = process.env.VITE_API_LINK;
 
   const response = await fetch(`${baseUrl}${endpoint}`, {
     headers: {
