@@ -9,9 +9,31 @@ import HomeLayout from "./layouts/HomeLayout";
 import Interviews from "./pages/Interviews";
 import Calendar from "./pages/Calendar";
 import { useUserStore } from "./store/userStore";
+import { authService } from "./services/authApi";
+import { useEffect } from "react";
 
 function App() {
   const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
+
+  useEffect(() => {
+    async function fetchUserData() {
+      try {
+        const { user } = await authService.getUserData();
+        setUser({
+          username: user.username,
+          email: user.email,
+          themeDarkMode: user.themeDarkMode,
+        });
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    }
+
+    if (localStorage.getItem("access_token")) {
+      fetchUserData();
+    }
+  }, []);
 
   return (
     <Router>

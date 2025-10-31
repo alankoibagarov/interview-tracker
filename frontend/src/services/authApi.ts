@@ -48,6 +48,27 @@ class AuthService {
         throw new Error("Login failed");
     }
   }
+
+  async getUserData(): Promise<{ statusCode: number; user: User }> {
+    const response = await request<{ statusCode: number; user: User }>(
+      "/users/getUserData",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      }
+    );
+
+    switch (response.statusCode) {
+      case ResponseCodes.BadRequest:
+        throw new Error("Invalid credentials");
+      case ResponseCodes.OK:
+        return response;
+      default:
+        throw new Error("Login failed");
+    }
+  }
 }
 
 export const authService = new AuthService();
