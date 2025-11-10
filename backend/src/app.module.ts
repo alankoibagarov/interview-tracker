@@ -10,7 +10,10 @@ import path from 'path';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // makes process.env available everywhere
-      envFilePath: path.resolve(__dirname, '../../.env'), // adjust if you use custom paths
+      envFilePath:
+        process.env.NODE_ENV === 'development'
+          ? path.resolve(__dirname, '../../.env.local')
+          : path.resolve(__dirname, '../../.env'),
     }),
     InterviewsModule,
     AuthModule,
