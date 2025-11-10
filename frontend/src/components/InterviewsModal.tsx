@@ -158,6 +158,8 @@ const InterviewsModal = forwardRef<
           backdrop:transition-opacity backdrop:duration-250
           [&::backdrop]:bg-slate-950/50 [&::backdrop]:opacity-0
           z-50 self-center
+          is-open:opacity-100 is-open:scale-100
+          is-open:[&::backdrop]:opacity-100
         "
     >
       <div
@@ -407,17 +409,6 @@ const InterviewsModal = forwardRef<
           </form>
         </div>
       </div>
-
-      {/* Minimal CSS for the 'is-open' class. Keep it tiny & in-sync with Tailwind utilities */}
-      <style>{`
-          dialog.is-open {
-            opacity: 1;
-            transform: scale(1);
-          }
-          dialog.is-open::backdrop {
-            opacity: 1;
-          }
-        `}</style>
     </dialog>
   );
 });

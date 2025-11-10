@@ -17,3 +17,4 @@
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant is-open (&:where(.is-open, .is-open *));
