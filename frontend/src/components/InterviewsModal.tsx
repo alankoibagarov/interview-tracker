@@ -2,6 +2,7 @@ import React, {
   forwardRef,
   useEffect,
   useImperativeHandle,
+  useRef,
   useState,
 } from "react";
 import {
@@ -13,7 +14,9 @@ import {
 import { interviewsApi } from "../services/interviewsApi";
 import { useInterviewsStore } from "../store/interviewsStore";
 
-type InterviewsModalProps = {};
+type InterviewsModalProps = {
+  closeOnBackdrop?: boolean;
+};
 
 const initialForm: CreateInterviewDto = {
   company: "",
@@ -28,258 +31,393 @@ const initialForm: CreateInterviewDto = {
   followUpDate: "",
 };
 
+const TRANSITION_MS = 250; // keep in sync with Tailwind duration
+
 const InterviewsModal = forwardRef<
   { openDialog: () => void },
   InterviewsModalProps
->((props, ref) => {
-  const dialogRef = React.useRef<HTMLDialogElement>(null);
+>(({ closeOnBackdrop = true }, ref) => {
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const [form, setForm] = useState(initialForm);
+  const [isClosing, setIsClosing] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const interviewsStore = useInterviewsStore();
-  const { setInterviews, selectedInterview } = interviewsStore;
+  const { setInterviews, selectedInterview } = useInterviewsStore();
 
+  // Imperative API
   const openDialog = () => {
-    dialogRef.current?.showModal();
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (!dialog.open) {
+      dialog.showModal();
+      // Let it paint once before adding the "open" class (for transitions)
+      requestAnimationFrame(() => dialog.classList.add("is-open"));
+    }
+    // Prepare form for edit/create
+    if (selectedInterview) {
+      const s: Interview = selectedInterview;
+      setForm({
+        company: s.company,
+        position: s.position,
+        date: s.date,
+        status: s.status,
+        type: s.type,
+        interviewer: s.interviewer || "",
+        notes: s.notes || "",
+        feedback: s.feedback || "",
+        rating: s.rating || 0,
+        followUpDate: s.followUpDate || "",
+      });
+    } else {
+      setForm(initialForm);
+    }
   };
 
-  const closeDialog = () => {
-    const interviewsModal = document.getElementById(
-      "interviewsModal"
-    ) as HTMLDialogElement;
-    interviewsModal.close();
+  const startClose = () => {
+    const dialog = dialogRef.current;
+    if (!dialog || !dialog.open || isClosing) return;
+    setIsClosing(true);
+    dialog.classList.remove("is-open"); // triggers reverse transition
+
+    // Close after the animation finishes
+    const onTransitionEnd = (e: TransitionEvent) => {
+      if (e.target !== dialog) return; // ensure it's the dialog transition
+      dialog.removeEventListener("transitionend", onTransitionEnd);
+      dialog.close();
+      setIsClosing(false);
+    };
+    dialog.addEventListener("transitionend", onTransitionEnd);
+
+    // Safety timeout (in case transitionend doesn’t fire)
+    setTimeout(() => {
+      if (dialog.open) dialog.close();
+      setIsClosing(false);
+    }, TRANSITION_MS + 50);
+  };
+
+  useImperativeHandle(ref, () => ({ openDialog }), []);
+
+  // ESC key → animated close
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    const onCancel = (e: Event) => {
+      e.preventDefault(); // prevent instant close
+      startClose();
+    };
+    dialog.addEventListener("cancel", onCancel);
+    return () => dialog.removeEventListener("cancel", onCancel);
+  }, []);
+
+  // Backdrop click → animated close
+  const handleBackdropMouseDown = (e: React.MouseEvent<HTMLDialogElement>) => {
+    if (!closeOnBackdrop) return;
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    const rect = dialog.getBoundingClientRect();
+    const insidePanel =
+      e.clientX >= rect.left &&
+      e.clientX <= rect.right &&
+      e.clientY >= rect.top &&
+      e.clientY <= rect.bottom;
+    if (!insidePanel) startClose();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (selectedInterview) {
-      await interviewsApi.updateInterview(selectedInterview.id, form);
-    } else {
-      await interviewsApi.createInterview(form);
-    }
-    const data = await interviewsApi.getInterviews();
-    setInterviews(data);
-    closeDialog();
-  };
-
-  useImperativeHandle(ref, () => ({
-    openDialog,
-  }));
-
-  useEffect(() => {
-    const handleOpen = () => {
+    try {
+      setSubmitting(true);
       if (selectedInterview) {
-        const selected: Interview = selectedInterview;
-        setForm({
-          company: selected.company,
-          position: selected.position,
-          date: selected.date,
-          status: selected.status,
-          type: selected.type,
-          interviewer: selected.interviewer || "",
-          notes: selected.notes || "",
-          feedback: selected.feedback || "",
-          rating: selected.rating || 0,
-          followUpDate: selected.followUpDate || "",
-        });
+        await interviewsApi.updateInterview(selectedInterview.id, form);
       } else {
-        setForm(initialForm);
+        await interviewsApi.createInterview(form);
       }
-    };
-
-    handleOpen();
-  }, [selectedInterview]);
+      const data = await interviewsApi.getInterviews();
+      setInterviews(data);
+      startClose();
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <dialog
       ref={dialogRef}
       id="interviewsModal"
-      className="w-full backdrop:bg-slate-950/50 max-w-full xl:max-w-7xl max-h-fit h-screen mx-auto hidden open:flex flex-col items-center justify-center self-center rounded"
+      aria-modal="true"
+      aria-hidden="true"
+      onMouseDown={handleBackdropMouseDown}
+      // Base hidden state + transitions. "is-open" class toggled imperatively.
+      className="
+          w-full max-w-full xl:max-w-7xl mx-auto
+          open:flex open:flex-col items-center justify-center
+          rounded-lg border border-slate-200 shadow-xl
+          p-0
+          transition-all duration-250 ease-out
+          opacity-0 scale-95
+          backdrop:transition-opacity backdrop:duration-250
+          [&::backdrop]:bg-slate-950/50 [&::backdrop]:opacity-0
+          z-50 self-center
+        "
     >
-      <header className="modal-header flex justify-between items-center w-full mb-4 py-4 border-b border-slate-400 px-8">
-        <h2 className="text-lg">Add Interview</h2>
-        <button
-          className="close-modal-btn cursor-pointer text-lg focus-visible:outline-none"
-          onClick={closeDialog}
-        >
-          ×
-        </button>
-      </header>
-      <div className="modal-body w-full px-8 pb-8 overflow-y-auto">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <div className="flex flex-col xl:flex-row gap-3">
-            <div className="flex flex-col gap-4 xl:w-1/2">
-              <div className="flex flex-col gap-2">
-                <label htmlFor="name">Company</label>
-                <input
-                  type="text"
-                  name="company"
-                  placeholder="Company"
-                  className="border px-3 py-2 rounded"
-                  value={form.company}
-                  onChange={(e) =>
-                    setForm({ ...form, company: e.target.value })
-                  }
-                  required
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <label htmlFor="position">Position</label>
-                <input
-                  type="text"
-                  name="position"
-                  placeholder="Position"
-                  className="border px-3 py-2 rounded"
-                  value={form.position}
-                  onChange={(e) =>
-                    setForm({ ...form, position: e.target.value })
-                  }
-                  required
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <label htmlFor="position">Position</label>
-                <input
-                  type="datetime-local"
-                  name="date"
-                  className="border px-3 py-2 rounded"
-                  value={form.date}
-                  onChange={(e) => setForm({ ...form, date: e.target.value })}
-                  required
-                />
-              </div>
+      <div
+        // Panel wrapper to constrain height & scroll inside
+        className="bg-white w-[clamp(20rem,95vw,72rem)] max-h-[min(90vh,800px)] rounded-lg overflow-hidden"
+      >
+        <header className="flex justify-between items-center w-full py-4 border-b border-slate-200 px-6">
+          <h2 id="interviewsModalTitle" className="text-lg font-semibold">
+            {selectedInterview ? "Edit Interview" : "Add Interview"}
+          </h2>
+          <button
+            type="button"
+            onClick={startClose}
+            className="cursor-pointer text-xl leading-none rounded p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-700 focus:outline-none focus-visible:ring"
+            aria-label="Close dialog"
+          >
+            ×
+          </button>
+        </header>
 
-              <div className="flex flex-col gap-2">
-                <label htmlFor="position">Position</label>
-                <select
-                  name="status"
-                  value={form.status}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      status: e.target.value as InterviewStatus,
-                    })
-                  }
-                  className="border px-3 py-2 rounded"
-                  required
-                >
-                  {Object.values(InterviewStatus).map((status) => (
-                    <option key={status} value={status}>
-                      {status.charAt(0).toUpperCase() + status.slice(1)}
-                    </option>
-                  ))}
-                </select>
-              </div>
+        <div className="px-6 py-5 overflow-y-auto">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div className="flex flex-col xl:flex-row gap-4">
+              <div className="flex flex-col gap-4 xl:w-1/2">
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="company" className="font-medium">
+                    Company
+                  </label>
+                  <input
+                    id="company"
+                    type="text"
+                    name="company"
+                    placeholder="Company"
+                    className="border px-3 py-2 rounded"
+                    value={form.company}
+                    onChange={(e) =>
+                      setForm({ ...form, company: e.target.value })
+                    }
+                    required
+                  />
+                </div>
 
-              <div className="flex flex-col gap-2">
-                <label htmlFor="position">Position</label>
-                <select
-                  name="type"
-                  value={form.type}
-                  onChange={(e) =>
-                    setForm({ ...form, type: e.target.value as InterviewType })
-                  }
-                  className="border px-3 py-2 rounded"
-                  required
-                >
-                  {Object.values(InterviewType).map((type) => (
-                    <option key={type} value={type}>
-                      {type.charAt(0).toUpperCase() + type.slice(1)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="flex flex-col gap-4 xl:w-1/2">
-              <div className="flex flex-col gap-2">
-                <label htmlFor="position">Position</label>
-                <input
-                  type="text"
-                  name="interviewer"
-                  placeholder="Interviewer"
-                  className="border px-3 py-2 rounded"
-                  value={form.interviewer}
-                  onChange={(e) =>
-                    setForm({ ...form, interviewer: e.target.value })
-                  }
-                  required
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <label htmlFor="position">Position</label>
-                <input
-                  type="text"
-                  name="notes"
-                  placeholder="Notes"
-                  className="border px-3 py-2 rounded"
-                  value={form.notes}
-                  onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <label htmlFor="position">Position</label>
-                <input
-                  type="text"
-                  name="feedback"
-                  placeholder="Feedback"
-                  className="border px-3 py-2 rounded"
-                  value={form.feedback}
-                  onChange={(e) =>
-                    setForm({ ...form, feedback: e.target.value })
-                  }
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <label className="font-medium">Rating</label>
-                <div className="flex gap-4 h-[38px]">
-                  {[1, 2, 3, 4, 5].map((num) => (
-                    <label key={num} className="flex items-center gap-1">
-                      <input
-                        type="radio"
-                        name="rating"
-                        value={num}
-                        checked={form.rating === num}
-                        onChange={() => setForm({ ...form, rating: num })}
-                        className="accent-blue-500"
-                        required
-                      />
-                      {num}
-                    </label>
-                  ))}
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="position" className="font-medium">
+                    Position
+                  </label>
+                  <input
+                    id="position"
+                    type="text"
+                    name="position"
+                    placeholder="Position"
+                    className="border px-3 py-2 rounded"
+                    value={form.position}
+                    onChange={(e) =>
+                      setForm({ ...form, position: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="date" className="font-medium">
+                    Date & Time
+                  </label>
+                  <input
+                    id="date"
+                    type="datetime-local"
+                    name="date"
+                    className="border px-3 py-2 rounded"
+                    value={form.date}
+                    onChange={(e) => setForm({ ...form, date: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="status" className="font-medium">
+                    Status
+                  </label>
+                  <select
+                    id="status"
+                    name="status"
+                    value={form.status}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        status: e.target.value as InterviewStatus,
+                      })
+                    }
+                    className="border px-3 py-2 rounded"
+                    required
+                  >
+                    {Object.values(InterviewStatus).map((status) => (
+                      <option key={status} value={status}>
+                        {status.charAt(0).toUpperCase() + status.slice(1)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="type" className="font-medium">
+                    Type
+                  </label>
+                  <select
+                    id="type"
+                    name="type"
+                    value={form.type}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        type: e.target.value as InterviewType,
+                      })
+                    }
+                    className="border px-3 py-2 rounded"
+                    required
+                  >
+                    {Object.values(InterviewType).map((type) => (
+                      <option key={type} value={type}>
+                        {type.charAt(0).toUpperCase() + type.slice(1)}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
-              <div className="flex flex-col gap-2">
-                <label className="font-medium">Rating</label>
-                <input
-                  type="datetime-local"
-                  name="followUpDate"
-                  placeholder="Follow Up Date"
-                  className="border px-3 py-2 rounded h-[38px]"
-                  value={form.followUpDate}
-                  onChange={(e) =>
-                    setForm({ ...form, followUpDate: e.target.value })
-                  }
-                  required
-                />
+
+              <div className="flex flex-col gap-4 xl:w-1/2">
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="interviewer" className="font-medium">
+                    Interviewer
+                  </label>
+                  <input
+                    id="interviewer"
+                    type="text"
+                    name="interviewer"
+                    placeholder="Interviewer"
+                    className="border px-3 py-2 rounded"
+                    value={form.interviewer}
+                    onChange={(e) =>
+                      setForm({ ...form, interviewer: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="notes" className="font-medium">
+                    Notes
+                  </label>
+                  <input
+                    id="notes"
+                    type="text"
+                    name="notes"
+                    placeholder="Notes"
+                    className="border px-3 py-2 rounded"
+                    value={form.notes}
+                    onChange={(e) =>
+                      setForm({ ...form, notes: e.target.value })
+                    }
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="feedback" className="font-medium">
+                    Feedback
+                  </label>
+                  <input
+                    id="feedback"
+                    type="text"
+                    name="feedback"
+                    placeholder="Feedback"
+                    className="border px-3 py-2 rounded"
+                    value={form.feedback}
+                    onChange={(e) =>
+                      setForm({ ...form, feedback: e.target.value })
+                    }
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <span className="font-medium">Rating</span>
+                  <div className="flex gap-4 h-[38px]">
+                    {[1, 2, 3, 4, 5].map((num) => (
+                      <label key={num} className="flex items-center gap-1">
+                        <input
+                          type="radio"
+                          name="rating"
+                          value={num}
+                          checked={form.rating === num}
+                          onChange={() => setForm({ ...form, rating: num })}
+                          className="accent-blue-600"
+                          required
+                        />
+                        {num}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="followUpDate" className="font-medium">
+                    Follow Up Date
+                  </label>
+                  <input
+                    id="followUpDate"
+                    type="datetime-local"
+                    name="followUpDate"
+                    className="border px-3 py-2 rounded h-[38px]"
+                    value={form.followUpDate}
+                    onChange={(e) =>
+                      setForm({ ...form, followUpDate: e.target.value })
+                    }
+                    required
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="modal-footer flex justify-end gap-2 mt-4">
-            <button
-              type="submit"
-              className="confirm-button px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500px-4 py-2 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 transition-colors"
-            >
-              Confirm
-            </button>
 
-            <button
-              onClick={closeDialog}
-              className="close-button px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500px-4 py-2 bg-red-500 text-white rounded-lg text-sm hover:bg-red-600 transition-colors"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
+            <div className="flex justify-end gap-2 mt-4">
+              <button
+                type="submit"
+                disabled={submitting}
+                className="
+                    px-4 py-2 rounded-lg text-sm
+                    bg-green-600 text-white hover:bg-green-700
+                    disabled:opacity-60 disabled:cursor-not-allowed
+                    focus:outline-none focus-visible:ring
+                  "
+              >
+                {submitting ? "Saving..." : "Confirm"}
+              </button>
+
+              <button
+                type="button"
+                onClick={startClose}
+                disabled={submitting}
+                className="
+                    px-4 py-2 rounded-lg text-sm
+                    bg-red-500 text-white hover:bg-red-600
+                    disabled:opacity-60 disabled:cursor-not-allowed
+                    focus:outline-none focus-visible:ring
+                  "
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
+
+      {/* Minimal CSS for the 'is-open' class. Keep it tiny & in-sync with Tailwind utilities */}
+      <style>{`
+          dialog.is-open {
+            opacity: 1;
+            transform: scale(1);
+          }
+          dialog.is-open::backdrop {
+            opacity: 1;
+          }
+        `}</style>
     </dialog>
   );
 });
