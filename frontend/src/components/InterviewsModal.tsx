@@ -13,6 +13,11 @@ import {
 } from "../services/interviewsApi";
 import { interviewsApi } from "../services/interviewsApi";
 import { useInterviewsStore } from "../store/interviewsStore";
+import Input from "./Input";
+import Datepicker from "./Datepicker";
+import Select from "./Select";
+import RadioGroup from "./RadioGroup";
+import { interviewStatuses, interviewTypes } from "../const/lists";
 
 type InterviewsModalProps = {
   closeOnBackdrop?: boolean;
@@ -152,7 +157,7 @@ const InterviewsModal = forwardRef<
           w-full max-w-full xl:max-w-7xl mx-auto
           open:flex open:flex-col items-center justify-center
           rounded-lg border border-slate-200 shadow-xl
-          p-0
+          py-2 px-0
           transition-all duration-250 ease-out
           opacity-0 scale-95
           backdrop:transition-opacity backdrop:duration-250
@@ -164,7 +169,7 @@ const InterviewsModal = forwardRef<
     >
       <div
         // Panel wrapper to constrain height & scroll inside
-        className="bg-white w-[clamp(20rem,95vw,72rem)] max-h-[min(90vh,800px)] rounded-lg overflow-hidden"
+        className="bg-white w-[clamp(20rem,95vw,100%)] max-h-[min(90vh,800px)] rounded-lg overflow-hidden"
       >
         <header className="flex justify-between items-center w-full py-4 border-b border-slate-200 px-6">
           <h2 id="interviewsModalTitle" className="text-lg font-semibold">
@@ -185,15 +190,12 @@ const InterviewsModal = forwardRef<
             <div className="flex flex-col xl:flex-row gap-4">
               <div className="flex flex-col gap-4 xl:w-1/2">
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="company" className="font-medium">
-                    Company
-                  </label>
-                  <input
+                  <Input
                     id="company"
                     type="text"
                     name="company"
                     placeholder="Company"
-                    className="border px-3 py-2 rounded"
+                    label="Company"
                     value={form.company}
                     onChange={(e) =>
                       setForm({ ...form, company: e.target.value })
@@ -203,15 +205,12 @@ const InterviewsModal = forwardRef<
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="position" className="font-medium">
-                    Position
-                  </label>
-                  <input
+                  <Input
                     id="position"
                     type="text"
                     name="position"
                     placeholder="Position"
-                    className="border px-3 py-2 rounded"
+                    label="Position"
                     value={form.position}
                     onChange={(e) =>
                       setForm({ ...form, position: e.target.value })
@@ -221,14 +220,10 @@ const InterviewsModal = forwardRef<
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="date" className="font-medium">
-                    Date & Time
-                  </label>
-                  <input
+                  <Datepicker
                     id="date"
-                    type="datetime-local"
                     name="date"
-                    className="border px-3 py-2 rounded"
+                    label="Date & Time"
                     value={form.date}
                     onChange={(e) => setForm({ ...form, date: e.target.value })}
                     required
@@ -236,12 +231,11 @@ const InterviewsModal = forwardRef<
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="status" className="font-medium">
-                    Status
-                  </label>
-                  <select
+                  <Select
                     id="status"
                     name="status"
+                    label="Status"
+                    options={interviewStatuses}
                     value={form.status}
                     onChange={(e) =>
                       setForm({
@@ -249,54 +243,36 @@ const InterviewsModal = forwardRef<
                         status: e.target.value as InterviewStatus,
                       })
                     }
-                    className="border px-3 py-2 rounded"
                     required
-                  >
-                    {Object.values(InterviewStatus).map((status) => (
-                      <option key={status} value={status}>
-                        {status.charAt(0).toUpperCase() + status.slice(1)}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="type" className="font-medium">
-                    Type
-                  </label>
-                  <select
+                  <Select
                     id="type"
                     name="type"
+                    label="Type"
                     value={form.type}
+                    options={interviewTypes}
                     onChange={(e) =>
                       setForm({
                         ...form,
                         type: e.target.value as InterviewType,
                       })
                     }
-                    className="border px-3 py-2 rounded"
                     required
-                  >
-                    {Object.values(InterviewType).map((type) => (
-                      <option key={type} value={type}>
-                        {type.charAt(0).toUpperCase() + type.slice(1)}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
               </div>
 
               <div className="flex flex-col gap-4 xl:w-1/2">
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="interviewer" className="font-medium">
-                    Interviewer
-                  </label>
-                  <input
+                  <Input
                     id="interviewer"
                     type="text"
                     name="interviewer"
                     placeholder="Interviewer"
-                    className="border px-3 py-2 rounded"
+                    label="Interviewer"
                     value={form.interviewer}
                     onChange={(e) =>
                       setForm({ ...form, interviewer: e.target.value })
@@ -306,15 +282,12 @@ const InterviewsModal = forwardRef<
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="notes" className="font-medium">
-                    Notes
-                  </label>
-                  <input
+                  <Input
                     id="notes"
                     type="text"
                     name="notes"
                     placeholder="Notes"
-                    className="border px-3 py-2 rounded"
+                    label="Notes"
                     value={form.notes}
                     onChange={(e) =>
                       setForm({ ...form, notes: e.target.value })
@@ -323,15 +296,12 @@ const InterviewsModal = forwardRef<
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="feedback" className="font-medium">
-                    Feedback
-                  </label>
-                  <input
+                  <Input
                     id="feedback"
                     type="text"
                     name="feedback"
                     placeholder="Feedback"
-                    className="border px-3 py-2 rounded"
+                    label="Feedback"
                     value={form.feedback}
                     onChange={(e) =>
                       setForm({ ...form, feedback: e.target.value })
@@ -340,34 +310,23 @@ const InterviewsModal = forwardRef<
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <span className="font-medium">Rating</span>
-                  <div className="flex gap-4 h-[38px]">
-                    {[1, 2, 3, 4, 5].map((num) => (
-                      <label key={num} className="flex items-center gap-1">
-                        <input
-                          type="radio"
-                          name="rating"
-                          value={num}
-                          checked={form.rating === num}
-                          onChange={() => setForm({ ...form, rating: num })}
-                          className="accent-blue-600"
-                          required
-                        />
-                        {num}
-                      </label>
-                    ))}
-                  </div>
+                  <RadioGroup
+                    name="rating"
+                    selectedValue={form.rating}
+                    label="Rating"
+                    options={[1, 2, 3, 4, 5]}
+                    onChange={(e) =>
+                      setForm({ ...form, rating: Number(e.target.value) })
+                    }
+                    required
+                  />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="followUpDate" className="font-medium">
-                    Follow Up Date
-                  </label>
-                  <input
+                  <Datepicker
                     id="followUpDate"
-                    type="datetime-local"
                     name="followUpDate"
-                    className="border px-3 py-2 rounded h-[38px]"
+                    label="Follow Up Date"
                     value={form.followUpDate}
                     onChange={(e) =>
                       setForm({ ...form, followUpDate: e.target.value })

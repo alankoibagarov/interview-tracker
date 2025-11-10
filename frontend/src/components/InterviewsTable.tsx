@@ -14,6 +14,7 @@ import {
   StarIcon,
 } from "@heroicons/react/24/solid";
 import { capitalize } from "../helpers";
+import { interviewStatuses } from "../const/lists";
 
 interface InterviewsTableProps {
   openDialog: () => void;
@@ -196,7 +197,7 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({ openDialog }) => {
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="all">All Statuses</option>
-              {Object.values(InterviewStatus).map((val) => (
+              {interviewStatuses.map((val) => (
                 <option key={val} value={val}>
                   {capitalize(val)}
                 </option>
