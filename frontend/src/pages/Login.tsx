@@ -23,7 +23,7 @@ const Login = () => {
           email: res.email,
           themeDarkMode: res.themeDarkMode,
         });
-        navigate("/dashboard");
+        navigate("/interviews");
       }
     } catch {
       console.error("Login error:");

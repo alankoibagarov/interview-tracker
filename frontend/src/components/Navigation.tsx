@@ -71,7 +71,7 @@ const Navigation: React.FC<Props> = ({ type }) => {
     >
       <div className="w-full mx-auto px-5 flex justify-between items-center h-[70px]">
         <Link
-          to={type === NavigationType.HOME ? "/" : "/dashboard"}
+          to={type === NavigationType.HOME ? "/" : "/interviews"}
           className={`text-2xl font-bold hover:text-secondary-500 transition-colors duration-300 outline-none ${
             scrolled
               ? "text-white dark:text-slate-950"
@@ -84,9 +84,9 @@ const Navigation: React.FC<Props> = ({ type }) => {
         <div className="flex gap-3 items-center">
           {type !== NavigationType.DASHBOARD && (
             <Link
-              to="/dashboard"
+              to="/interviews"
               className={`px-4 py-2.5 rounded-lg font-medium transition-all duration-300 relative ${
-                location.pathname === "/dashboard"
+                location.pathname === "/interviews"
                   ? 'text-primary-500 bg-primary-50 font-semibold after:content-[""] after:absolute after:bottom-[-2px] after:left-1/2 after:-translate-x-1/2 after:w-5 after:h-0.5 after:bg-primary-500 after:rounded-sm'
                   : "text-gray-700 hover:text-primary-500 hover:bg-primary-50"
               } ${scrolled ? "text-primary-500" : "text-white"}`}

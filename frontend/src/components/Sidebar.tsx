@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  HomeIcon,
+  // HomeIcon,
   ListBulletIcon,
   // CalendarDaysIcon,
 } from "@heroicons/react/24/solid";
@@ -26,12 +26,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const [activeItem, setActiveItem] = useState(location.pathname);
 
   const sidebarItems: SidebarItem[] = [
-    {
-      id: "dashboard",
-      label: "Dashboard",
-      icon: HomeIcon,
-      path: "/dashboard",
-    },
+    // {
+    //   id: "dashboard",
+    //   label: "Dashboard",
+    //   icon: HomeIcon,
+    //   path: "/dashboard",
+    // },
     {
       id: "interviews",
       label: "Interviews",

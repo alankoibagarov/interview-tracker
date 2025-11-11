@@ -12,15 +12,20 @@ import {
   TrashIcon,
   ArrowDownTrayIcon,
   StarIcon,
+  DocumentMagnifyingGlassIcon,
 } from "@heroicons/react/24/solid";
 import { capitalize } from "../helpers";
 import { interviewStatuses } from "../const/lists";
 
 interface InterviewsTableProps {
   openDialog: () => void;
+  openDetailsDialog: () => void;
 }
 
-const InterviewsTable: React.FC<InterviewsTableProps> = ({ openDialog }) => {
+const InterviewsTable: React.FC<InterviewsTableProps> = ({
+  openDialog,
+  openDetailsDialog,
+}) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [sortField, setSortField] = useState<keyof Interview>("date");
@@ -60,7 +65,7 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({ openDialog }) => {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm("Are you sure you want to delete this interview?")) {
+    if (globalThis.confirm("Are you sure you want to delete this interview?")) {
       try {
         await interviewsApi.deleteInterview(id);
         setInterviews(interviews.filter((interview) => interview.id !== id));
@@ -82,6 +87,12 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({ openDialog }) => {
     setSelectedInterview(null);
 
     openDialog();
+  };
+
+  const handleOpenDetails = async (interview: Interview) => {
+    setSelectedInterview(interview);
+
+    openDetailsDialog();
   };
 
   const exportToExcel = async () => {
@@ -346,6 +357,13 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({ openDialog }) => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div className="flex justify-end gap-2">
+                    <button
+                      onClick={() => handleOpenDetails(interview)}
+                      className="text-indigo-600 hover:text-indigo-900 transition-colors cursor-pointer"
+                      title="Details"
+                    >
+                      <DocumentMagnifyingGlassIcon className="h-5 w-5" />
+                    </button>
                     <button
                       onClick={() => handleEdit(interview)}
                       className="text-yellow-600 hover:text-yellow-900 transition-colors cursor-pointer"

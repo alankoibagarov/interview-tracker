@@ -18,6 +18,7 @@ import Datepicker from "./Datepicker";
 import Select from "./Select";
 import RadioGroup from "./RadioGroup";
 import { interviewStatuses, interviewTypes } from "../const/lists";
+import Textarea from "./Textarea";
 
 type InterviewsModalProps = {
   closeOnBackdrop?: boolean;
@@ -58,24 +59,6 @@ const InterviewsModal = forwardRef<
       // Let it paint once before adding the "open" class (for transitions)
       requestAnimationFrame(() => dialog.classList.add("is-open"));
     }
-    // Prepare form for edit/create
-    if (selectedInterview) {
-      const s: Interview = selectedInterview;
-      setForm({
-        company: s.company,
-        position: s.position,
-        date: s.date,
-        status: s.status,
-        type: s.type,
-        interviewer: s.interviewer || "",
-        notes: s.notes || "",
-        feedback: s.feedback || "",
-        rating: s.rating || 0,
-        followUpDate: s.followUpDate || "",
-      });
-    } else {
-      setForm(initialForm);
-    }
   };
 
   const startClose = () => {
@@ -113,6 +96,26 @@ const InterviewsModal = forwardRef<
     dialog.addEventListener("cancel", onCancel);
     return () => dialog.removeEventListener("cancel", onCancel);
   }, []);
+
+  useEffect(() => {
+    if (selectedInterview) {
+      const s: Interview = selectedInterview;
+      setForm({
+        company: s.company,
+        position: s.position,
+        date: s.date,
+        status: s.status,
+        type: s.type,
+        interviewer: s.interviewer || "",
+        notes: s.notes || "",
+        feedback: s.feedback || "",
+        rating: s.rating || 0,
+        followUpDate: s.followUpDate || "",
+      });
+    } else {
+      setForm(initialForm);
+    }
+  }, [selectedInterview]);
 
   // Backdrop click → animated close
   const handleBackdropMouseDown = (e: React.MouseEvent<HTMLDialogElement>) => {
@@ -296,20 +299,6 @@ const InterviewsModal = forwardRef<
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <Input
-                    id="feedback"
-                    type="text"
-                    name="feedback"
-                    placeholder="Feedback"
-                    label="Feedback"
-                    value={form.feedback}
-                    onChange={(e) =>
-                      setForm({ ...form, feedback: e.target.value })
-                    }
-                  />
-                </div>
-
-                <div className="flex flex-col gap-2">
                   <RadioGroup
                     name="rating"
                     selectedValue={form.rating}
@@ -332,6 +321,21 @@ const InterviewsModal = forwardRef<
                       setForm({ ...form, followUpDate: e.target.value })
                     }
                     required
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <Textarea
+                    id="feedback"
+                    type="text"
+                    name="feedback"
+                    placeholder="Feedback"
+                    label="Feedback"
+                    rows="3"
+                    value={form.feedback}
+                    onChange={(e) =>
+                      setForm({ ...form, feedback: e.target.value })
+                    }
                   />
                 </div>
               </div>
