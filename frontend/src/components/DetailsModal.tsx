@@ -45,6 +45,19 @@ const DetailsModal = forwardRef<
 
   const { setInterviews, selectedInterview } = useInterviewsStore();
 
+  useEffect(() => {
+    loadInterviewData();
+  }, []);
+
+  const loadInterviewData = async () => {
+    try {
+      const interviewData = await interviewsApi.getInterview("1");
+      console.log("Loaded interview data:", interviewData);
+    } catch (err) {
+      console.error("Error loading dashboard data:", err);
+    }
+  };
+
   // Imperative API
   const openDialog = () => {
     const dialog = dialogRef.current;

@@ -25,6 +25,7 @@ export async function request<T>(
   const response = await fetch(`${baseUrl}${endpoint}`, {
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       ...options?.headers,
     },
     ...options,
