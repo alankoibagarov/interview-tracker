@@ -59,7 +59,6 @@ export class InterviewsController {
     @Param('id', ParseIntPipe) id: number,
     @Req() req: Request & { user: { sub: number; username: string } },
   ): Promise<InterviewEntity> {
-    console.log(id);
     const interview = await this.interviewsService.findOne(id);
     if (!interview) {
       throw new NotFoundException('Interview not found');
