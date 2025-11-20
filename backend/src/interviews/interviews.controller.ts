@@ -15,16 +15,21 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { InterviewsService } from './interviews.service';
+import { InterviewRecordsService } from './interviews.records.service';
 import type {
   CreateInterviewDto,
   UpdateInterviewDto,
   InterviewEntity,
 } from './interview.entity';
+import type { InterviewRecordEntity } from './interview-record.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('interviews')
 export class InterviewsController {
-  constructor(private readonly interviewsService: InterviewsService) {}
+  constructor(
+    private readonly interviewsService: InterviewsService,
+    private readonly recordsService: InterviewRecordsService,
+  ) {}
 
   @UseGuards(AuthGuard)
   @Get()
@@ -58,7 +63,7 @@ export class InterviewsController {
   async findOne(
     @Param('id', ParseIntPipe) id: number,
     @Req() req: Request & { user: { sub: number; username: string } },
-  ): Promise<InterviewEntity> {
+  ): Promise<InterviewEntity & { records: InterviewRecordEntity[] }> {
     const interview = await this.interviewsService.findOne(id);
     if (!interview) {
       throw new NotFoundException('Interview not found');
@@ -71,7 +76,9 @@ export class InterviewsController {
       throw new ForbiddenException();
     }
 
-    return interview;
+    const records = await this.recordsService.findByInterview(id, userId);
+
+    return { ...interview, records };
   }
 
   @Post()
