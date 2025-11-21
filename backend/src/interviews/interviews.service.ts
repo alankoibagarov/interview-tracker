@@ -105,4 +105,68 @@ export class InterviewsService {
       where: { userId },
     });
   }
+
+  async exportToCsv(userId: number): Promise<string> {
+    const interviews = await this.interviewRepo.find({
+      where: { userId },
+      order: { date: 'DESC' },
+    });
+
+    const headers = [
+      'ID',
+      'Company',
+      'Position',
+      'Date',
+      'Type',
+      'Status',
+      'Interviewer',
+      'Rating',
+      'Follow Up Date',
+      'Notes',
+      'Feedback',
+      'Created At',
+      'Updated At',
+    ];
+
+    const escapeCsvValue = (value: unknown): string => {
+      if (value === null || value === undefined) {
+        return '';
+      }
+
+      const stringValue =
+        typeof value === 'string' ? value : String(value);
+
+      if (
+        stringValue.includes('"') ||
+        stringValue.includes(',') ||
+        stringValue.includes('\n') ||
+        stringValue.includes('\r')
+      ) {
+        return `"${stringValue.replace(/"/g, '""')}"`;
+      }
+
+      return stringValue;
+    };
+
+    const rows = interviews.map((interview) => [
+      interview.id,
+      interview.company,
+      interview.position,
+      interview.date,
+      interview.type,
+      interview.status,
+      interview.interviewer ?? '',
+      interview.rating ?? '',
+      interview.followUpDate ?? '',
+      interview.notes ?? '',
+      interview.feedback ?? '',
+      interview.createdAt,
+      interview.updatedAt,
+    ]);
+
+    return [
+      headers.join(','),
+      ...rows.map((row) => row.map(escapeCsvValue).join(',')),
+    ].join('\n');
+  }
 }

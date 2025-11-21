@@ -23,17 +23,38 @@ export async function request<T>(
   const baseUrl = process.env.VITE_API_LINK;
 
   const response = await fetch(`${baseUrl}${endpoint}`, {
+    ...options,
     headers: {
+      ...options?.headers,
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      ...options?.headers,
     },
-    ...options,
+  });
+
+  // if (response.status === ResponseCodes.Unauthorized) {
+  //   logoutUser();
+  // }
+
+  return response.json();
+}
+
+export async function requestBlob(
+  endpoint: string,
+  options?: RequestInit
+): Promise<Blob> {
+  const baseUrl = process.env.VITE_API_LINK;
+
+  const response = await fetch(`${baseUrl}${endpoint}`, {
+     ...options,
+    headers: {
+      ...options?.headers,
+      'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+    },
   });
 
   if (response.status === ResponseCodes.Unauthorized) {
     logoutUser();
   }
 
-  return response.json();
+  return response.blob();
 }

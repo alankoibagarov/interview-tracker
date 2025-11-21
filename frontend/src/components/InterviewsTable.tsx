@@ -98,7 +98,22 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({
   };
 
   const exportToExcel = async () => {
-    alert("Export to Excel functionality is not implemented yet.");
+    try {
+      const blob = await interviewsApi.exportInterviewsCsv();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `interviews-${new Date()
+        .toISOString()
+        .split("T")[0]}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Error exporting interviews:", err);
+      alert("Failed to export interviews");
+    }
   };
 
   const getStatusColor = (status: InterviewStatus) => {

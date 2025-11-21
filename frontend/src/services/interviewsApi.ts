@@ -1,4 +1,4 @@
-import { request } from "./api";
+import { request, requestBlob } from "./api";
 
 export enum InterviewStatus {
   Scheduled = "scheduled",
@@ -105,6 +105,14 @@ class InterviewsService {
 
   async getRecentActivity(): Promise<Interview[]> {
     return request<Interview[]>("/interviews/recent");
+  }
+
+  async exportInterviewsCsv(): Promise<Blob> {
+    return requestBlob("/interviews/export", {
+      headers: {
+        Accept: "text/csv",
+      },
+    });
   }
 }
 

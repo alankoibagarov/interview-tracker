@@ -13,6 +13,7 @@ import {
   Req,
   NotFoundException,
   ForbiddenException,
+  Res,
 } from '@nestjs/common';
 import { InterviewsService } from './interviews.service';
 import { InterviewRecordsService } from './interviews.records.service';
@@ -23,6 +24,7 @@ import type {
 } from './interview.entity';
 import type { InterviewRecordEntity } from './interview-record.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
+import type { Request, Response } from 'express';
 
 @Controller('interviews')
 export class InterviewsController {
@@ -56,6 +58,26 @@ export class InterviewsController {
   ) {
     const userId = req.user.sub;
     return await this.interviewsService.getRecentActivity(userId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('export')
+  async exportCsv(
+    @Req() req: Request & { user: { sub: number; username: string } },
+    @Res() res: Response,
+  ) {
+    const userId = req.user.sub;
+    const csvContent = await this.interviewsService.exportToCsv(userId);
+
+    const dateSuffix = new Date().toISOString().split('T')[0];
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="interviews-${dateSuffix}.csv"`,
+    );
+
+    return res.send(csvContent);
   }
 
   @UseGuards(AuthGuard)
