@@ -19,6 +19,7 @@ import Select from "./Select";
 import RadioGroup from "./RadioGroup";
 import { interviewStatuses, interviewTypes } from "../const/lists";
 import Textarea from "./Textarea";
+import WysiwygEditor from "./WysiwygEditor";
 
 type InterviewsModalProps = {
   closeOnBackdrop?: boolean;
@@ -172,7 +173,7 @@ const InterviewsModal = forwardRef<
     >
       <div
         // Panel wrapper to constrain height & scroll inside
-        className="bg-white w-[clamp(20rem,95vw,100%)] max-h-[min(90vh,800px)] rounded-lg overflow-hidden"
+        className="bg-white w-[clamp(20rem,95vw,100%)] max-h-[min(90vh,800px)] rounded-lg"
       >
         <header className="flex justify-between items-center w-full py-4 border-b border-slate-200 px-6">
           <h2 id="interviewsModalTitle" className="text-lg font-semibold">
@@ -325,7 +326,17 @@ const InterviewsModal = forwardRef<
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <Textarea
+                  <WysiwygEditor
+                    id="feedback"
+                    name="feedback"
+                    placeholder="Feedback"
+                    label="Feedback"
+                    value={form.feedback}
+                    onChange={(e) =>
+                      setForm({ ...form, feedback: e.target.value })
+                    }
+                  />
+                  {/* <Textarea
                     id="feedback"
                     type="text"
                     name="feedback"
@@ -336,7 +347,7 @@ const InterviewsModal = forwardRef<
                     onChange={(e) =>
                       setForm({ ...form, feedback: e.target.value })
                     }
-                  />
+                  /> */}
                 </div>
               </div>
             </div>

@@ -1,0 +1,24 @@
+.wrapper {
+  font-family: var(--font-inter, "Inter", sans-serif);
+}
+
+.wrapper :global(.ql-toolbar.ql-snow) {
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0;
+}
+
+.wrapper :global(.ql-container.ql-snow) {
+  border: none;
+}
+
+.wrapper :global(.ql-editor) {
+  min-height: inherit;
+  padding: 0.75rem 1rem;
+}
+
+.wrapper :global(.ql-editor:focus) {
+  outline: none;
+}
+
