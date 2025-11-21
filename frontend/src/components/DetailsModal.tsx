@@ -199,7 +199,56 @@ const DetailsModal = forwardRef<
         <div className="px-6 py-5 overflow-y-auto">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col xl:flex-row gap-4">
-              <div className="flex flex-col gap-4 xl:w-1/2">1</div>
+              <div className="flex flex-col gap-4 xl:w-1/2">
+                <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                  <div className="text-xs uppercase text-slate-500 tracking-wide">
+                    Candidate
+                  </div>
+                  <div className="mt-1 h-4 w-32 rounded bg-slate-200 animate-pulse" />
+                  <div className="mt-3 text-xs uppercase text-slate-500 tracking-wide">
+                    Position
+                  </div>
+                  <div className="mt-1 h-4 w-40 rounded bg-slate-200 animate-pulse" />
+                </div>
+
+                <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-xs uppercase text-slate-500 tracking-wide">
+                        Company
+                      </div>
+                      <div className="mt-1 h-4 w-48 rounded bg-slate-100 animate-pulse" />
+                    </div>
+                    <span className="h-6 w-16 rounded-full bg-slate-100 animate-pulse" />
+                  </div>
+                  <div className="mt-4 grid grid-cols-2 gap-3">
+                    {[...Array(4)].map((_, idx) => (
+                      <div key={idx} className="space-y-1">
+                        <div className="text-[11px] uppercase text-slate-400">
+                          Placeholder
+                        </div>
+                        <div className="h-4 w-full rounded bg-slate-100 animate-pulse" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-slate-100 animate-pulse"></div>
+                    <div className="flex-1 space-y-1">
+                      <div className="h-4 w-32 rounded bg-slate-100 animate-pulse" />
+                      <div className="h-3 w-24 rounded bg-slate-100 animate-pulse" />
+                    </div>
+                    <div className="h-8 w-16 rounded-md bg-slate-100 animate-pulse" />
+                  </div>
+                  <div className="mt-4 space-y-2">
+                    {[...Array(3)].map((_, idx) => (
+                      <div key={idx} className="h-3 w-full rounded bg-slate-50 animate-pulse" />
+                    ))}
+                  </div>
+                </div>
+              </div>
               <div className="flex flex-col gap-4 xl:w-1/2">
                 <Timeline
                   items={[
