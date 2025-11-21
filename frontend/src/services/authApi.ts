@@ -51,13 +51,7 @@ class AuthService {
 
   async getUserData(): Promise<{ statusCode: number; user: User }> {
     const response = await request<{ statusCode: number; user: User }>(
-      "/users/getUserData",
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      }
+      "/users/getUserData"
     );
 
     switch (response.statusCode) {

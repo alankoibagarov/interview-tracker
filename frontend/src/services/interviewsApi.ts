@@ -69,11 +69,7 @@ export interface InterviewStats {
 class InterviewsService {
   // Interviews
   async getInterviews(): Promise<Interview[]> {
-    return request<Interview[]>("/interviews", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    });
+    return request<Interview[]>("/interviews");
   }
 
   async getInterview(id: string): Promise<Interview> {
@@ -104,19 +100,11 @@ class InterviewsService {
   }
 
   async getInterviewStats(): Promise<InterviewStats> {
-    return request<InterviewStats>("/interviews/stats", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    });
+    return request<InterviewStats>("/interviews/stats");
   }
 
   async getRecentActivity(): Promise<Interview[]> {
-    return request<Interview[]>("/interviews/recent", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    });
+    return request<Interview[]>("/interviews/recent");
   }
 }
 

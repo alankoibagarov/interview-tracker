@@ -5,23 +5,31 @@ import {
   Put,
   Body,
   Param,
+  ParseIntPipe,
   HttpException,
   HttpStatus,
   UseGuards,
   Delete,
   Req,
+  NotFoundException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { InterviewsService } from './interviews.service';
+import { InterviewRecordsService } from './interviews.records.service';
 import type {
   CreateInterviewDto,
   UpdateInterviewDto,
   InterviewEntity,
 } from './interview.entity';
+import type { InterviewRecordEntity } from './interview-record.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('interviews')
 export class InterviewsController {
-  constructor(private readonly interviewsService: InterviewsService) {}
+  constructor(
+    private readonly interviewsService: InterviewsService,
+    private readonly recordsService: InterviewRecordsService,
+  ) {}
 
   @UseGuards(AuthGuard)
   @Get()
@@ -50,14 +58,28 @@ export class InterviewsController {
     return await this.interviewsService.getRecentActivity(userId);
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string): Interview {
-  //   const interview = this.interviewsService.findOne(id);
-  //   if (!interview) {
-  //     throw new HttpException('Interview not found', HttpStatus.NOT_FOUND);
-  //   }
-  //   return interview;
-  // }
+  @UseGuards(AuthGuard)
+  @Get(':id')
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() req: Request & { user: { sub: number; username: string } },
+  ): Promise<InterviewEntity & { records: InterviewRecordEntity[] }> {
+    const interview = await this.interviewsService.findOne(id);
+    if (!interview) {
+      throw new NotFoundException('Interview not found');
+    }
+
+    // Ensure the current user owns the interview
+    const userId = req.user.sub;
+    if (interview.userId !== userId) {
+      // Do not reveal existence to unauthorized users - use Forbidden
+      throw new ForbiddenException();
+    }
+
+    const records = await this.recordsService.findByInterview(id, userId);
+
+    return { ...interview, records };
+  }
 
   @Post()
   async create(

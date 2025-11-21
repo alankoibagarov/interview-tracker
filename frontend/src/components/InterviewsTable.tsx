@@ -45,8 +45,10 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({
     try {
       setLoading(true);
       const data = await interviewsApi.getInterviews();
-      setInterviews(data);
-      setError(null);
+      if (data) {
+        setInterviews(data);
+        setError(null);
+      }
     } catch (err) {
       setError("Failed to load interviews");
       console.error("Error loading interviews:", err);
