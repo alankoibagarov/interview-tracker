@@ -159,7 +159,7 @@ const DetailsModal = forwardRef<
   return (
     <dialog
       ref={dialogRef}
-      id="interviewsModal"
+      id="detailsModal"
       aria-modal="true"
       aria-hidden="true"
       onMouseDown={handleBackdropMouseDown}
