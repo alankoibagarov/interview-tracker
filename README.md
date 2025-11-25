@@ -27,11 +27,14 @@ interview-tracker/
 ├─ frontend/                   # React client
 │  ├─ src/
 │  │  ├─ components/           # Reusable UI components
+│  │  ├─ const/                # Constants
+│  │  ├─ helpers/              # Helper functions
 │  │  ├─ layouts/              # Page layouts
 │  │  ├─ pages/                # Route pages
+│  │  ├─ routing/              # Router configuration
 │  │  ├─ services/             # API service calls
 │  │  ├─ store/                # State management (Redux/Zustand)
-│  │  ├─ types/                # TypeScript types/interfaces
+│  │  ├─ test/                 # Tests
 │  │  └─ App.tsx
 │  ├─ index.html
 │  ├─ package.json
