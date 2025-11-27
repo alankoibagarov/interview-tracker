@@ -33,15 +33,7 @@ function Timeline({
   const mapDisplayedToOriginal = (displayedIndex: number) =>
     reverse ? items.length - 1 - displayedIndex : displayedIndex;
 
-  const handleKey =
-    (it: TimelineItem, origIndex: number) =>
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (!onItemClick) return;
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        onItemClick(it, origIndex);
-      }
-    };
+
 
   return (
     <div className={`relative flex flex-col ${className}`}>

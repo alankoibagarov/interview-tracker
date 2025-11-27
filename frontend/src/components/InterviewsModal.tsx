@@ -18,7 +18,7 @@ import Datepicker from "./Datepicker";
 import Select from "./Select";
 import RadioGroup from "./RadioGroup";
 import { interviewStatuses, interviewTypes } from "../const/lists";
-import Textarea from "./Textarea";
+
 import WysiwygEditor from "./WysiwygEditor";
 
 type InterviewsModalProps = {
@@ -327,13 +327,11 @@ const InterviewsModal = forwardRef<
 
                 <div className="flex flex-col gap-2">
                   <WysiwygEditor
-                    id="feedback"
-                    name="feedback"
                     placeholder="Feedback"
                     label="Feedback"
                     value={form.feedback}
-                    onChange={(e) =>
-                      setForm({ ...form, feedback: e.target.value })
+                    onChange={(value) =>
+                      setForm({ ...form, feedback: value })
                     }
                   />
                   {/* <Textarea
