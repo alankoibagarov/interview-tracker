@@ -31,9 +31,9 @@ export async function request<T>(
     },
   });
 
-  // if (response.status === ResponseCodes.Unauthorized) {
-  //   logoutUser();
-  // }
+  if (response.status === ResponseCodes.Unauthorized) {
+    logoutUser();
+  }
 
   return response.json();
 }

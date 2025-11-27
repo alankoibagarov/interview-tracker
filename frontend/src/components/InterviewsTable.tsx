@@ -51,6 +51,7 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({
       }
     } catch (err) {
       setError("Failed to load interviews");
+      setInterviews([]);
       console.error("Error loading interviews:", err);
     } finally {
       setLoading(false);
