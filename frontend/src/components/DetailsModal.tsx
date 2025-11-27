@@ -14,6 +14,7 @@ import {
 import { interviewsApi } from "../services/interviewsApi";
 import { useInterviewsStore } from "../store/interviewsStore";
 import Timeline from "./Timeline";
+import { formatDate } from "../helpers/date";
 
 type InterviewsModalProps = {
   closeOnBackdrop?: boolean;
@@ -42,19 +43,26 @@ const DetailsModal = forwardRef<
   const [form, setForm] = useState(initialForm);
   const [isClosing, setIsClosing] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { setInterviews, selectedInterview } = useInterviewsStore();
 
   useEffect(() => {
-    loadInterviewData();
-  }, []);
+    if (dialogRef.current?.open) {
+      loadInterviewData();
+    }
+  }, [dialogRef.current?.open]);
 
   const loadInterviewData = async () => {
     try {
-      const interviewData = await interviewsApi.getInterview("1");
+      if (!selectedInterview) return;
+      setLoading(true);
+      const interviewData = await interviewsApi.getInterview(selectedInterview.id);
       console.log("Loaded interview data:", interviewData);
     } catch (err) {
       console.error("Error loading dashboard data:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -204,11 +212,19 @@ const DetailsModal = forwardRef<
                   <div className="text-xs uppercase text-slate-500 tracking-wide">
                     Candidate
                   </div>
-                  <div className="mt-1 h-4 w-32 rounded bg-slate-200 animate-pulse" />
+                  {loading ? (
+                    <div className="mt-1 h-4 w-32 rounded bg-slate-200 animate-pulse" />
+                  ) : (
+                    selectedInterview?.company
+                  )}
                   <div className="mt-3 text-xs uppercase text-slate-500 tracking-wide">
                     Position
                   </div>
-                  <div className="mt-1 h-4 w-40 rounded bg-slate-200 animate-pulse" />
+                  {loading ? (
+                    <div className="mt-1 h-4 w-40 rounded bg-slate-200 animate-pulse" />
+                  ) : (
+                    selectedInterview?.position
+                  )}
                 </div>
 
                 <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
@@ -217,9 +233,17 @@ const DetailsModal = forwardRef<
                       <div className="text-xs uppercase text-slate-500 tracking-wide">
                         Company
                       </div>
-                      <div className="mt-1 h-4 w-48 rounded bg-slate-100 animate-pulse" />
+                      {loading ? (
+                        <div className="mt-1 h-4 w-48 rounded bg-slate-100 animate-pulse" />
+                      ) : (
+                        selectedInterview?.company
+                      )}
                     </div>
-                    <span className="h-6 w-16 rounded-full bg-slate-100 animate-pulse" />
+                    {loading ? (
+                      <span className="h-6 w-16 rounded-full bg-slate-100 animate-pulse" />
+                    ) : (
+                      formatDate(selectedInterview?.date ?? '')
+                    )}
                   </div>
                   <div className="mt-4 grid grid-cols-2 gap-3">
                     {[...Array(4)].map((_, idx) => (
