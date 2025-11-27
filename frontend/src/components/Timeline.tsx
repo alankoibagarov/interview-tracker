@@ -99,10 +99,10 @@ function Timeline({
         ) : (
           <div
             key={it.id ?? idx}
-            className={`flex items-start gap-3 relative min-h-[4rem] mb-2`}
+            className={`flex items-start gap-3 relative min-h-[4rem] mb-2 ${idx % 2 === 0 ? "" : "flex-row-reverse"}`}
           >
             <div className="bg-white p-0 rounded-md flex-1">
-              <div className="text-[13px] text-[#444] leading-[1.4]">
+              <div className={`text-[13px] text-[#444] leading-[1.4] ${idx % 2 === 0 ? "text-right" : "text-left"}`}>
                 {it.content}
               </div>
             </div>
@@ -127,11 +127,7 @@ function Timeline({
               </div>
             </div>
 
-            <div className="bg-white p-0 rounded-md flex-1">
-              <div className="text-[13px] text-[#444] leading-[1.4]">
-                {it.content}
-              </div>
-            </div>
+            <div className="bg-white p-0 rounded-md flex-1"/>
           </div>
         );
       })}
