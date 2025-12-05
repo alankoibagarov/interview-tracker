@@ -101,16 +101,16 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({
   const exportToExcel = async () => {
     try {
       const blob = await interviewsApi.exportInterviewsCsv();
-      const url = window.URL.createObjectURL(blob);
+      const url = globalThis.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `interviews-${new Date()
-        .toISOString()
-        .split("T")[0]}.csv`;
+      link.download = `interviews-${
+        new Date().toISOString().split("T")[0]
+      }.csv`;
       document.body.appendChild(link);
       link.click();
       link.remove();
-      window.URL.revokeObjectURL(url);
+      globalThis.URL.revokeObjectURL(url);
     } catch (err) {
       console.error("Error exporting interviews:", err);
       alert("Failed to export interviews");
@@ -355,7 +355,7 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({
                         {interview.rating}/5
                       </span>
                       <div className="flex">
-                        {[...Array(5)].map((_, i) => (
+                        {[new Array(5)].map((_, i) => (
                           <span
                             key={i}
                             className={`text-xs ${
