@@ -103,6 +103,7 @@ export class InterviewsController {
     return { ...interview, records };
   }
 
+  @UseGuards(AuthGuard)
   @Post()
   async create(
     @Body() createInterviewDto: CreateInterviewDto,
@@ -112,6 +113,7 @@ export class InterviewsController {
     return await this.interviewsService.create(createInterviewDto, userId);
   }
 
+  @UseGuards(AuthGuard)
   @Put(':id')
   async update(
     @Param('id') id: number,
@@ -127,6 +129,7 @@ export class InterviewsController {
     return interview;
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<{ message: string }> {
     const deleted = await this.interviewsService.remove(id);
