@@ -137,5 +137,21 @@ describe("InterviewsModal", () => {
     );
     expect(mockCreate).not.toHaveBeenCalled();
   });
+
+  it("closes modal when Cancel button is clicked", async () => {
+    const user = userEvent.setup();
+    setSelectedInterview(null);
+    const dialog = renderAndOpenModal();
+
+    expect(dialog).toHaveAttribute("open");
+
+    await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+
+    // The component removes the open attribute or closes the dialog.
+    // Since we are mocking or running in JSDOM, successful closure usually removes the open attribute.
+    await waitFor(() => {
+        expect(dialog).not.toHaveAttribute("open");
+    });
+  });
 });
 

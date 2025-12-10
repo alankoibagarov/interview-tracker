@@ -16,6 +16,7 @@ const mockGet = vi.hoisted(() => vi.fn());
 const mockDelete = vi.hoisted(() =>
   vi.fn().mockResolvedValue({ message: "ok" })
 );
+const mockExport = vi.hoisted(() => vi.fn().mockResolvedValue(new Blob(["csv"], { type: "text/csv" })));
 
 vi.mock("../../services/interviewsApi", async () => {
   const actual = await vi.importActual<
@@ -26,6 +27,7 @@ vi.mock("../../services/interviewsApi", async () => {
     interviewsApi: {
       getInterviews: mockGet,
       deleteInterview: mockDelete,
+      exportInterviewsCsv: mockExport,
     },
   };
 });
@@ -69,7 +71,14 @@ describe("InterviewsTable", () => {
     seedInterviewsStore([]);
     mockGet.mockReset();
     mockDelete.mockReset();
+    mockExport.mockReset();
     mockGet.mockResolvedValue(interviews);
+
+    // Mock global interactions
+    global.confirm = vi.fn(() => true);
+    global.alert = vi.fn();
+    global.URL.createObjectURL = vi.fn(() => "blob:url");
+    global.URL.revokeObjectURL = vi.fn();
   });
 
   it("loads interviews on mount and displays rows", async () => {
@@ -110,6 +119,33 @@ describe("InterviewsTable", () => {
     expect(useInterviewsStore.getState().selectedInterview?.company).toBe(
       "Globex"
     );
+  });
+
+  it("does not delete interview when user cancels confirmation", async () => {
+    vi.mocked(global.confirm).mockReturnValue(false);
+    render(
+      <InterviewsTable openDialog={vi.fn()} openDetailsDialog={vi.fn()} />
+    );
+    await screen.findByText("ACME");
+
+    const row = screen.getByText("ACME").closest("tr")!;
+    await userEvent.click(within(row).getByTitle("Delete"));
+
+    expect(global.confirm).toHaveBeenCalled();
+    expect(mockDelete).not.toHaveBeenCalled();
+  });
+
+  it("exports interviews to CSV when export button is clicked", async () => {
+    render(
+      <InterviewsTable openDialog={vi.fn()} openDetailsDialog={vi.fn()} />
+    );
+    await screen.findByText("ACME");
+
+    const exportBtn = screen.getByTitle("Download Excel file");
+    await userEvent.click(exportBtn);
+
+    await waitFor(() => expect(mockExport).toHaveBeenCalled());
+    expect(global.URL.createObjectURL).toHaveBeenCalled();
   });
 });
 
