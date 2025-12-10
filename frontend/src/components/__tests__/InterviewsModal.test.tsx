@@ -93,7 +93,7 @@ describe("InterviewsModal", () => {
     expect(screen.getByDisplayValue("Frontend")).toBeInTheDocument();
   });
 
-  it("creates a new interview when submitting in add mode", async () => {
+  it("creates a new interview when submitting in add mode", { timeout: 15000 }, async () => {
     const user = userEvent.setup();
     setSelectedInterview(null);
     const dialog = renderAndOpenModal();

@@ -72,13 +72,13 @@ if (!window.matchMedia) {
 if (typeof window.HTMLDialogElement !== "undefined") {
   window.HTMLDialogElement.prototype.showModal =
     window.HTMLDialogElement.prototype.showModal ??
-    function showModal() {
+    function showModal(this: HTMLDialogElement) {
       this.setAttribute("open", "");
     };
 
   window.HTMLDialogElement.prototype.close =
     window.HTMLDialogElement.prototype.close ??
-    function close() {
+    function close(this: HTMLDialogElement) {
       this.removeAttribute("open");
     };
 }

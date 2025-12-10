@@ -72,7 +72,7 @@ class InterviewsService {
     return request<Interview[]>("/interviews");
   }
 
-  async getInterview(id: string): Promise<Interview> {
+  async getInterview(id: number): Promise<Interview> {
     return request<Interview>(`/interviews/${id}`);
   }
 

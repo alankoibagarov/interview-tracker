@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create, type StateCreator } from "zustand";
+import { persist, type PersistOptions } from "zustand/middleware";
 import type { Interview } from "../services/interviewsApi";
 
 interface InterviewsState {
@@ -14,7 +14,10 @@ interface InterviewsState {
 }
 
 export const useInterviewsStore = create<InterviewsState>()(
-  persist(
+  (persist as (
+    config: StateCreator<InterviewsState>,
+    options: PersistOptions<InterviewsState>
+  ) => StateCreator<InterviewsState>)(
     (set) => ({
       interviews: [],
 

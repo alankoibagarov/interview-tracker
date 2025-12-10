@@ -5,7 +5,6 @@ A full‑stack web application to manage, track, and analyze interviews. It incl
 ## Tech Stack
 
 - Backend: NestJS, TypeORM, PostgreSQL, JWT, Config Module
-- Frontend: React + Vite, TypeScript, Tailwind CSS
 - Frontend: React + Vite, TypeScript, Tailwind CSS, @heroicons/react (icons)
 - Testing: Jest, Supertest
 - Dev: Docker (optional), ESLint + Prettier
@@ -27,14 +26,20 @@ interview-tracker/
 │  └─ ...
 ├─ frontend/                   # React client
 │  ├─ src/
-│  │  ├─ components/
-│  │  ├─ layouts/
-│  │  ├─ pages/
-│  │  ├─ services/
-│  │  └─ store/
+│  │  ├─ components/           # Reusable UI components
+│  │  ├─ const/                # Constants
+│  │  ├─ helpers/              # Helper functions
+│  │  ├─ layouts/              # Page layouts
+│  │  ├─ pages/                # Route pages
+│  │  ├─ routing/              # Router configuration
+│  │  ├─ services/             # API service calls
+│  │  ├─ store/                # State management (Redux/Zustand)
+│  │  ├─ test/                 # Tests
+│  │  └─ App.tsx
 │  ├─ index.html
 │  ├─ package.json
 │  └─ ...
+├─ docker-compose.yml          # (Optional) PostgreSQL container
 ├─ README.md
 └─ LICENSE
 ```
@@ -87,7 +92,20 @@ cd backend && npm install
 cd ../frontend && npm install
 ```
 
-### 4) Run
+### 4) Database Setup (TypeORM)
+
+```sh
+cd backend
+npm run typeorm migration:run
+```
+
+Optional: Seed initial data
+
+```sh
+npm run seed
+```
+
+### 5) Run
 
 Backend (http://localhost:3000):
 
@@ -111,11 +129,14 @@ Backend:
 - `npm run test` – unit tests
 - `npm run test:e2e` – end‑to‑end tests (Supertest)
 - `npm run lint` – run ESLint
+- `npm run typeorm migration:run` – run database migrations
+- `npm run seed` – seed initial data
 
 Frontend:
 
 - `npm run dev` – start Vite dev server
 - `npm run build` – build for production
+- `npm run preview` – preview production build locally
 
 ## API Overview (Backend)
 
@@ -123,9 +144,18 @@ Frontend:
 - `GET /interviews` – list user interviews (auth required)
 - Additional CRUD endpoints exist under `/interviews`.
 
+## Docker Setup (Optional)
+
+Run PostgreSQL in Docker:
+
+```sh
+docker-compose up -d
+```
+
 ## Development Notes
 
 - TypeORM runs with `synchronize: true` in development; disable for production.
+- Ensure `.env` is added to `.gitignore` before committing.
 
 ## Testing
 
