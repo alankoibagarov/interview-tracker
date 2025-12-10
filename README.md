@@ -5,8 +5,8 @@ A full‑stack web application to manage, track, and analyze interviews. It incl
 ## Tech Stack
 
 - Backend: NestJS, TypeORM, PostgreSQL, JWT, Config Module
-- Frontend: React + Vite, TypeScript, Tailwind CSS, @heroicons/react (icons)
-- Testing: Jest, Supertest
+- Frontend: React + Vite, TypeScript, Tailwind CSS, @heroicons/react, Zustand
+- Testing: Jest (Backend), Vitest + React Testing Library (Frontend)
 - Dev: Docker (optional), ESLint + Prettier
 
 ## Repository Structure
@@ -99,11 +99,7 @@ cd backend
 npm run typeorm migration:run
 ```
 
-Optional: Seed initial data
 
-```sh
-npm run seed
-```
 
 ### 5) Run
 
@@ -130,13 +126,14 @@ Backend:
 - `npm run test:e2e` – end‑to‑end tests (Supertest)
 - `npm run lint` – run ESLint
 - `npm run typeorm migration:run` – run database migrations
-- `npm run seed` – seed initial data
 
 Frontend:
 
 - `npm run dev` – start Vite dev server
 - `npm run build` – build for production
 - `npm run preview` – preview production build locally
+- `npm run test` – run Vitest unit tests
+- `npm run test:coverage` – run tests with coverage
 
 ## API Overview (Backend)
 
@@ -146,10 +143,16 @@ Frontend:
 
 ## Docker Setup (Optional)
 
-Run PostgreSQL in Docker:
+Start the entire stack (Backend, Frontend, Database):
 
 ```sh
 docker-compose up -d
+```
+
+Or run just the database:
+
+```sh
+docker-compose up -d db
 ```
 
 ## Development Notes
