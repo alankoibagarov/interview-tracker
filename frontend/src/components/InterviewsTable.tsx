@@ -219,6 +219,8 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({
               Add Interview
             </button>
             <select
+              aria-label="Filter by status"
+              data-testid="filter-status"
               value={filterStatus}
               onChange={(e) =>
                 setFilterStatus(e.target.value as InterviewStatus | "all")

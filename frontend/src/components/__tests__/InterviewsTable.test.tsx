@@ -147,5 +147,59 @@ describe("InterviewsTable", () => {
     await waitFor(() => expect(mockExport).toHaveBeenCalled());
     expect(global.URL.createObjectURL).toHaveBeenCalled();
   });
+
+  it("sorts interviews by company", async () => {
+    render(<InterviewsTable openDialog={vi.fn()} openDetailsDialog={vi.fn()} />);
+    await screen.findByText("ACME");
+
+    const sortBtn = screen.getByText("Company");
+    await userEvent.click(sortBtn); // Ascending
+
+    const rows = screen.getAllByRole("row");
+    // Row 0 is header. Row 1 should be ACME (first), Row 2 Globex
+    // Wait, by default loading -> interviews. Sort field is date desc.
+    // ACME date: 2025-01-01. Globex date: 2025-02-01.
+    // Desc: Globex, ACME. 
+    // If I click Company: "ACME", "Globex". Ascending.
+    // ACME < Globex. Row 1 ACME.
+    expect(rows[1]).toHaveTextContent("ACME");
+    expect(rows[2]).toHaveTextContent("Globex");
+
+    await userEvent.click(sortBtn); // Descending
+    const rowsDesc = screen.getAllByRole("row");
+    expect(rowsDesc[1]).toHaveTextContent("Globex");
+    expect(rowsDesc[2]).toHaveTextContent("ACME");
+  });
+
+  it("filters interviews by status", async () => {
+    const user = userEvent.setup();
+    render(<InterviewsTable openDialog={vi.fn()} openDetailsDialog={vi.fn()} />);
+    await screen.findByText("ACME"); 
+    await screen.findByText("Globex");
+
+    const filterSelect = screen.getByTestId("filter-status");
+    await user.selectOptions(filterSelect, InterviewStatus.Completed);
+
+    expect(screen.getByText("ACME")).toBeInTheDocument();
+    expect(screen.queryByText("Globex")).not.toBeInTheDocument();
+  });
+
+  it("displays empty state when no interviews match filter", async () => {
+    const user = userEvent.setup();
+    render(<InterviewsTable openDialog={vi.fn()} openDetailsDialog={vi.fn()} />);
+    await screen.findByText("ACME");
+
+    const filterSelect = screen.getByTestId("filter-status");
+    await user.selectOptions(filterSelect, InterviewStatus.Pending);
+
+    expect(screen.getByText('No interviews with status "pending"')).toBeInTheDocument();
+  });
+
+  it("displays error message when API fails", async () => {
+    mockGet.mockRejectedValueOnce(new Error("API Error"));
+    render(<InterviewsTable openDialog={vi.fn()} openDetailsDialog={vi.fn()} />);
+
+    await waitFor(() => expect(screen.getByText("Failed to load interviews")).toBeInTheDocument());
+  });
 });
 
