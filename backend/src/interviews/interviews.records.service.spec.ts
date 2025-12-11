@@ -45,7 +45,9 @@ describe('InterviewRecordsService', () => {
     jest.clearAllMocks();
   });
 
-  const interview = (overrides: Partial<InterviewEntity> = {}): InterviewEntity => ({
+  const interview = (
+    overrides: Partial<InterviewEntity> = {},
+  ): InterviewEntity => ({
     id: 1,
     userId: 5,
     company: 'Acme',
@@ -58,7 +60,9 @@ describe('InterviewRecordsService', () => {
     ...overrides,
   });
 
-  const record = (overrides: Partial<InterviewRecordEntity> = {}): InterviewRecordEntity => ({
+  const record = (
+    overrides: Partial<InterviewRecordEntity> = {},
+  ): InterviewRecordEntity => ({
     id: 1,
     interviewId: 1,
     userId: 5,
@@ -75,7 +79,11 @@ describe('InterviewRecordsService', () => {
     recordRepo.create.mockReturnValue(created);
     recordRepo.save.mockResolvedValue(created);
 
-    const dto = { type: 'note', message: 'Progress', metadata: { mood: 'good' } };
+    const dto = {
+      type: 'note',
+      message: 'Progress',
+      metadata: { mood: 'good' },
+    };
     const result = await service.create(1, 5, dto);
 
     expect(recordRepo.create).toHaveBeenCalledWith(
@@ -161,7 +169,9 @@ describe('InterviewRecordsService', () => {
     recordRepo.findOne.mockResolvedValue(record({ interviewId: 2 }));
     interviewRepo.findOne.mockResolvedValue(interview({ id: 2, userId: 99 }));
 
-    await expect(service.remove(10, 5)).rejects.toBeInstanceOf(ForbiddenException);
+    await expect(service.remove(10, 5)).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
   });
 
   it('remove deletes record when ownership verified', async () => {
@@ -173,4 +183,3 @@ describe('InterviewRecordsService', () => {
     expect(recordRepo.delete).toHaveBeenCalledWith(10);
   });
 });
-

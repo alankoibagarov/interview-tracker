@@ -41,7 +41,9 @@ describe('InterviewsService', () => {
     jest.clearAllMocks();
   });
 
-  const sampleInterview = (overrides: Partial<InterviewEntity> = {}): InterviewEntity => ({
+  const sampleInterview = (
+    overrides: Partial<InterviewEntity> = {},
+  ): InterviewEntity => ({
     id: 1,
     userId: 10,
     company: 'Acme',
@@ -121,7 +123,10 @@ describe('InterviewsService', () => {
     const saved = sampleInterview({ status: 'completed' });
     interviewRepo.save.mockResolvedValue(saved);
 
-    const updateDto: UpdateInterviewDto = { status: 'completed', notes: 'Updated' };
+    const updateDto: UpdateInterviewDto = {
+      status: 'completed',
+      notes: 'Updated',
+    };
     const result = await service.update(existing.id, updateDto);
 
     expect(interviewRepo.save).toHaveBeenCalledWith(
@@ -160,11 +165,15 @@ describe('InterviewsService', () => {
         cancelled: '0',
       }),
     };
-    interviewRepo.createQueryBuilder.mockReturnValue(qb as SelectQueryBuilder<InterviewEntity>);
+    interviewRepo.createQueryBuilder.mockReturnValue(
+      qb as SelectQueryBuilder<InterviewEntity>,
+    );
 
     const stats = await service.getStats(12);
 
-    expect(qb.where).toHaveBeenCalledWith('interview.userId = :userId', { userId: 12 });
+    expect(qb.where).toHaveBeenCalledWith('interview.userId = :userId', {
+      userId: 12,
+    });
     expect(stats).toEqual({
       total: 4,
       completed: 2,
@@ -215,4 +224,3 @@ describe('InterviewsService', () => {
     });
   });
 });
-

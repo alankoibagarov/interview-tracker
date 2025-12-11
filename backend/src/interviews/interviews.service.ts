@@ -133,8 +133,7 @@ export class InterviewsService {
         return '';
       }
 
-      const stringValue =
-        typeof value === 'string' ? value : String(value);
+      const stringValue = typeof value === 'string' ? value : String(value);
 
       if (
         stringValue.includes('"') ||
