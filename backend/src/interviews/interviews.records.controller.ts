@@ -15,6 +15,7 @@ import {
   type CreateInterviewRecordDto,
 } from './interviews.records.service';
 import { AuthGuard } from 'src/auth/auth.guard';
+import type { Request } from 'express';
 
 @Controller('interviews/:interviewId/records')
 export class InterviewRecordsController {

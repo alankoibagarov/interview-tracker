@@ -4,6 +4,7 @@ import React, {
   useImperativeHandle,
   useRef,
   useState,
+  useCallback,
 } from "react";
 import {
   InterviewStatus,
@@ -47,13 +48,9 @@ const DetailsModal = forwardRef<
 
   const { setInterviews, selectedInterview } = useInterviewsStore();
 
-  useEffect(() => {
-    if (dialogRef.current?.open) {
-      loadInterviewData();
-    }
-  }, [dialogRef.current?.open]);
 
-  const loadInterviewData = async () => {
+
+  const loadInterviewData = useCallback(async () => {
     try {
       if (!selectedInterview) return;
       setLoading(true);
@@ -64,7 +61,13 @@ const DetailsModal = forwardRef<
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedInterview]);
+
+  useEffect(() => {
+    if (dialogRef.current?.open) {
+      loadInterviewData();
+    }
+  }, [dialogRef.current?.open, loadInterviewData]);
 
   // Imperative API
   const openDialog = () => {
@@ -77,7 +80,7 @@ const DetailsModal = forwardRef<
     }
   };
 
-  const startClose = () => {
+  const startClose = useCallback(() => {
     const dialog = dialogRef.current;
     if (!dialog || !dialog.open || isClosing) return;
     setIsClosing(true);
@@ -97,7 +100,7 @@ const DetailsModal = forwardRef<
       if (dialog.open) dialog.close();
       setIsClosing(false);
     }, TRANSITION_MS + 50);
-  };
+  }, [isClosing]);
 
   useImperativeHandle(ref, () => ({ openDialog }), []);
 
@@ -111,7 +114,7 @@ const DetailsModal = forwardRef<
     };
     dialog.addEventListener("cancel", onCancel);
     return () => dialog.removeEventListener("cancel", onCancel);
-  }, []);
+  }, [startClose]);
 
   useEffect(() => {
     if (selectedInterview) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { interviewsApi } from "../services/interviewsApi";
-import type { InterviewStats } from "../services/interviewsApi";
+import type { InterviewStats, Interview } from "../services/interviewsApi";
 import { formatDate, formatTimeAgo } from "../helpers/date";
 
 const defaultStats: InterviewStats = {
@@ -14,7 +14,7 @@ const defaultStats: InterviewStats = {
 
 const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<InterviewStats>(defaultStats);
-  const [recentActivity, setRecentActivity] = useState<any[]>([]);
+  const [recentActivity, setRecentActivity] = useState<Interview[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

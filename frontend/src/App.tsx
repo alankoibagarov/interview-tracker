@@ -33,7 +33,7 @@ function App() {
     if (localStorage.getItem("access_token")) {
       fetchUserData();
     }
-  }, []);
+  }, [setUser]);
 
   return (
     <Router>

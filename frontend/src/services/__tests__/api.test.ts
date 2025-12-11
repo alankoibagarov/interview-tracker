@@ -20,7 +20,7 @@ describe("api service", () => {
     vi.mocked(global.fetch).mockClear();
     mockReplace.mockClear();
     localStorage.clear();
-    useUserStore.getState().setUser({ id: 1, email: "test@test.com" } as any);
+    useUserStore.getState().setUser({ email: "test@test.com", username: "test", themeDarkMode: false });
   });
 
   it("request adds authorization header", async () => {

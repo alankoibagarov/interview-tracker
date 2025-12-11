@@ -4,6 +4,7 @@ import React, {
   useImperativeHandle,
   useRef,
   useState,
+  useCallback,
 } from "react";
 import {
   InterviewStatus,
@@ -62,7 +63,7 @@ const InterviewsModal = forwardRef<
     }
   };
 
-  const startClose = () => {
+  const startClose = useCallback(() => {
     const dialog = dialogRef.current;
     if (!dialog || !dialog.open || isClosing) return;
     setIsClosing(true);
@@ -82,7 +83,7 @@ const InterviewsModal = forwardRef<
       if (dialog.open) dialog.close();
       setIsClosing(false);
     }, TRANSITION_MS + 50);
-  };
+  }, [isClosing]);
 
   useImperativeHandle(ref, () => ({ openDialog }), []);
 
@@ -96,7 +97,7 @@ const InterviewsModal = forwardRef<
     };
     dialog.addEventListener("cancel", onCancel);
     return () => dialog.removeEventListener("cancel", onCancel);
-  }, []);
+  }, [startClose]);
 
   useEffect(() => {
     if (selectedInterview) {

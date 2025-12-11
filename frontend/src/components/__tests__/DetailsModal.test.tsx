@@ -77,7 +77,7 @@ describe("DetailsModal", () => {
     setSelectedInterview(sampleInterview);
     // tailored to stay in pending state for a bit? 
     // actually testing 'loading' usually requires controlling the promise resolution or checking immediate effect
-    let resolvePromise: (val: any) => void;
+    let resolvePromise: (val: Interview) => void;
     const promise = new Promise((resolve) => { resolvePromise = resolve; });
     mockGetInterview.mockReturnValue(promise);
 

@@ -68,21 +68,23 @@ const WysiwygEditor = ({
   // Mount Quill
   useEffect(() => {
     let isMounted = true;
+    const container = quillContainerRef.current;
+    const wrapper = wrapperRef.current;
+
     const initQuill = async () => {
-      if (!quillContainerRef.current || quillInstanceRef.current || !isMounted) {
+      if (!container || quillInstanceRef.current || !isMounted) {
         return;
       }
 
       const { default: QuillConstructor } = await import("quill");
 
-      const wrapper = wrapperRef.current;
       if (wrapper) {
         wrapper.querySelectorAll(".ql-toolbar").forEach((toolbar) => {
           toolbar.remove();
         });
       }
 
-      const quill = new QuillConstructor(quillContainerRef.current, {
+      const quill = new QuillConstructor(container, {
         theme: "snow",
         readOnly,
         placeholder,
@@ -117,11 +119,10 @@ const WysiwygEditor = ({
         instance.off("text-change");
       }
       quillInstanceRef.current = null;
-      if (quillContainerRef.current) {
-        quillContainerRef.current.innerHTML = "";
-        quillContainerRef.current.removeAttribute("class");
+      if (container) {
+        container.innerHTML = "";
+        container.removeAttribute("class");
       }
-      const wrapper = wrapperRef.current;
       if (wrapper) {
         wrapper.querySelectorAll(".ql-toolbar").forEach((toolbar) => {
           toolbar.remove();
