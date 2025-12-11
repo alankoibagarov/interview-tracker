@@ -23,6 +23,8 @@ export interface Interview {
   status: InterviewStatus;
   type: InterviewType;
   interviewer?: string;
+  location?: string;
+  callLink?: string;
   notes?: string;
   feedback?: string;
   rating?: number;
@@ -38,6 +40,8 @@ export interface CreateInterviewDto {
   status: InterviewStatus;
   type: InterviewType;
   interviewer?: string;
+  location?: string;
+  callLink?: string;
   notes?: string;
   feedback?: string;
   rating?: number;
@@ -51,6 +55,8 @@ export interface UpdateInterviewDto {
   status?: InterviewStatus;
   type?: InterviewType;
   interviewer?: string;
+  location?: string;
+  callLink?: string;
   notes?: string;
   feedback?: string;
   rating?: number;

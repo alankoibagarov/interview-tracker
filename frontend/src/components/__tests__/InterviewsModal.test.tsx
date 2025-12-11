@@ -57,6 +57,8 @@ const sampleInterview: Interview = {
   status: InterviewStatus.Scheduled,
   type: InterviewType.Onsite,
   interviewer: "Jane",
+  location: "https://maps.google.com",
+  callLink: "https://zoom.us/j/123",
   notes: "Bring portfolio",
   feedback: "Good",
   rating: 3,
@@ -91,6 +93,8 @@ describe("InterviewsModal", () => {
 
     expect(screen.getByDisplayValue("ACME")).toBeInTheDocument();
     expect(screen.getByDisplayValue("Frontend")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("https://maps.google.com")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("https://zoom.us/j/123")).toBeInTheDocument();
   });
 
   it("creates a new interview when submitting in add mode", { timeout: 15000 }, async () => {
@@ -105,6 +109,14 @@ describe("InterviewsModal", () => {
       screen.getByPlaceholderText("Interviewer"),
       "Alex Recruiter"
     );
+    await user.type(
+      screen.getByPlaceholderText("Location (URL)"),
+      "https://maps.google.com"
+    );
+    await user.type(
+      screen.getByPlaceholderText("Call Link (URL)"),
+      "https://meet.google.com/abc-def-ghi"
+    );
     await user.type(getInputByLabel("Follow Up Date"), "2025-12-01T09:00");
     await user.click(screen.getByLabelText("4"));
 
@@ -112,7 +124,16 @@ describe("InterviewsModal", () => {
       within(dialog).getByRole("button", { name: "Confirm" })
     );
 
-    await waitFor(() => expect(mockCreate).toHaveBeenCalled());
+    await waitFor(() =>
+      expect(mockCreate).toHaveBeenCalledWith(
+        expect.objectContaining({
+          company: "Globex",
+          position: "Developer",
+          location: "https://maps.google.com",
+          callLink: "https://meet.google.com/abc-def-ghi",
+        })
+      )
+    );
     expect(mockUpdate).not.toHaveBeenCalled();
     expect(mockGet).toHaveBeenCalled();
   });

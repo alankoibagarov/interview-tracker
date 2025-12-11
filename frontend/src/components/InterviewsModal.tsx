@@ -33,6 +33,8 @@ const initialForm: CreateInterviewDto = {
   status: InterviewStatus.Scheduled,
   type: InterviewType.Onsite,
   interviewer: "",
+  location: "",
+  callLink: "",
   notes: "",
   feedback: "",
   rating: 0,
@@ -109,6 +111,8 @@ const InterviewsModal = forwardRef<
         status: s.status,
         type: s.type,
         interviewer: s.interviewer || "",
+        location: s.location || "",
+        callLink: s.callLink || "",
         notes: s.notes || "",
         feedback: s.feedback || "",
         rating: s.rating || 0,
@@ -266,6 +270,34 @@ const InterviewsModal = forwardRef<
                       })
                     }
                     required
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <Input
+                    id="location"
+                    type="text"
+                    name="location"
+                    placeholder="Location (URL)"
+                    label="Location (Maps URL)"
+                    value={form.location}
+                    onChange={(e) =>
+                      setForm({ ...form, location: e.target.value })
+                    }
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <Input
+                    id="callLink"
+                    type="text"
+                    name="callLink"
+                    placeholder="Call Link (URL)"
+                    label="Call Link"
+                    value={form.callLink}
+                    onChange={(e) =>
+                      setForm({ ...form, callLink: e.target.value })
+                    }
                   />
                 </div>
               </div>

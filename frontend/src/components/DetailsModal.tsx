@@ -28,6 +28,8 @@ const initialForm: CreateInterviewDto = {
   status: InterviewStatus.Scheduled,
   type: InterviewType.Onsite,
   interviewer: "",
+  location: "",
+  callLink: "",
   notes: "",
   feedback: "",
   rating: 0,
@@ -126,6 +128,8 @@ const DetailsModal = forwardRef<
         status: s.status,
         type: s.type,
         interviewer: s.interviewer || "",
+        location: s.location || "",
+        callLink: s.callLink || "",
         notes: s.notes || "",
         feedback: s.feedback || "",
         rating: s.rating || 0,
@@ -249,7 +253,47 @@ const DetailsModal = forwardRef<
                     )}
                   </div>
                   <div className="mt-4 grid grid-cols-2 gap-3">
-                    {[...Array(4)].map((_, idx) => (
+                    <div className="space-y-1">
+                      <div className="text-[11px] uppercase text-slate-400">
+                        Location
+                      </div>
+                      {loading ? (
+                        <div className="h-4 w-full rounded bg-slate-100 animate-pulse" />
+                      ) : selectedInterview?.location ? (
+                        <a
+                          href={selectedInterview.location}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-sm font-medium text-blue-600 hover:underline truncate block"
+                        >
+                           Map Link
+                        </a>
+                      ) : (
+                        <div className="text-sm font-medium text-slate-700">-</div>
+                      )}
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="text-[11px] uppercase text-slate-400">
+                        Call Link
+                      </div>
+                      {loading ? (
+                        <div className="h-4 w-full rounded bg-slate-100 animate-pulse" />
+                      ) : selectedInterview?.callLink ? (
+                        <a
+                          href={selectedInterview.callLink}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-sm font-medium text-blue-600 hover:underline truncate block"
+                        >
+                          Join Call
+                        </a>
+                      ) : (
+                        <div className="text-sm font-medium text-slate-700">-</div>
+                      )}
+                    </div>
+
+                    {[...Array(2)].map((_, idx) => (
                       <div key={idx} className="space-y-1">
                         <div className="text-[11px] uppercase text-slate-400">
                           Placeholder
