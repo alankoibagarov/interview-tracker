@@ -6,10 +6,11 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string | null;
   fullWidth?: boolean;
   className?: string;
+  required?: boolean;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error = null, fullWidth = true, className = "", ...rest }, ref) => {
+  ({ label, error = null, fullWidth = true, className = "", required = false, ...rest }, ref) => {
     const base =
       "px-4 py-2 rounded-lg border text-sm placeholder-gray-400 bg-white text-gray-900 disabled:opacity-60 disabled:cursor-not-allowed";
     const focus =
@@ -23,6 +24,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label className="block text-sm font-medium text-gray-700 mb-1">
             {label}
+            {required && <span className="text-red-500">*</span>}
           </label>
         )}
 
@@ -32,6 +34,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           className={`${base} ${focus} ${errorStyle} ${
             fullWidth ? "w-full" : "min-w-[200px]"
           }`}
+          required={required}
         />
 
         {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
