@@ -1,6 +1,13 @@
 import React from "react";
 import { formatDate } from "../helpers/date";
-import type { TimelineItem } from "../services/interviewsApi";
+
+export interface TimelineItem {
+  id?: string | number;
+  title?: string;
+  content: React.ReactNode;
+  date: string;
+  icon?: React.ReactNode;
+}
 
 type TimelineProps = {
   items: TimelineItem[];
@@ -25,7 +32,7 @@ function Timeline({
 
   return (
     <div className={`relative flex flex-col gap-4 ${className}`}>
-      <div className="self-center text-sm text-[#444]">Start</div>
+      <div className="self-center text-sm text-[#444]">End</div>
       {ordered.map((it, idx) => {
         const origIndex = mapDisplayedToOriginal(idx);
         const isActive =
@@ -85,7 +92,7 @@ function Timeline({
           </div>
         );
       })}
-      <div className="self-center text-sm text-[#444]">End</div>
+      <div className="self-center text-sm text-[#444]">Start</div>
     </div>
   );
 }

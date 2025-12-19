@@ -12,8 +12,7 @@ export const formatTimeAgo = (dateString: string) => {
 };
 
 export const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  return date.toLocaleString(undefined, {
+  return new Date(dateString).toLocaleString(undefined, {
     year: "numeric",
     month: "short",
     day: "numeric",

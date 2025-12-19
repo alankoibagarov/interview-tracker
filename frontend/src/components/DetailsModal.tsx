@@ -6,12 +6,6 @@ import React, {
   useState,
   useCallback,
 } from "react";
-import {
-  InterviewStatus,
-  InterviewType,
-  type CreateInterviewDto,
-  type Interview,
-} from "../services/interviewsApi";
 import { interviewsApi } from "../services/interviewsApi";
 import { useInterviewsStore } from "../store/interviewsStore";
 import Timeline from "./Timeline";
@@ -22,21 +16,6 @@ import { StarIcon } from "@heroicons/react/16/solid";
 
 type InterviewsModalProps = {
   closeOnBackdrop?: boolean;
-};
-
-const initialForm: CreateInterviewDto = {
-  company: "",
-  position: "",
-  date: "",
-  status: InterviewStatus.Scheduled,
-  type: InterviewType.Onsite,
-  interviewer: "",
-  location: "",
-  callLink: "",
-  notes: "",
-  feedback: "",
-  rating: 0,
-  followUpDate: "",
 };
 
 const TRANSITION_MS = 250; // keep in sync with Tailwind duration
@@ -91,28 +70,27 @@ const DetailsModal = forwardRef<
   InterviewsModalProps
 >(({ closeOnBackdrop = true }, ref) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [form, setForm] = useState(initialForm);
   const [isClosing, setIsClosing] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { setInterviews, selectedInterview } = useInterviewsStore();
+  const { selectedInterview, setSelectedInterview } = useInterviewsStore();
   const userData = useUserStore((state) => state.user);
 
   const loadInterviewData = useCallback(async () => {
     try {
-      if (!selectedInterview) return;
+      if (!selectedInterview?.id) return;
       setLoading(true);
       const interviewData = await interviewsApi.getInterview(
         selectedInterview.id
       );
+      setSelectedInterview(interviewData);
       console.log("Loaded interview data:", interviewData);
     } catch (err) {
       console.error("Error loading dashboard data:", err);
     } finally {
       setLoading(false);
     }
-  }, [selectedInterview]);
+  }, [selectedInterview?.id, setSelectedInterview]);
 
   useEffect(() => {
     if (dialogRef.current?.open) {
@@ -167,28 +145,6 @@ const DetailsModal = forwardRef<
     return () => dialog.removeEventListener("cancel", onCancel);
   }, [startClose]);
 
-  useEffect(() => {
-    if (selectedInterview) {
-      const s: Interview = selectedInterview;
-      setForm({
-        company: s.company,
-        position: s.position,
-        date: s.date,
-        status: s.status,
-        type: s.type,
-        interviewer: s.interviewer || "",
-        location: s.location || "",
-        callLink: s.callLink || "",
-        notes: s.notes || "",
-        feedback: s.feedback || "",
-        rating: s.rating || 0,
-        followUpDate: s.followUpDate || "",
-      });
-    } else {
-      setForm(initialForm);
-    }
-  }, [selectedInterview]);
-
   // Backdrop click → animated close
   const handleBackdropMouseDown = (e: React.MouseEvent<HTMLDialogElement>) => {
     if (!closeOnBackdrop) return;
@@ -201,23 +157,6 @@ const DetailsModal = forwardRef<
       e.clientY >= rect.top &&
       e.clientY <= rect.bottom;
     if (!insidePanel) startClose();
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      setSubmitting(true);
-      if (selectedInterview) {
-        await interviewsApi.updateInterview(selectedInterview.id, form);
-      } else {
-        await interviewsApi.createInterview(form);
-      }
-      const data = await interviewsApi.getInterviews();
-      setInterviews(data);
-      startClose();
-    } finally {
-      setSubmitting(false);
-    }
   };
 
   return (
@@ -260,7 +199,7 @@ const DetailsModal = forwardRef<
           </button>
         </header>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6">
+        <form className="flex flex-col gap-4 p-6">
           <div className="flex flex-col xl:flex-row gap-4">
             <div className="flex flex-col gap-4 xl:w-1/2 max-h-[600px] overflow-y-auto">
               <div className="flex items-center gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
@@ -377,7 +316,11 @@ const DetailsModal = forwardRef<
             </div>
             <div className="flex flex-col gap-4 xl:w-1/2 max-h-[600px] overflow-y-auto">
               {selectedInterview?.records?.length ? (
-                <Timeline items={selectedInterview?.records} />
+                <Timeline
+                  items={selectedInterview?.records?.map((i) => {
+                    return { date: i.createdAt, content: i.message };
+                  })}
+                />
               ) : (
                 <div className="flex flex-1 justify-center items-center">
                   No timeline data is available
@@ -390,7 +333,6 @@ const DetailsModal = forwardRef<
           <button
             type="button"
             onClick={startClose}
-            disabled={submitting}
             className="
                     px-4 py-2 rounded-lg text-sm
                     bg-red-500 text-white hover:bg-red-600

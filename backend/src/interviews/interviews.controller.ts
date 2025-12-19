@@ -110,7 +110,15 @@ export class InterviewsController {
     @Req() req: Request & { user: { sub: number; username: string } },
   ): Promise<InterviewEntity> {
     const userId = req.user.sub;
-    return await this.interviewsService.create(createInterviewDto, userId);
+    const interview = await this.interviewsService.create(
+      createInterviewDto,
+      userId,
+    );
+    await this.recordsService.create(interview.id, userId, {
+      type: 'note',
+      message: 'Created entry',
+    });
+    return interview;
   }
 
   @UseGuards(AuthGuard)
@@ -126,6 +134,11 @@ export class InterviewsController {
     if (!interview) {
       throw new HttpException('Interview not found', HttpStatus.NOT_FOUND);
     }
+
+    await this.recordsService.create(interview.id, interview.userId, {
+      type: 'note',
+      message: 'Updated entry',
+    });
     return interview;
   }
 

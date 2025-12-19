@@ -31,7 +31,7 @@ export interface Interview {
   followUpDate?: string;
   createdAt: string;
   updatedAt: string;
-  records: TimelineItem[];
+  records: InterviewRecordEntity[];
 }
 
 export interface CreateInterviewDto {
@@ -73,12 +73,13 @@ export interface InterviewStats {
   successRate: number;
 }
 
-export interface TimelineItem {
-  id?: string | number;
-  title?: string;
-  content: React.ReactNode;
-  date: string;
-  icon?: React.ReactNode;
+export interface InterviewRecordEntity {
+  id: number;
+  interviewId: number;
+  userId: number;
+  message: string;
+  metadata: Record<string, unknown> | null;
+  createdAt: string;
 }
 
 class InterviewsService {
