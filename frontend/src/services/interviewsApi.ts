@@ -31,6 +31,7 @@ export interface Interview {
   followUpDate?: string;
   createdAt: string;
   updatedAt: string;
+  records: TimelineItem[];
 }
 
 export interface CreateInterviewDto {
@@ -70,6 +71,14 @@ export interface InterviewStats {
   pending: number;
   cancelled: number;
   successRate: number;
+}
+
+export interface TimelineItem {
+  id?: string | number;
+  title?: string;
+  content: React.ReactNode;
+  date: string;
+  icon?: React.ReactNode;
 }
 
 class InterviewsService {

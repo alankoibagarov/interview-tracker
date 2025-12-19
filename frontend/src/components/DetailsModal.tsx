@@ -18,6 +18,7 @@ import Timeline from "./Timeline";
 import { formatDate } from "../helpers/date";
 import { useUserStore } from "../store/userStore";
 import DOMPurify from "dompurify";
+import { StarIcon } from "@heroicons/react/16/solid";
 
 type InterviewsModalProps = {
   closeOnBackdrop?: boolean;
@@ -64,9 +65,11 @@ const renderSafeHtml = (
 };
 
 const DetailsModalFormField = ({
+  children,
   label = "",
   value = "",
 }: {
+  children?: React.ReactNode;
   label: string;
   value: string;
 }) => {
@@ -77,7 +80,7 @@ const DetailsModalFormField = ({
           {label}
         </div>
       )}
-
+      {children}
       {renderSafeHtml(value)}
     </div>
   );
@@ -229,7 +232,7 @@ const DetailsModal = forwardRef<
           w-full max-w-full xl:max-w-7xl mx-auto
           open:flex open:flex-col items-center justify-center
           rounded-lg border border-slate-200 shadow-xl
-          py-2 px-0
+          p-0
           transition-all duration-250 ease-out
           opacity-0 scale-95
           backdrop:transition-opacity backdrop:duration-250
@@ -257,136 +260,146 @@ const DetailsModal = forwardRef<
           </button>
         </header>
 
-        <div className="px-6 py-5 overflow-y-auto">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <div className="flex items-center gap-4">
-              {loading ? (
-                <div className="h-10 w-10 rounded-full bg-slate-100 animate-pulse"></div>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6">
+          <div className="flex flex-col xl:flex-row gap-4">
+            <div className="flex flex-col gap-4 xl:w-1/2 max-h-[600px] overflow-y-auto">
+              <div className="flex items-center gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
+                {loading ? (
+                  <div className="h-10 w-10 rounded-full bg-slate-100 animate-pulse"></div>
+                ) : (
+                  <div className="w-9 h-9 bg-primary-500 rounded-full flex items-center justify-center text-slate-900 dark:text-white font-semibold">
+                    {userData?.username?.charAt(0).toUpperCase() || "U"}
+                  </div>
+                )}
+                <div className="flex flex-col flex-1 items-start">
+                  {userData?.username && (
+                    <DetailsModalFormField
+                      label=""
+                      value={userData?.username || ""}
+                    />
+                  )}
+                  {userData?.email && (
+                    <DetailsModalFormField
+                      label=""
+                      value={userData?.email || ""}
+                    />
+                  )}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
+                <div className="grid gap-4">
+                  <DetailsModalFormField
+                    label="Company"
+                    value={selectedInterview?.company || ""}
+                  />
+                  <DetailsModalFormField
+                    label="Created At"
+                    value={formatDate(selectedInterview?.date || "")}
+                  />
+                </div>
+                <div className="grid gap-4">
+                  <DetailsModalFormField
+                    label="Position"
+                    value={selectedInterview?.position || ""}
+                  />
+                  <DetailsModalFormField
+                    label="Follow Up Date"
+                    value={formatDate(selectedInterview?.followUpDate || "")}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 rounded-lg border border-slate-200 bg-white p-4">
+                <div className="grid gap-4">
+                  <DetailsModalFormField
+                    label="Status"
+                    value={selectedInterview?.status || ""}
+                  />
+
+                  <DetailsModalFormField
+                    label="Type"
+                    value={selectedInterview?.type || ""}
+                  />
+                </div>
+                <div className="grid gap-4">
+                  <DetailsModalFormField
+                    label="Interviewer"
+                    value={selectedInterview?.interviewer || ""}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 rounded-lg border border-slate-200 bg-white p-4">
+                <div className="grid gap-4">
+                  <DetailsModalFormField
+                    label="Location"
+                    value={selectedInterview?.location || ""}
+                  />
+
+                  <DetailsModalFormField
+                    label="Call Link"
+                    value={selectedInterview?.callLink || ""}
+                  />
+
+                  <DetailsModalFormField
+                    label="Notes"
+                    value={selectedInterview?.notes || ""}
+                  />
+                </div>
+                <div className="grid gap-4">
+                  <DetailsModalFormField
+                    label="Feedback"
+                    value={selectedInterview?.feedback || ""}
+                  />
+
+                  <DetailsModalFormField
+                    label="Rating"
+                    value=""
+                    children={
+                      <div className="relative flex left-[-3px]">
+                        {Array.from({ length: 5 }, (_, i) => (
+                          <span
+                            key={i}
+                            className={`text-xs ${
+                              i < Number(selectedInterview?.rating)
+                                ? "text-yellow-400"
+                                : "text-gray-300"
+                            }`}
+                          >
+                            <StarIcon className="h-4 w-4" />
+                          </span>
+                        ))}
+                      </div>
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-4 xl:w-1/2 max-h-[600px] overflow-y-auto">
+              {selectedInterview?.records?.length ? (
+                <Timeline items={selectedInterview?.records} />
               ) : (
-                <div className="w-9 h-9 bg-primary-500 rounded-full flex items-center justify-center text-slate-900 dark:text-white font-semibold">
-                  {userData?.username?.charAt(0).toUpperCase() || "U"}
+                <div className="flex flex-1 justify-center items-center">
+                  No timeline data is available
                 </div>
               )}
-              <div className="flex-1 space-y-1">
-                {userData?.username && (
-                  <DetailsModalFormField
-                    label=""
-                    value={userData?.username || ""}
-                  />
-                )}
-                {userData?.email && (
-                  <DetailsModalFormField
-                    label=""
-                    value={userData?.email || ""}
-                  />
-                )}
-              </div>
-              <div className="h-8 w-16 rounded-md bg-slate-100 animate-pulse" />
             </div>
-            <div className="flex flex-col xl:flex-row gap-4">
-              <div className="flex flex-col gap-4 xl:w-1/2">
-                <div className="grid grid-cols-2 gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
-                  <div className="grid gap-4">
-                    <DetailsModalFormField
-                      label="Company"
-                      value={selectedInterview?.company || ""}
-                    />
-                    <DetailsModalFormField
-                      label="Created At"
-                      value={formatDate(selectedInterview?.date || "")}
-                    />
-                  </div>
-                  <div className="grid gap-4">
-                    <DetailsModalFormField
-                      label="Position"
-                      value={selectedInterview?.position || ""}
-                    />
-                    <DetailsModalFormField
-                      label="Follow Up Date"
-                      value={formatDate(selectedInterview?.followUpDate || "")}
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 rounded-lg border border-slate-200 bg-white p-4">
-                  <div className="grid gap-4">
-                    <DetailsModalFormField
-                      label="Status"
-                      value={selectedInterview?.status || ""}
-                    />
-
-                    <DetailsModalFormField
-                      label="Type"
-                      value={selectedInterview?.type || ""}
-                    />
-                  </div>
-                  <div className="grid gap-4">
-                    <DetailsModalFormField
-                      label="Interviewer"
-                      value={selectedInterview?.interviewer || ""}
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 rounded-lg border border-slate-200 bg-white p-4">
-                  <div className="grid gap-4">
-                    <DetailsModalFormField
-                      label="Location"
-                      value={selectedInterview?.location || ""}
-                    />
-
-                    <DetailsModalFormField
-                      label="Call Link"
-                      value={selectedInterview?.callLink || ""}
-                    />
-
-                    <DetailsModalFormField
-                      label="Notes"
-                      value={selectedInterview?.notes || ""}
-                    />
-                  </div>
-                  <div className="grid gap-4">
-                    <DetailsModalFormField
-                      label="Feedback"
-                      value={selectedInterview?.feedback || ""}
-                    />
-
-                    <DetailsModalFormField
-                      label="Rating"
-                      value={selectedInterview?.rating?.toString() || ""}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col gap-4 xl:w-1/2">
-                <Timeline
-                  items={[
-                    { content: 123 },
-                    { content: 123 },
-                    { content: 123 },
-                    { content: 123 },
-                    { content: 123 },
-                  ]}
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-2 mt-4">
-              <button
-                type="button"
-                onClick={startClose}
-                disabled={submitting}
-                className="
+          </div>
+        </form>
+        <div className="flex justify-end gap-2 p-6 border-b border-slate-200">
+          <button
+            type="button"
+            onClick={startClose}
+            disabled={submitting}
+            className="
                     px-4 py-2 rounded-lg text-sm
                     bg-red-500 text-white hover:bg-red-600
                     disabled:opacity-60 disabled:cursor-not-allowed
                     focus:outline-none focus-visible:ring
                   "
-              >
-                Close
-              </button>
-            </div>
-          </form>
+          >
+            Close
+          </button>
         </div>
       </div>
     </dialog>
