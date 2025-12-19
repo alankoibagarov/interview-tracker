@@ -16,6 +16,8 @@ import { interviewsApi } from "../services/interviewsApi";
 import { useInterviewsStore } from "../store/interviewsStore";
 import Timeline from "./Timeline";
 import { formatDate } from "../helpers/date";
+import { useUserStore } from "../store/userStore";
+import DOMPurify from "dompurify";
 
 type InterviewsModalProps = {
   closeOnBackdrop?: boolean;
@@ -38,6 +40,49 @@ const initialForm: CreateInterviewDto = {
 
 const TRANSITION_MS = 250; // keep in sync with Tailwind duration
 
+type SafeHtml = {
+  __html: string;
+};
+
+const renderSafeHtml = (
+  html: string,
+  loading: boolean = false
+): React.ReactNode => {
+  if (loading) {
+    return <div className="mt-1 h-4 w-32 rounded bg-slate-200 animate-pulse" />;
+  }
+
+  if (!html) {
+    return <div className="text-slate-500">-</div>;
+  }
+
+  const cleanHtml: SafeHtml = {
+    __html: DOMPurify.sanitize(html),
+  };
+
+  return <div dangerouslySetInnerHTML={cleanHtml} />;
+};
+
+const DetailsModalFormField = ({
+  label = "",
+  value = "",
+}: {
+  label: string;
+  value: string;
+}) => {
+  return (
+    <div>
+      {label && (
+        <div className="text-xs uppercase text-slate-500 tracking-wide">
+          {label}
+        </div>
+      )}
+
+      {renderSafeHtml(value)}
+    </div>
+  );
+};
+
 const DetailsModal = forwardRef<
   { openDialog: () => void },
   InterviewsModalProps
@@ -49,14 +94,15 @@ const DetailsModal = forwardRef<
   const [loading, setLoading] = useState(false);
 
   const { setInterviews, selectedInterview } = useInterviewsStore();
-
-
+  const userData = useUserStore((state) => state.user);
 
   const loadInterviewData = useCallback(async () => {
     try {
       if (!selectedInterview) return;
       setLoading(true);
-      const interviewData = await interviewsApi.getInterview(selectedInterview.id);
+      const interviewData = await interviewsApi.getInterview(
+        selectedInterview.id
+      );
       console.log("Loaded interview data:", interviewData);
     } catch (err) {
       console.error("Error loading dashboard data:", err);
@@ -213,110 +259,102 @@ const DetailsModal = forwardRef<
 
         <div className="px-6 py-5 overflow-y-auto">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div className="flex items-center gap-4">
+              {loading ? (
+                <div className="h-10 w-10 rounded-full bg-slate-100 animate-pulse"></div>
+              ) : (
+                <div className="w-9 h-9 bg-primary-500 rounded-full flex items-center justify-center text-slate-900 dark:text-white font-semibold">
+                  {userData?.username?.charAt(0).toUpperCase() || "U"}
+                </div>
+              )}
+              <div className="flex-1 space-y-1">
+                {userData?.username && (
+                  <DetailsModalFormField
+                    label=""
+                    value={userData?.username || ""}
+                  />
+                )}
+                {userData?.email && (
+                  <DetailsModalFormField
+                    label=""
+                    value={userData?.email || ""}
+                  />
+                )}
+              </div>
+              <div className="h-8 w-16 rounded-md bg-slate-100 animate-pulse" />
+            </div>
             <div className="flex flex-col xl:flex-row gap-4">
               <div className="flex flex-col gap-4 xl:w-1/2">
-                <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-                  <div className="text-xs uppercase text-slate-500 tracking-wide">
-                    Candidate
+                <div className="grid grid-cols-2 gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
+                  <div className="grid gap-4">
+                    <DetailsModalFormField
+                      label="Company"
+                      value={selectedInterview?.company || ""}
+                    />
+                    <DetailsModalFormField
+                      label="Created At"
+                      value={formatDate(selectedInterview?.date || "")}
+                    />
                   </div>
-                  {loading ? (
-                    <div className="mt-1 h-4 w-32 rounded bg-slate-200 animate-pulse" />
-                  ) : (
-                    selectedInterview?.company
-                  )}
-                  <div className="mt-3 text-xs uppercase text-slate-500 tracking-wide">
-                    Position
-                  </div>
-                  {loading ? (
-                    <div className="mt-1 h-4 w-40 rounded bg-slate-200 animate-pulse" />
-                  ) : (
-                    selectedInterview?.position
-                  )}
-                </div>
-
-                <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-xs uppercase text-slate-500 tracking-wide">
-                        Company
-                      </div>
-                      {loading ? (
-                        <div className="mt-1 h-4 w-48 rounded bg-slate-100 animate-pulse" />
-                      ) : (
-                        selectedInterview?.company
-                      )}
-                    </div>
-                    {loading ? (
-                      <span className="h-6 w-16 rounded-full bg-slate-100 animate-pulse" />
-                    ) : (
-                      formatDate(selectedInterview?.date ?? '')
-                    )}
-                  </div>
-                  <div className="mt-4 grid grid-cols-2 gap-3">
-                    <div className="space-y-1">
-                      <div className="text-[11px] uppercase text-slate-400">
-                        Location
-                      </div>
-                      {loading ? (
-                        <div className="h-4 w-full rounded bg-slate-100 animate-pulse" />
-                      ) : selectedInterview?.location ? (
-                        <a
-                          href={selectedInterview.location}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-sm font-medium text-blue-600 hover:underline truncate block"
-                        >
-                           Map Link
-                        </a>
-                      ) : (
-                        <div className="text-sm font-medium text-slate-700">-</div>
-                      )}
-                    </div>
-
-                    <div className="space-y-1">
-                      <div className="text-[11px] uppercase text-slate-400">
-                        Call Link
-                      </div>
-                      {loading ? (
-                        <div className="h-4 w-full rounded bg-slate-100 animate-pulse" />
-                      ) : selectedInterview?.callLink ? (
-                        <a
-                          href={selectedInterview.callLink}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-sm font-medium text-blue-600 hover:underline truncate block"
-                        >
-                          Join Call
-                        </a>
-                      ) : (
-                        <div className="text-sm font-medium text-slate-700">-</div>
-                      )}
-                    </div>
-
-                    {[...Array(2)].map((_, idx) => (
-                      <div key={idx} className="space-y-1">
-                        <div className="text-[11px] uppercase text-slate-400">
-                          Placeholder
-                        </div>
-                        <div className="h-4 w-full rounded bg-slate-100 animate-pulse" />
-                      </div>
-                    ))}
+                  <div className="grid gap-4">
+                    <DetailsModalFormField
+                      label="Position"
+                      value={selectedInterview?.position || ""}
+                    />
+                    <DetailsModalFormField
+                      label="Follow Up Date"
+                      value={formatDate(selectedInterview?.followUpDate || "")}
+                    />
                   </div>
                 </div>
 
-                <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-                  <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-slate-100 animate-pulse"></div>
-                    <div className="flex-1 space-y-1">
-                      <div className="h-4 w-32 rounded bg-slate-100 animate-pulse" />
-                      <div className="h-3 w-24 rounded bg-slate-100 animate-pulse" />
-                    </div>
-                    <div className="h-8 w-16 rounded-md bg-slate-100 animate-pulse" />
+                <div className="grid grid-cols-2 gap-4 rounded-lg border border-slate-200 bg-white p-4">
+                  <div className="grid gap-4">
+                    <DetailsModalFormField
+                      label="Status"
+                      value={selectedInterview?.status || ""}
+                    />
+
+                    <DetailsModalFormField
+                      label="Type"
+                      value={selectedInterview?.type || ""}
+                    />
                   </div>
-                  <div className="mt-4 space-y-2">
-                    {[...Array(3)].map((_, idx) => (
-                      <div key={idx} className="h-3 w-full rounded bg-slate-50 animate-pulse" />
-                    ))}
+                  <div className="grid gap-4">
+                    <DetailsModalFormField
+                      label="Interviewer"
+                      value={selectedInterview?.interviewer || ""}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 rounded-lg border border-slate-200 bg-white p-4">
+                  <div className="grid gap-4">
+                    <DetailsModalFormField
+                      label="Location"
+                      value={selectedInterview?.location || ""}
+                    />
+
+                    <DetailsModalFormField
+                      label="Call Link"
+                      value={selectedInterview?.callLink || ""}
+                    />
+
+                    <DetailsModalFormField
+                      label="Notes"
+                      value={selectedInterview?.notes || ""}
+                    />
+                  </div>
+                  <div className="grid gap-4">
+                    <DetailsModalFormField
+                      label="Feedback"
+                      value={selectedInterview?.feedback || ""}
+                    />
+
+                    <DetailsModalFormField
+                      label="Rating"
+                      value={selectedInterview?.rating?.toString() || ""}
+                    />
                   </div>
                 </div>
               </div>
@@ -335,19 +373,6 @@ const DetailsModal = forwardRef<
 
             <div className="flex justify-end gap-2 mt-4">
               <button
-                type="submit"
-                disabled={submitting}
-                className="
-                    px-4 py-2 rounded-lg text-sm
-                    bg-green-600 text-white hover:bg-green-700
-                    disabled:opacity-60 disabled:cursor-not-allowed
-                    focus:outline-none focus-visible:ring
-                  "
-              >
-                {submitting ? "Saving..." : "Confirm"}
-              </button>
-
-              <button
                 type="button"
                 onClick={startClose}
                 disabled={submitting}
@@ -358,7 +383,7 @@ const DetailsModal = forwardRef<
                     focus:outline-none focus-visible:ring
                   "
               >
-                Cancel
+                Close
               </button>
             </div>
           </form>
