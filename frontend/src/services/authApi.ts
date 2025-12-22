@@ -63,6 +63,23 @@ class AuthService {
         throw new Error("Login failed");
     }
   }
+
+  async register(
+    user: Record<string, string>
+  ): Promise<{ statusCode: number }> {
+    const response = await request<{ statusCode: number }>(
+      "/auth/register",
+      {
+        method: "POST",
+        body: JSON.stringify(user),
+      }
+    );
+
+    if (response) {
+      return { statusCode: 200 };
+    }
+    throw new Error("Registration failed");
+  }
 }
 
 export const authService = new AuthService();
