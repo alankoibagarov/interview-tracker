@@ -4,6 +4,7 @@ import Dashboard from "./pages/Dashboard";
 import RequireAuth from "./routing/RequireAuth";
 import "./App.css";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import DashboardLayout from "./layouts/DashboardLayout";
 import HomeLayout from "./layouts/HomeLayout";
 import Interviews from "./pages/Interviews";
@@ -39,7 +40,7 @@ function App() {
     <Router>
       <div
         className={
-          "App font-inter h-screen" + `${user?.themeDarkMode ? " dark" : ""}`
+          "App font-zalando h-screen" + `${user?.themeDarkMode ? " dark" : ""}`
         }
       >
         <main className="main-content h-screen">
@@ -83,6 +84,7 @@ function App() {
               }
             />
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path="*" element={<div>404 Not Found</div>} />
           </Routes>
         </main>

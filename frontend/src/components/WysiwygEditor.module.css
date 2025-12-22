@@ -1,5 +1,5 @@
 .wrapper {
-  font-family: var(--font-inter, "Inter", sans-serif);
+  font-family: var(--font-zalando, "Zalando Sans", sans-serif);
 }
 
 .wrapper :global(.ql-toolbar.ql-snow) {
