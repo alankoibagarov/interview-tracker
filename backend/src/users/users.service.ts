@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
+import { unlink } from 'fs/promises';
+import { join } from 'path';
 
 @Injectable()
 export class UsersService {
@@ -45,6 +47,56 @@ export class UsersService {
     }
 
     await this.userRepo.update(user?.id, { themeDarkMode });
+
+    return {
+      statusCode: 200,
+    };
+  }
+
+  async uploadProfilePicture(username: string, filename: string) {
+    const user = await this.findOne(username);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    if (user.profilePicture) {
+      // Delete old picture if exists
+      try {
+        const oldFilePath = join(process.cwd(), 'uploads', user.profilePicture.replace('/uploads/', ''));
+        await unlink(oldFilePath);
+      } catch (error) {
+        // File might not exist, ignore error
+        console.log('Could not delete old profile picture:', error);
+      }
+    }
+
+    const profilePicturePath = `/uploads/${filename}`;
+    await this.userRepo.update(user.id, { profilePicture: profilePicturePath });
+
+    return {
+      statusCode: 200,
+      profilePicture: profilePicturePath,
+    };
+  }
+
+  async removeProfilePicture(username: string) {
+    const user = await this.findOne(username);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Delete file from disk
+    if (user.profilePicture) {
+      try {
+        const filePath = join(process.cwd(), 'uploads', user.profilePicture.replace('/uploads/', ''));
+        await unlink(filePath);
+      } catch (error) {
+        // File might not exist, log but continue
+        console.log('Could not delete profile picture file:', error);
+      }
+    }
+
+    await this.userRepo.update(user.id, { profilePicture: null });
 
     return {
       statusCode: 200,

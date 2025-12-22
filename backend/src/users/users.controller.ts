@@ -7,7 +7,13 @@ import {
   Get,
   UseGuards,
   Req,
+  Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 import { UsersService } from './users.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { User } from './users.entity';
@@ -37,5 +43,37 @@ export class UsersController {
       statusCode: 200,
       user,
     };
+  }
+
+  @Post('upload-profile-picture')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const randomName = Array(32)
+            .fill(null)
+            .map(() => Math.round(Math.random() * 16).toString(16))
+            .join('');
+          cb(null, `${randomName}${extname(file.originalname)}`);
+        },
+      }),
+    }),
+  )
+  async uploadProfilePicture(
+    @Req() req: any,
+    @UploadedFile() file: any,
+  ) {
+    return this.usersService.uploadProfilePicture(
+      req.user.username,
+      file.filename,
+    );
+  }
+
+  @Delete('profile-picture')
+  @UseGuards(AuthGuard)
+  async removeProfilePicture(@Req() req: any) {
+    return this.usersService.removeProfilePicture(req.user.username);
   }
 }

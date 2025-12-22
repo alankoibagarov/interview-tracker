@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useUserStore } from "../store/userStore";
 import { UserIcon } from "@heroicons/react/24/outline";
+import { authService } from "../services/authApi";
 
 type Props = {
   isOpen: boolean;
@@ -14,9 +15,43 @@ enum SettingsTab {
 const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState<SettingsTab>(SettingsTab.PROFILE);
   const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [isVisible, setIsVisible] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file && user) {
+      try {
+        const response = await authService.uploadProfilePicture(file);
+        if (response.statusCode === 200) {
+          setUser({ ...user, profilePicture: response.profilePicture });
+        }
+      } catch (error) {
+        console.error("Failed to upload profile picture", error);
+        alert("Failed to upload profile picture");
+      }
+    }
+  };
+
+  const handleDeleteProfilePicture = async () => {
+    if (user) {
+      const confirmDelete = window.confirm("Are you sure you want to remove your profile picture?");
+      if (!confirmDelete) return;
+
+      try {
+        const response = await authService.deleteProfilePicture();
+        if (response.statusCode === 200) {
+           setUser({ ...user, profilePicture: null });
+        }
+      } catch (error) {
+        console.error("Failed to delete profile picture", error);
+        alert("Failed to delete profile picture");
+      }
+    }
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -87,16 +122,52 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
               
               <div className="space-y-6">
                 <div className="flex items-center gap-6 p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700">
-                  <div className="size-20 bg-primary-500 text-white rounded-full flex items-center justify-center text-3xl font-bold shadow-lg shadow-primary-500/20">
-                    {user?.username?.charAt(0).toUpperCase() || "U"}
+                  <div className="relative group">
+                    <div className="size-24 rounded-full overflow-hidden border-4 border-white dark:border-slate-700 shadow-lg shadow-slate-200 dark:shadow-none">
+                       {user?.profilePicture ? (
+                            <img 
+                                src={`${process.env.VITE_API_LINK}${user.profilePicture}`} 
+                                alt={user.username}
+                                className="w-full h-full object-cover"
+                            />
+                       ) : (
+                        <div className="w-full h-full bg-primary-500 text-white flex items-center justify-center text-4xl font-bold">
+                            {user?.username?.charAt(0).toUpperCase() || "U"}
+                        </div>
+                       )}
+                    </div>
+                     <input 
+                        type="file" 
+                        ref={fileInputRef} 
+                        onChange={handleFileChange} 
+                        className="hidden" 
+                        accept="image/*"
+                     />
                   </div>
-                  <div>
-                    <h4 className="text-xl font-bold text-slate-900 dark:text-white">
+                  
+                  <div className="flex-1">
+                    <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-1">
                       {user?.username}
                     </h4>
-                    <p className="text-slate-500 dark:text-slate-400">
+                    <p className="text-slate-500 dark:text-slate-400 mb-4">
                       {user?.role} Account
                     </p>
+                    <div className="flex gap-3">
+                        <button
+                            onClick={() => fileInputRef.current?.click()}
+                            className="px-4 py-2 text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 rounded-lg transition-colors"
+                        >
+                            Change Photo
+                        </button>
+                        {user?.profilePicture && (
+                             <button
+                                onClick={handleDeleteProfilePicture}
+                                className="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                            >
+                                Remove
+                            </button>
+                        )}
+                    </div>
                   </div>
                 </div>
 

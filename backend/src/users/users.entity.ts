@@ -28,6 +28,9 @@ export class User {
   @Column({ nullable: true })
   email: string;
 
-  @Column({ default: 'user' })
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
   role: UserRole;
+
+  @Column({ type: 'varchar', nullable: true })
+  profilePicture: string | null;
 }

@@ -166,8 +166,16 @@ const Navigation: React.FC<Props> = ({ type }) => {
                 </div>
                 <div className="relative">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 bg-primary-500 rounded-full flex items-center justify-center text-slate-900 dark:text-white font-semibold">
-                      {user.username?.charAt(0).toUpperCase() || "U"}
+                    <div className="w-9 h-9 bg-primary-500 rounded-full flex items-center justify-center text-slate-900 dark:text-white font-semibold overflow-hidden border border-slate-200 dark:border-slate-700">
+                      {user.profilePicture ? (
+                        <img
+                          src={`${process.env.VITE_API_LINK}${user.profilePicture}`}
+                          alt={user.username}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        user.username?.charAt(0).toUpperCase() || "U"
+                      )}
                     </div>
                     <div className="hidden sm:flex flex-col items-start">
                       <span className="text-sm font-medium text-slate-900 dark:text-white">

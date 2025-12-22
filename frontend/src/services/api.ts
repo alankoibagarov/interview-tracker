@@ -22,13 +22,18 @@ export async function request<T>(
 ): Promise<T> {
   const baseUrl = process.env.VITE_API_LINK;
 
+  const headers: HeadersInit = {
+    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    ...options?.headers,
+  };
+
+  if (!(options?.body instanceof FormData)) {
+    (headers as any)["Content-Type"] = "application/json";
+  }
+
   const response = await fetch(`${baseUrl}${endpoint}`, {
     ...options,
-    headers: {
-      ...options?.headers,
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-    },
+    headers,
   });
 
   if (response.status === ResponseCodes.Unauthorized) {

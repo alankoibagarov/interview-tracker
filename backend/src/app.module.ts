@@ -5,15 +5,20 @@ import { InterviewsModule } from './interviews/interviews.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import path from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join, resolve } from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // makes process.env available everywhere
       envFilePath:
         process.env.NODE_ENV === 'development'
-          ? path.resolve(__dirname, '../../.env.local')
-          : path.resolve(__dirname, '../../.env'),
+          ? resolve(__dirname, '../../.env.local')
+          : resolve(__dirname, '../../.env'),
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'uploads'),
+      serveRoot: '/uploads',
     }),
     InterviewsModule,
     AuthModule,

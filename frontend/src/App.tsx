@@ -28,6 +28,7 @@ function App() {
           email: user.email,
           themeDarkMode: user.themeDarkMode,
           role: user.role,
+          profilePicture: user.profilePicture,
         });
       } catch (error) {
         console.error("Failed to fetch user data:", error);

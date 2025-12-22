@@ -10,6 +10,7 @@ export interface User {
   email: string;
   themeDarkMode: boolean;
   role: UserRole;
+  profilePicture?: string | null;
 }
 
 interface LoginResponse {
@@ -86,6 +87,27 @@ class AuthService {
       return { statusCode: 200 };
     }
     throw new Error("Registration failed");
+  }
+
+
+  async uploadProfilePicture(file: File): Promise<{ statusCode: number; profilePicture: string }> {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await request<{ statusCode: number; profilePicture: string }>(
+      "/users/upload-profile-picture",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+    return response;
+  }
+
+  async deleteProfilePicture(): Promise<{ statusCode: number }> {
+    return request("/users/profile-picture", {
+      method: "DELETE",
+    });
   }
 }
 
