@@ -1,9 +1,15 @@
 import { request, ResponseCodes } from "./api";
 
+export enum UserRole {
+  ADMIN = "admin",
+  USER = "user",
+}
+
 export interface User {
   username: string;
   email: string;
   themeDarkMode: boolean;
+  role: UserRole;
 }
 
 interface LoginResponse {
@@ -11,6 +17,7 @@ interface LoginResponse {
   statusCode: ResponseCodes;
   themeDarkMode: boolean;
   email: string;
+  role: UserRole;
 }
 
 class AuthService {

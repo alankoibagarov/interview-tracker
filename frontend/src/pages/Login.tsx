@@ -22,6 +22,7 @@ const Login = () => {
           username,
           email: res.email,
           themeDarkMode: res.themeDarkMode,
+          role: res.role,
         });
         navigate("/interviews");
       }

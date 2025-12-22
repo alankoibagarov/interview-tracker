@@ -25,6 +25,7 @@ function App() {
           username: user.username,
           email: user.email,
           themeDarkMode: user.themeDarkMode,
+          role: user.role,
         });
       } catch (error) {
         console.error("Failed to fetch user data:", error);

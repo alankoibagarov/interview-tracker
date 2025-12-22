@@ -1,5 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { User } from './users.entity';
+import { User, UserRole } from './users.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
@@ -29,6 +29,7 @@ export class UsersService {
       username: createUserDto.username,
       passwordHash,
       email: createUserDto.email,
+      role: UserRole.USER,
     });
     return this.userRepo.save(user);
   }
