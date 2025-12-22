@@ -47,6 +47,7 @@ const interviews: Interview[] = [
     followUpDate: "",
     createdAt: "",
     updatedAt: "",
+    records: [],
   },
   {
     id: 2,
@@ -62,6 +63,7 @@ const interviews: Interview[] = [
     followUpDate: "",
     createdAt: "",
     updatedAt: "",
+    records: [],
   },
 ];
 

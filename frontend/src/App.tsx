@@ -9,6 +9,8 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import HomeLayout from "./layouts/HomeLayout";
 import Interviews from "./pages/Interviews";
 import Calendar from "./pages/Calendar";
+import TermsOfUsage from "./pages/TermsOfUsage";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import { useUserStore } from "./store/userStore";
 import { authService } from "./services/authApi";
 import { useEffect } from "react";
@@ -83,6 +85,22 @@ function App() {
                   </DashboardLayout>
                 </RequireAuth>
               }
+            />
+            <Route 
+                path="/terms" 
+                element={
+                    <HomeLayout>
+                        <TermsOfUsage />
+                    </HomeLayout>
+                } 
+            />
+            <Route 
+                path="/privacy" 
+                element={
+                    <HomeLayout>
+                        <PrivacyPolicy />
+                    </HomeLayout>
+                } 
             />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
