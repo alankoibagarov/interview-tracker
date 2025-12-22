@@ -196,10 +196,12 @@ describe("InterviewsTable", () => {
   });
 
   it("displays error message when API fails", async () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     mockGet.mockRejectedValueOnce(new Error("API Error"));
     render(<InterviewsTable openDialog={vi.fn()} openDetailsDialog={vi.fn()} />);
 
     await waitFor(() => expect(screen.getByText("Failed to load interviews")).toBeInTheDocument());
+    consoleSpy.mockRestore();
   });
 });
 

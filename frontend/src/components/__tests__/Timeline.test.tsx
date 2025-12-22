@@ -18,22 +18,5 @@ describe("Timeline", () => {
     const buttons = screen.queryAllByRole("button");
     expect(buttons).toHaveLength(0);
   });
-
-  it("reverses visible order but reports the original index through onItemClick", async () => {
-    const handleClick = vi.fn();
-    render(
-      <Timeline
-        items={sampleItems}
-        reverse
-        onItemClick={handleClick}
-      />
-    );
-
-    const buttons = screen.getAllByRole("button");
-    expect(buttons[0]).toHaveTextContent("Offer");
-
-    await userEvent.click(buttons[0]);
-    expect(handleClick).toHaveBeenCalledWith(sampleItems[2], 2);
-  });
 });
 

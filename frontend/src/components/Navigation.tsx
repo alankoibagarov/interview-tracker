@@ -10,6 +10,7 @@ import {
   SunIcon,
 } from "@heroicons/react/24/solid";
 import { authService } from "../services/authApi";
+import SettingsModal from "./SettingsModal";
 
 type Props = {
   type?: NavigationType;
@@ -20,6 +21,7 @@ const Navigation: React.FC<Props> = ({ type }) => {
   const navigate = useNavigate();
 
   const [scrolled, setScrolled] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
@@ -55,119 +57,126 @@ const Navigation: React.FC<Props> = ({ type }) => {
   }, []);
 
   return (
-    <nav
-      className={`z-50 transition-colors duration-300 h-[70px] ${
-        type === NavigationType.HOME &&
-        !scrolled &&
-        "w-full flex fixed bg-white/0"
-      }
+    <>
+      <nav
+        className={`z-50 transition-colors duration-300 h-[70px] ${
+          type === NavigationType.HOME &&
+          !scrolled &&
+          "w-full flex fixed bg-white/0"
+        }
       ${
         scrolled &&
         "w-full flex fixed bg-white/90 backdrop-blur-md border-b border-slate-300 dark:border-white/20 shadow-lg"
       }  ${
-        type === NavigationType.DASHBOARD &&
-        "bg-white dark:bg-slate-950 backdrop-blur-md border-b border-slate-300 dark:border-white/20 shadow-lg"
-      }`}
-    >
-      <div className="w-full mx-auto px-5 flex justify-between items-center h-[70px]">
-        <div className="flex items-center gap-2">
-          <img className="size-[50px]" src="src/assets/logo.png" alt="Logo" />
-          <Link
-            to={type === NavigationType.HOME ? "/" : "/interviews"}
-            className={`text-2xl font-bold hover:text-secondary-500 transition-colors duration-300 outline-none ${
-            scrolled
-              ? "text-white dark:text-slate-950"
-              : "text-slate-950 dark:text-white"
-          }`}
-        >
-          Interview Flow
-        </Link>
-        </div>
-        <div className="flex gap-3 items-center">
-          {type !== NavigationType.DASHBOARD && (
+          type === NavigationType.DASHBOARD &&
+          "bg-white dark:bg-slate-950 backdrop-blur-md border-b border-slate-300 dark:border-white/20 shadow-lg"
+        }`}
+      >
+        <div className="w-full mx-auto px-5 flex justify-between items-center h-[70px]">
+          <div className="flex items-center gap-2">
+            <img className="size-[50px]" src="src/assets/logo.png" alt="Logo" />
             <Link
-              to="/interviews"
-              className={`px-4 py-2.5 rounded-lg font-medium transition-all duration-300 relative ${
-                location.pathname === "/interviews"
-                  ? 'text-primary-500 bg-primary-50 font-semibold after:content-[""] after:absolute after:bottom-[-2px] after:left-1/2 after:-translate-x-1/2 after:w-5 after:h-0.5 after:bg-primary-500 after:rounded-sm'
-                  : "text-gray-700 hover:text-primary-500 hover:bg-primary-50"
-              } ${scrolled ? "text-primary-500" : "text-white"}`}
-            >
-              Dashboard
-            </Link>
-          )}
-
-          {/* Auth buttons (fallback) */}
-          {!user && (
-            <Link
-              to="/login"
-              className={`px-4 py-2.5 rounded-lg font-medium transition-all duration-300 relative ${
-                location.pathname === "/login"
-                  ? 'text-primary-500 bg-primary-50 font-semibold after:content-[""] after:absolute after:bottom-[-2px] after:left-1/2 after:-translate-x-1/2 after:w-5 after:h-0.5 after:bg-primary-500 after:rounded-sm'
-                  : "text-gray-700 hover:text-primary-500 hover:bg-primary-50"
-              } ${
-                scrolled || type === NavigationType.DASHBOARD
-                  ? "text-primary-500"
-                  : "text-white"
+              to={type === NavigationType.HOME ? "/" : "/interviews"}
+              className={`text-2xl font-bold hover:text-secondary-500 transition-colors duration-300 outline-none ${
+                scrolled
+                  ? "text-white dark:text-slate-950"
+                  : "text-slate-950 dark:text-white"
               }`}
             >
-              Login
+              Interview Flow
             </Link>
-          )}
+          </div>
+          <div className="flex gap-3 items-center">
+            {type !== NavigationType.DASHBOARD && (
+              <Link
+                to="/interviews"
+                className={`px-4 py-2.5 rounded-lg font-medium transition-all duration-300 relative ${
+                  location.pathname === "/interviews"
+                    ? 'text-primary-500 bg-primary-50 font-semibold after:content-[""] after:absolute after:bottom-[-2px] after:left-1/2 after:-translate-x-1/2 after:w-5 after:h-0.5 after:bg-primary-500 after:rounded-sm'
+                    : "text-gray-700 hover:text-primary-500 hover:bg-primary-50"
+                } ${scrolled ? "text-primary-500" : "text-white"}`}
+              >
+                Dashboard
+              </Link>
+            )}
 
-          {/* User Panel */}
-          {user && (
-            <>
-              <div className="flex gap-3">
-                {user.themeDarkMode ? (
-                  <MoonIcon
-                    title="Switch to Light Mode"
+            {/* Auth buttons (fallback) */}
+            {!user && (
+              <Link
+                to="/login"
+                className={`px-4 py-2.5 rounded-lg font-medium transition-all duration-300 relative ${
+                  location.pathname === "/login"
+                    ? 'text-primary-500 bg-primary-50 font-semibold after:content-[""] after:absolute after:bottom-[-2px] after:left-1/2 after:-translate-x-1/2 after:w-5 after:h-0.5 after:bg-primary-500 after:rounded-sm'
+                    : "text-gray-700 hover:text-primary-500 hover:bg-primary-50"
+                } ${
+                  scrolled || type === NavigationType.DASHBOARD
+                    ? "text-primary-500"
+                    : "text-white"
+                }`}
+              >
+                Login
+              </Link>
+            )}
+
+            {/* User Panel */}
+            {user && (
+              <>
+                <div className="flex gap-3">
+                  {user.themeDarkMode ? (
+                    <MoonIcon
+                      title="Switch to Light Mode"
+                      className="h-6 w-6 text-slate-900 dark:text-white cursor-pointer"
+                      onClick={switchTheme}
+                    />
+                  ) : (
+                    <SunIcon
+                      title="Switch to Dark Mode"
+                      className="h-6 w-6 text-slate-900 dark:text-white cursor-pointer"
+                      onClick={switchTheme}
+                    />
+                  )}
+                  <Cog6ToothIcon
+                    title="Settings"
                     className="h-6 w-6 text-slate-900 dark:text-white cursor-pointer"
-                    onClick={switchTheme}
+                    onClick={() => setIsSettingsOpen(true)}
                   />
-                ) : (
-                  <SunIcon
-                    title="Switch to Dark Mode"
+                  <UserIcon
+                    title="Profile"
                     className="h-6 w-6 text-slate-900 dark:text-white cursor-pointer"
-                    onClick={switchTheme}
                   />
-                )}
-                <Cog6ToothIcon
-                  title="Settings"
-                  className="h-6 w-6 text-slate-900 dark:text-white cursor-pointer"
-                />
-                <UserIcon
-                  title="Profile"
-                  className="h-6 w-6 text-slate-900 dark:text-white cursor-pointer"
-                />
-              </div>
-              <div className="relative">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-primary-500 rounded-full flex items-center justify-center text-slate-900 dark:text-white font-semibold">
-                    {user.username?.charAt(0).toUpperCase() || "U"}
-                  </div>
-                  <div className="hidden sm:flex flex-col items-start">
-                    <span className="text-sm font-medium text-slate-900 dark:text-white">
-                      {user.username || "User"}
-                    </span>
-                    <span className="text-xs text-gray-400">
-                      {user.username || ""}
-                    </span>
+                </div>
+                <div className="relative">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 bg-primary-500 rounded-full flex items-center justify-center text-slate-900 dark:text-white font-semibold">
+                      {user.username?.charAt(0).toUpperCase() || "U"}
+                    </div>
+                    <div className="hidden sm:flex flex-col items-start">
+                      <span className="text-sm font-medium text-slate-900 dark:text-white">
+                        {user.username || "User"}
+                      </span>
+                      <span className="text-xs text-gray-400">
+                        {user.username || ""}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex gap-3">
-                <ArrowRightStartOnRectangleIcon
-                  title="Logout"
-                  className="h-6 w-6 text-slate-900 dark:text-white cursor-pointer"
-                  onClick={logout}
-                />
-              </div>
-            </>
-          )}
+                <div className="flex gap-3">
+                  <ArrowRightStartOnRectangleIcon
+                    title="Logout"
+                    className="h-6 w-6 text-slate-900 dark:text-white cursor-pointer"
+                    onClick={logout}
+                  />
+                </div>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+      />
+    </>
   );
 };
 
