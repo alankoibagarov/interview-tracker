@@ -9,6 +9,14 @@ A full‑stack web application to manage, track, and analyze interviews. It incl
 - Testing: Jest (Backend), Vitest + React Testing Library (Frontend)
 - Dev: Docker (optional), ESLint + Prettier
 
+## Features
+
+- **Authentication**: JWT-based auth with Role-Based Access Control (Admin/User).
+- **Interview Tracking**: Create, read, update, and delete interview records.
+- **Dashboard**: Visual statistics of interview progress.
+- **Settings**: User profile management and theme switching (Light/Dark mode).
+
+
 ## Repository Structure
 
 ```
@@ -137,7 +145,8 @@ Frontend:
 
 ## API Overview (Backend)
 
-- `POST /auth/login` – returns `{ access_token }` for valid credentials
+- `POST /auth/login` – returns `{ access_token, role }` for valid credentials
+- `POST /auth/register` – register a new user
 - `GET /interviews` – list user interviews (auth required)
 - Additional CRUD endpoints exist under `/interviews`.
 
