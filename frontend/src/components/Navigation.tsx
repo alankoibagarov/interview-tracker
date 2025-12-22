@@ -70,9 +70,11 @@ const Navigation: React.FC<Props> = ({ type }) => {
       }`}
     >
       <div className="w-full mx-auto px-5 flex justify-between items-center h-[70px]">
-        <Link
-          to={type === NavigationType.HOME ? "/" : "/interviews"}
-          className={`text-2xl font-bold hover:text-secondary-500 transition-colors duration-300 outline-none ${
+        <div className="flex items-center gap-2">
+          <img className="size-[50px]" src="src/assets/logo.png" alt="Logo" />
+          <Link
+            to={type === NavigationType.HOME ? "/" : "/interviews"}
+            className={`text-2xl font-bold hover:text-secondary-500 transition-colors duration-300 outline-none ${
             scrolled
               ? "text-white dark:text-slate-950"
               : "text-slate-950 dark:text-white"
@@ -80,7 +82,7 @@ const Navigation: React.FC<Props> = ({ type }) => {
         >
           Interview Flow
         </Link>
-
+        </div>
         <div className="flex gap-3 items-center">
           {type !== NavigationType.DASHBOARD && (
             <Link
