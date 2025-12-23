@@ -84,7 +84,6 @@ const DetailsModal = forwardRef<
         selectedInterview.id
       );
       setSelectedInterview(interviewData);
-      console.log("Loaded interview data:", interviewData);
     } catch (err) {
       console.error("Error loading dashboard data:", err);
     } finally {

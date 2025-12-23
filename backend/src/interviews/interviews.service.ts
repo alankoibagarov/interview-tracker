@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
-  // Interview,
   CreateInterviewDto,
-  // UpdateInterviewDto,
   InterviewEntity,
   InterviewStats,
   UpdateInterviewDto,
@@ -18,11 +16,11 @@ export class InterviewsService {
   ) {}
 
   async findAll(userId: number): Promise<InterviewEntity[]> {
-    return await this.interviewRepo.find({ where: { userId } });
+    return this.interviewRepo.find({ where: { userId } });
   }
 
   async findOne(id: number): Promise<InterviewEntity | null> {
-    return await this.interviewRepo.findOne({ where: { id } });
+    return this.interviewRepo.findOne({ where: { id } });
   }
 
   async create(
@@ -37,7 +35,7 @@ export class InterviewsService {
       updatedAt: new Date().toISOString(),
     });
 
-    return await this.interviewRepo.save(newInterview);
+    return this.interviewRepo.save(newInterview);
   }
 
   async update(
@@ -49,7 +47,7 @@ export class InterviewsService {
       return null;
     }
     Object.assign(interview, updateInterviewDto, { updatedAt: new Date() });
-    return await this.interviewRepo.save(interview);
+    return this.interviewRepo.save(interview);
   }
 
   async remove(id: number): Promise<boolean> {

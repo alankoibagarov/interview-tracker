@@ -42,6 +42,7 @@ const initialForm: CreateInterviewDto = {
 };
 
 const TRANSITION_MS = 250; // keep in sync with Tailwind duration
+const TIMEOUT_GAP_MS = 50;
 
 const InterviewsModal = forwardRef<
   { openDialog: () => void },
@@ -84,7 +85,7 @@ const InterviewsModal = forwardRef<
     setTimeout(() => {
       if (dialog.open) dialog.close();
       setIsClosing(false);
-    }, TRANSITION_MS + 50);
+    }, TRANSITION_MS + TIMEOUT_GAP_MS);
   }, [isClosing]);
 
   useImperativeHandle(ref, () => ({ openDialog }), []);

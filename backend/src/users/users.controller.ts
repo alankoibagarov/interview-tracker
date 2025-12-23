@@ -17,6 +17,17 @@ import { extname } from 'path';
 import { UsersService } from './users.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { User } from './users.entity';
+import { SetThemeDto } from './dto/set-theme.dto';
+
+interface AuthenticatedRequest extends Request {
+  user: { sub: number; username: string };
+}
+interface UploadedFileType {
+  filename: string;
+  originalname: string;
+  mimetype: string;
+  size: number;
+}
 
 @Controller('users')
 export class UsersController {
@@ -24,7 +35,7 @@ export class UsersController {
 
   @HttpCode(HttpStatus.OK)
   @Post('setTheme')
-  signIn(@Body() signInDto: Record<string, any>) {
+  signIn(@Body() signInDto: SetThemeDto) {
     return this.usersService.setTheme(
       signInDto.username,
       signInDto.themeDarkMode,
@@ -35,7 +46,7 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   @Get('getUserData')
   async getUser(
-    @Req() req: Request & { user: { sub: number; username: string } },
+    @Req() req: AuthenticatedRequest,
   ): Promise<{ statusCode: number; user: User | null }> {
     const user = await this.usersService.findOne(req['user'].username);
 
@@ -62,8 +73,8 @@ export class UsersController {
     }),
   )
   async uploadProfilePicture(
-    @Req() req: any,
-    @UploadedFile() file: any,
+    @Req() req: AuthenticatedRequest,
+    @UploadedFile() file: UploadedFileType,
   ) {
     return this.usersService.uploadProfilePicture(
       req.user.username,
@@ -73,7 +84,7 @@ export class UsersController {
 
   @Delete('profile-picture')
   @UseGuards(AuthGuard)
-  async removeProfilePicture(@Req() req: any) {
+  async removeProfilePicture(@Req() req: AuthenticatedRequest) {
     return this.usersService.removeProfilePicture(req.user.username);
   }
 }

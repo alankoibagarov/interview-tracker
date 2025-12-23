@@ -40,6 +40,11 @@ export async function request<T>(
     logoutUser();
   }
 
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || `HTTP ${response.status}`);
+  }
+
   return response.json();
 }
 
@@ -59,6 +64,11 @@ export async function requestBlob(
 
   if (response.status === ResponseCodes.Unauthorized) {
     logoutUser();
+  }
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || `HTTP ${response.status}`);
   }
 
   return response.blob();

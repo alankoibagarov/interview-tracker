@@ -30,7 +30,7 @@ import { join, resolve } from 'path';
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
       autoLoadEntities: true,
-      synchronize: true, // ⚠️ good for dev, but turn OFF in production
+      synchronize: process.env.NODE_ENV === 'development', // ⚠️ good for dev, but turn OFF in production
     }),
   ],
   controllers: [AppController],
