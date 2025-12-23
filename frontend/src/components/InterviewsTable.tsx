@@ -357,7 +357,7 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({
                         {interview.rating}/5
                       </span>
                       <div className="flex">
-                        {[new Array(5)].map((_, i) => (
+                        {Array.from({ length: 5 }).map((_, i) => (
                           <span
                             key={i}
                             className={`text-xs ${

@@ -46,7 +46,7 @@ export class UsersService {
       throw new Error('User not found');
     }
 
-    await this.userRepo.update(user?.id, { themeDarkMode });
+    await this.userRepo.update(user.id, { themeDarkMode });
 
     return {
       statusCode: 200,

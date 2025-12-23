@@ -35,7 +35,7 @@ export class InterviewsService {
       updatedAt: new Date().toISOString(),
     });
 
-    return this.interviewRepo.save(newInterview);
+    return await this.interviewRepo.save(newInterview);
   }
 
   async update(
@@ -47,7 +47,7 @@ export class InterviewsService {
       return null;
     }
     Object.assign(interview, updateInterviewDto, { updatedAt: new Date() });
-    return this.interviewRepo.save(interview);
+    return await this.interviewRepo.save(interview);
   }
 
   async remove(id: number): Promise<boolean> {

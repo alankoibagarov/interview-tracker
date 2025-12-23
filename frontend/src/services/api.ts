@@ -19,7 +19,7 @@ const logoutUser = () => {
 export async function request<T>(
   endpoint: string,
   options?: RequestInit
-): Promise<T> {
+): Promise<T | null> {
   const baseUrl = process.env.VITE_API_LINK;
 
   const headers: HeadersInit = {
@@ -38,6 +38,7 @@ export async function request<T>(
 
   if (response.status === ResponseCodes.Unauthorized) {
     logoutUser();
+    return null;
   }
 
   if (!response.ok) {

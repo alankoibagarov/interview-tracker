@@ -144,10 +144,7 @@ export class InterviewsController {
     const interview = await this.interviewsService.update(
       id,
       updateInterviewDto,
-    );
-    if (!interview) {
-      throw new HttpException('Interview not found', HttpStatus.NOT_FOUND);
-    }
+    ) as InterviewEntity;
 
     await this.recordsService.create(interview.id, interview.userId, {
       type: 'note',

@@ -150,6 +150,8 @@ const InterviewsModal = forwardRef<
       const data = await interviewsApi.getInterviews();
       setInterviews(data);
       startClose();
+    } catch (error) {
+      console.error("Error submitting interview:", error);
     } finally {
       setSubmitting(false);
     }
