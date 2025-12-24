@@ -16,6 +16,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { capitalize } from "../helpers";
 import { interviewStatuses } from "../const/lists";
+import toast from 'react-hot-toast';
 
 interface InterviewsTableProps {
   openDialog: () => void;
@@ -41,18 +42,22 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({
     loadInterviews();
   }, []);
 
-  const loadInterviews = async () => {
+  const loadInterviews = async (isRefresh: boolean = false) => {
     try {
       setLoading(true);
       const data = await interviewsApi.getInterviews();
       if (data) {
         setInterviews(data);
         setError(null);
+        if (isRefresh) {
+          toast.success("Interviews loaded successfully");
+        }
       }
     } catch (err) {
       setError("Failed to load interviews");
       setInterviews([]);
       console.error("Error loading interviews:", err);
+      toast.error("Failed to load interviews");
     } finally {
       setLoading(false);
     }
@@ -72,10 +77,10 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({
       try {
         await interviewsApi.deleteInterview(id);
         setInterviews(interviews.filter((interview) => interview.id !== id));
-        alert("Interview deleted successfully");
+        toast.success("Interview deleted successfully");
       } catch (err) {
         setError("Failed to delete interview");
-        console.error("Error deleting interview:", err);
+        toast.error("Failed to delete interview");
       }
     }
   };
@@ -111,9 +116,9 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({
       link.click();
       link.remove();
       globalThis.URL.revokeObjectURL(url);
+      toast.success("Interviews exported successfully");
     } catch (err) {
-      console.error("Error exporting interviews:", err);
-      alert("Failed to export interviews");
+      toast.error("Failed to export interviews");
     }
   };
 
@@ -194,7 +199,7 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({
       <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
         {error}
         <button
-          onClick={loadInterviews}
+          onClick={() => loadInterviews(true)}
           className="ml-2 text-red-600 hover:text-red-800 underline"
         >
           Retry
@@ -235,7 +240,7 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({
               ))}
             </select>
             <button
-              onClick={loadInterviews}
+              onClick={() => loadInterviews(true)}
               className="px-4 py-2 bg-primary-500 text-white rounded-lg text-sm hover:bg-primary-600 transition-colors"
             >
               <ArrowPathIcon title="Refresh" className="h-5 w-5" />

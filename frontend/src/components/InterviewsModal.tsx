@@ -19,6 +19,7 @@ import Datepicker from "./Datepicker";
 import Select from "./Select";
 import RadioGroup from "./RadioGroup";
 import { interviewStatuses, interviewTypes } from "../const/lists";
+import toast from 'react-hot-toast';
 
 import WysiwygEditor from "./WysiwygEditor";
 
@@ -147,11 +148,13 @@ const InterviewsModal = forwardRef<
       } else {
         await interviewsApi.createInterview(form);
       }
+      toast.success(`Interview ${selectedInterview ? "updated" : "created"} successfully`);
       const data = await interviewsApi.getInterviews();
       setInterviews(data);
       startClose();
     } catch (error) {
       console.error("Error submitting interview:", error);
+      toast.error(`Interview ${selectedInterview ? "update" : "create"} failed`);
     } finally {
       setSubmitting(false);
     }

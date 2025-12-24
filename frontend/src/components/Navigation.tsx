@@ -27,7 +27,7 @@ const Navigation: React.FC<Props> = ({ type }) => {
   const setUser = useUserStore((state) => state.setUser);
 
   const logout = () => {
-    const confirmLogout = window.confirm("Are you sure you want to logout?");
+    const confirmLogout = globalThis.confirm("Are you sure you want to logout?");
     if (!confirmLogout) return;
     localStorage.removeItem("access_token");
     setUser(null);

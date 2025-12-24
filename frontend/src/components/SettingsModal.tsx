@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useUserStore } from "../store/userStore";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { authService } from "../services/authApi";
+import toast from 'react-hot-toast';
 
 type Props = {
   isOpen: boolean;
@@ -31,14 +32,14 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
         }
       } catch (error) {
         console.error("Failed to upload profile picture", error);
-        alert("Failed to upload profile picture");
+        toast.error("Failed to upload profile picture");
       }
     }
   };
 
   const handleDeleteProfilePicture = async () => {
     if (user) {
-      const confirmDelete = window.confirm("Are you sure you want to remove your profile picture?");
+      const confirmDelete = globalThis.confirm("Are you sure you want to remove your profile picture?");
       if (!confirmDelete) return;
 
       try {
@@ -48,7 +49,7 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
         }
       } catch (error) {
         console.error("Failed to delete profile picture", error);
-        alert("Failed to delete profile picture");
+        toast.error("Failed to delete profile picture");
       }
     }
   };

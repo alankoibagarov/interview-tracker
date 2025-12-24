@@ -14,6 +14,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import { useUserStore } from "./store/userStore";
 import { authService } from "./services/authApi";
 import { useEffect } from "react";
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const user = useUserStore((state) => state.user);
@@ -41,6 +42,7 @@ function App() {
   }, [setUser]);
 
   return (
+    <>
     <Router>
       <div
         className={
@@ -110,6 +112,8 @@ function App() {
         </main>
       </div>
     </Router>
+    <Toaster />
+    </>
   );
 }
 
