@@ -17,6 +17,7 @@ import {
 import { capitalize } from "../helpers";
 import { interviewStatuses } from "../const/lists";
 import toast from 'react-hot-toast';
+import { useConfirm } from "./ConfirmModal";
 
 interface InterviewsTableProps {
   openDialog: () => void;
@@ -37,6 +38,7 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({
   const interviewsStore = useInterviewsStore();
   const interviews = interviewsStore.interviews;
   const { setInterviews, setSelectedInterview } = interviewsStore;
+  const { confirm } = useConfirm();
 
   useEffect(() => {
     loadInterviews();
@@ -73,15 +75,23 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({
   };
 
   const handleDelete = async (id: number) => {
-    if (globalThis.confirm("Are you sure you want to delete this interview?")) {
-      try {
-        await interviewsApi.deleteInterview(id);
-        setInterviews(interviews.filter((interview) => interview.id !== id));
-        toast.success("Interview deleted successfully");
-      } catch (err) {
-        setError("Failed to delete interview");
-        toast.error("Failed to delete interview");
-      }
+    const confirmed = await confirm({
+      title: "Delete Interview",
+      message: "Are you sure you want to delete this interview? This action cannot be undone.",
+      confirmText: "Delete",
+      cancelText: "Cancel",
+      variant: "danger",
+    });
+    
+    if (!confirmed) return;
+    
+    try {
+      await interviewsApi.deleteInterview(id);
+      setInterviews(interviews.filter((interview) => interview.id !== id));
+      toast.success("Interview deleted successfully");
+    } catch (err) {
+      setError("Failed to delete interview");
+      toast.error("Failed to delete interview");
     }
   };
 

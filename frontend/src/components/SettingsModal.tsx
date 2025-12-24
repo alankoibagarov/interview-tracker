@@ -3,6 +3,7 @@ import { useUserStore } from "../store/userStore";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { authService } from "../services/authApi";
 import toast from 'react-hot-toast';
+import { useConfirm } from "./ConfirmModal";
 
 type Props = {
   isOpen: boolean;
@@ -18,6 +19,7 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { confirm } = useConfirm();
   
   const [isVisible, setIsVisible] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
@@ -29,6 +31,7 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
         const response = await authService.uploadProfilePicture(file);
         if (response.statusCode === 200) {
           setUser({ ...user, profilePicture: response.profilePicture });
+          toast.success("Profile picture updated successfully");
         }
       } catch (error) {
         console.error("Failed to upload profile picture", error);
@@ -39,13 +42,21 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const handleDeleteProfilePicture = async () => {
     if (user) {
-      const confirmDelete = globalThis.confirm("Are you sure you want to remove your profile picture?");
-      if (!confirmDelete) return;
+      const confirmed = await confirm({
+        title: "Remove Profile Picture",
+        message: "Are you sure you want to remove your profile picture?",
+        confirmText: "Remove",
+        cancelText: "Cancel",
+        variant: "danger",
+      });
+      
+      if (!confirmed) return;
 
       try {
         const response = await authService.deleteProfilePicture();
         if (response.statusCode === 200) {
            setUser({ ...user, profilePicture: null });
+           toast.success("Profile picture removed successfully");
         }
       } catch (error) {
         console.error("Failed to delete profile picture", error);

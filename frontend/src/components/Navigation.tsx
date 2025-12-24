@@ -11,6 +11,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { authService } from "../services/authApi";
 import SettingsModal from "./SettingsModal";
+import { useConfirm } from "./ConfirmModal";
 
 type Props = {
   type?: NavigationType;
@@ -25,10 +26,19 @@ const Navigation: React.FC<Props> = ({ type }) => {
 
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
+  const { confirm } = useConfirm();
 
-  const logout = () => {
-    const confirmLogout = globalThis.confirm("Are you sure you want to logout?");
-    if (!confirmLogout) return;
+  const logout = async () => {
+    const confirmed = await confirm({
+      title: "Confirm Logout",
+      message: "Are you sure you want to logout?",
+      confirmText: "Logout",
+      cancelText: "Cancel",
+      variant: "warning",
+    });
+
+    if (!confirmed) return;
+
     localStorage.removeItem("access_token");
     setUser(null);
     if (location.pathname !== "/") {
