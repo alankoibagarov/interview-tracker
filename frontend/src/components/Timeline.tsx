@@ -54,7 +54,7 @@ function Timeline({
             <div className="bg-white p-0 rounded-md flex-1">
               <div
                 className={`flex justify-between text-[11px] text-[#444] leading-[1.4] ${
-                  idx % 2 === 0 ? "text-right" : "text-left"
+                  idx % 2 === 0 ? "text-left" : "text-right"
                 }  ${idx % 2 === 0 ? "" : "flex-row-reverse"}`}
               >
                 <div>{formatDate(it.date)}</div>

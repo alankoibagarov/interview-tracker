@@ -25,6 +25,7 @@ import type {
 import type { InterviewRecordEntity } from './interview-record.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
 import type { Request, Response } from 'express';
+import { detectInterviewChanges } from './utils/change-tracker';
 
 @Controller('interviews')
 export class InterviewsController {
@@ -123,8 +124,17 @@ export class InterviewsController {
       userId,
     );
     await this.recordsService.create(interview.id, userId, {
-      type: 'note',
-      message: 'Created entry',
+      type: 'created',
+      message: 'Interview created',
+      metadata: {
+        initialValues: {
+          company: interview.company,
+          position: interview.position,
+          status: interview.status,
+          type: interview.type,
+          date: interview.date,
+        },
+      },
     });
     return interview;
   }
@@ -141,15 +151,27 @@ export class InterviewsController {
       throw new ForbiddenException();
     }
 
+    // Detect changes BEFORE updating
+    const changeResult = detectInterviewChanges(existing, updateInterviewDto);
+
+    // Perform the update
     const interview = await this.interviewsService.update(
       id,
       updateInterviewDto,
     ) as InterviewEntity;
 
-    await this.recordsService.create(interview.id, interview.userId, {
-      type: 'note',
-      message: 'Updated entry',
-    });
+    // Create record with change details
+    if (changeResult.hasChanges) {
+      await this.recordsService.create(interview.id, interview.userId, {
+        type: 'field_change',
+        message: changeResult.message,
+        metadata: {
+          changes: changeResult.changes,
+          changedFields: changeResult.changes.map((c) => c.field),
+        },
+      });
+    }
+
     return interview;
   }
 

@@ -7,7 +7,14 @@ import {
 } from 'typeorm';
 import { InterviewEntity } from './interview.entity';
 
-export type RecordType = 'note' | 'status_change' | 'email' | 'call' | 'other';
+export type RecordType =
+  | 'note'
+  | 'status_change'
+  | 'field_change'
+  | 'created'
+  | 'email'
+  | 'call'
+  | 'other';
 
 @Entity()
 export class InterviewRecordEntity {

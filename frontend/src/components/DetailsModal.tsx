@@ -316,8 +316,17 @@ const DetailsModal = forwardRef<
             <div className="flex flex-col gap-4 xl:w-1/2 max-h-[600px] overflow-y-auto">
               {selectedInterview?.records?.length ? (
                 <Timeline
-                  items={selectedInterview?.records?.map((i) => {
-                    return { date: i.createdAt, content: i.message };
+                  items={selectedInterview?.records?.map((record) => {
+                    // Build content with field changes if available
+                    const content = (
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{record.message}</span>
+                        </div>
+                      </div>
+                    );
+
+                    return { date: record.createdAt, content };
                   })}
                 />
               ) : (

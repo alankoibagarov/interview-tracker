@@ -80,20 +80,30 @@ export interface InterviewRecordEntity {
   message: string;
   metadata: Record<string, unknown> | null;
   createdAt: string;
+  type: RecordType;
 }
+
+export type RecordType =
+  | 'note'
+  | 'status_change'
+  | 'field_change'
+  | 'created'
+  | 'email'
+  | 'call'
+  | 'other';
 
 class InterviewsService {
   // Interviews
-  async getInterviews(): Promise<Interview[]> {
-    return request<Interview[]>("/interviews");
+  async getInterviews(): Promise<Interview[] | null> {
+    return request<Interview[] | null>("/interviews");
   }
 
-  async getInterview(id: number): Promise<Interview> {
-    return request<Interview>(`/interviews/${id}`);
+  async getInterview(id: number): Promise<Interview | null> {
+    return request<Interview | null>(`/interviews/${id}`);
   }
 
-  async createInterview(data: CreateInterviewDto): Promise<Interview> {
-    return request<Interview>("/interviews", {
+  async createInterview(data: CreateInterviewDto): Promise<Interview | null> {
+    return request<Interview | null>("/interviews", {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -102,28 +112,28 @@ class InterviewsService {
   async updateInterview(
     id: number,
     data: UpdateInterviewDto
-  ): Promise<Interview> {
-    return request<Interview>(`/interviews/${id}`, {
+  ): Promise<Interview | null> {
+    return request<Interview | null>(`/interviews/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
     });
   }
 
-  async deleteInterview(id: number): Promise<{ message: string }> {
-    return request<{ message: string }>(`/interviews/${id}`, {
+  async deleteInterview(id: number): Promise<{ message: string } | null> {
+    return request<{ message: string } | null>(`/interviews/${id}`, {
       method: "DELETE",
     });
   }
 
-  async getInterviewStats(): Promise<InterviewStats> {
-    return request<InterviewStats>("/interviews/stats");
+  async getInterviewStats(): Promise<InterviewStats | null> {
+    return request<InterviewStats | null>("/interviews/stats");
   }
 
-  async getRecentActivity(): Promise<Interview[]> {
-    return request<Interview[]>("/interviews/recent");
+  async getRecentActivity(): Promise<Interview[] | null> {
+    return request<Interview[] | null>("/interviews/recent");
   }
 
-  async exportInterviewsCsv(): Promise<Blob> {
+  async exportInterviewsCsv(): Promise<Blob | null> {
     return requestBlob("/interviews/export", {
       headers: {
         Accept: "text/csv",
