@@ -1,10 +1,9 @@
-import Navigation from "../components/Navigation";
-import { NavigationType } from "../const";
+import LandingNavigation from "../components/landing/LandingNavigation";
 
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navigation type={NavigationType.HOME} />
+      <LandingNavigation />
       <main>{children}</main>
     </div>
   );
