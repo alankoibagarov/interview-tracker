@@ -43,7 +43,7 @@ const MobileLandingNavigation: React.FC<MobileLandingNavigationProps> = ({ scrol
             >
                 <div className="w-full mx-auto px-1 flex justify-between items-center h-[50px]">
                     <div className="flex items-center gap-2">
-                        <img className="size-[40px]" src="src/assets/logo.png" alt="Logo" />
+                        <img className="size-[40px]" src="src/assets/logo.svg" alt="Logo" />
                         <Link
                             to={"/"}
                             className={`text-lg font-bold hover:text-secondary-500 transition-colors duration-300 outline-none ${

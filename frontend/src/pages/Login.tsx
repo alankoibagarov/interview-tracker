@@ -36,10 +36,14 @@ const Login = () => {
     <div className="flex h-screen w-screen">
       <div className="relative flex w-full flex-col justify-center gap-y-8 px-12 sm:mx-auto sm:basis-[500px] sm:px-0 lg:basis-[560px] lg:px-12">
         <div className="w-full max-w-md">
-          <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+          <Link className="flex justify-center mb-4" title="Go back to Home page" to={"/"}>
+            <img className="size-[50px]" src="src/assets/logo.svg" alt="Logo" />
+          </Link>
+
+          <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">
             Welcome
           </h2>
-          <h4 className="font-normal mb-6 text-center text-gray-800">
+          <h4 className="font-normal mb-4 text-center text-gray-800">
             Use your credentials to login
           </h4>
           <div className="flex flex-col gap-4">

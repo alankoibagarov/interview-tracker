@@ -25,7 +25,7 @@ const DesktopLandingNavigation: React.FC<DesktopLandingNavigationProps> = ({ scr
       >
         <div className="w-full mx-auto px-5 flex justify-between items-center h-[70px]">
           <div className="flex items-center gap-2">
-            <img className="size-[50px]" src="src/assets/logo.png" alt="Logo" />
+            <img className="size-[50px]" src="src/assets/logo.svg" alt="Logo" />
             <Link
               to={"/"}
               className={`text-2xl font-bold hover:text-secondary-500 transition-colors duration-300 outline-none ${

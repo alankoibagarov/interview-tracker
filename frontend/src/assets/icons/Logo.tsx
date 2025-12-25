@@ -1,0 +1,33 @@
+export default function Logo() {
+    return (
+    <svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+
+        <rect
+            x="0"
+            y="0"
+            width="1024"
+            height="1024"
+            rx="220"
+            fill="#667eea"
+        />
+
+                
+        <text
+            x="50%"
+            y="50%"
+            text-anchor="middle"
+            dominant-baseline="central"
+            dx="-28"
+            dy="-10"
+            font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif"
+            font-size="560"
+            font-weight="900"
+            fill="#ffffff"
+            letter-spacing="-40"
+        >
+            IF
+        </text>
+    </svg>
+
+    )
+}
