@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
+import HeroSection from "../components/landing/HeroSection";
 
 const Home: React.FC = () => {
   return (
@@ -13,149 +14,8 @@ const Home: React.FC = () => {
       </div>
 
       {/* Hero Section */}
-      <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl mx-auto px-5 py-20 min-h-[90vh]">
-        <div className="flex-1 text-white max-w-2xl mb-12 lg:mb-0">
-          <div className="text-center lg:text-left">
-            <h1 className="text-5xl lg:text-7xl text-white-700 font-bold mb-6 leading-tight">
-              Interview Flow
-            </h1>
-            <p className="text-lg lg:text-2xl mb-8 opacity-90 text-white-700 leading-relaxed font-light">
-              Master your interview process with intelligent tracking,
-              <span className="font-semibold text-yellow-300">
-                {" "}
-                data-driven insights
-              </span>
-              , and
-              <span className="font-semibold text-yellow-300">
-                {" "}
-                proven strategies
-              </span>
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center lg:justify-start mb-12">
-              <Link
-                to="/dashboard"
-                className="btn-primary group bg-primary-500 hover:bg-primary-600 text-white-700 px-6 py-3 rounded-lg"
-              >
-                <span className="flex text-white-700 items-center justify-center gap-2">
-                  Get Started
-                  <svg
-                    className="w-5 h-5 transition-transform group-hover:translate-x-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 7l5 5m0 0l-5 5m5-5H6"
-                    />
-                  </svg>
-                </span>
-              </Link>
-              <button className="btn-secondary group text-white-700">
-                <span className="flex items-center justify-center gap-2">
-                  Watch Demo
-                  <svg
-                    className="w-5 h-5 transition-transform group-hover:scale-110"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </span>
-              </button>
-            </div>
+      <HeroSection />
 
-            {/* Stats */}
-            <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 text-white/80 justify-center lg:justify-start">
-              <div className="text-center">
-                <div className="text-2xl lg:text-3xl font-bold text-yellow-300">
-                  10K+
-                </div>
-                <div className="text-sm">Interviews Tracked</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl lg:text-3xl font-bold text-yellow-300">
-                  85%
-                </div>
-                <div className="text-sm">Success Rate</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl lg:text-3xl font-bold text-yellow-300">
-                  24/7
-                </div>
-                <div className="text-sm">Support</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex-1 flex justify-center items-center w-full">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 max-w-4xl w-full text-white">
-            <div className="feature-card text-center">
-              <div className="text-4xl lg:text-5xl mb-4">📊</div>
-              <h3 className="text-lg lg:text-xl mb-3  font-semibold">
-                Smart Analytics
-              </h3>
-              <p className="text-sm opacity-90 leading-relaxed">
-                AI-powered insights to improve your interview performance
-              </p>
-            </div>
-            <div className="feature-card text-center">
-              <div className="text-4xl lg:text-5xl mb-4">📅</div>
-              <h3 className="text-lg lg:text-xl mb-3 font-semibold">
-                Smart Scheduling
-              </h3>
-              <p className="text-sm opacity-90 leading-relaxed">
-                Intelligent calendar management with reminders
-              </p>
-            </div>
-            <div className="feature-card text-center">
-              <div className="text-4xl lg:text-5xl mb-4">📝</div>
-              <h3 className="text-lg lg:text-xl mb-3 font-semibold">
-                Smart Notes
-              </h3>
-              <p className="text-sm opacity-90 leading-relaxed">
-                AI-enhanced note-taking with action items
-              </p>
-            </div>
-            <div className="feature-card text-center">
-              <div className="text-4xl lg:text-5xl mb-4">🎯</div>
-              <h3 className="text-lg lg:text-xl mb-3 font-semibold">
-                Goal Tracking
-              </h3>
-              <p className="text-sm opacity-90 leading-relaxed">
-                Set and achieve your career milestones
-              </p>
-            </div>
-            <div className="feature-card text-center">
-              <div className="text-4xl lg:text-5xl mb-4">🚀</div>
-              <h3 className="text-lg lg:text-xl mb-3 font-semibold">
-                Performance Boost
-              </h3>
-              <p className="text-sm opacity-90 leading-relaxed">
-                Proven strategies to ace every interview
-              </p>
-            </div>
-            <div className="feature-card text-center">
-              <div className="text-4xl lg:text-5xl mb-4">🔒</div>
-              <h3 className="text-lg lg:text-xl mb-3 font-semibold">
-                Secure & Private
-              </h3>
-              <p className="text-sm opacity-90 leading-relaxed">
-                Enterprise-grade security for your data
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Features Section */}
       <div className="relative bg-white py-16 lg:py-24 w-full">
