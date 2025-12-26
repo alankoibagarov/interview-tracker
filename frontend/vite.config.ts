@@ -12,6 +12,11 @@ export default ({ mode }: { mode: string }) => {
   const env = loadEnv(mode, path.resolve(__dirname, "..")); // points to repo root
   return defineConfig({
     plugins: [react()],
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
+    },
     // Vite exposes variables with VITE_ prefix automatically
     define: {
       "process.env": {

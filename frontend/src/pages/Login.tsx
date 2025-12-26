@@ -2,7 +2,7 @@ import { useState } from "react";
 import bgImage from "../assets/backgrounds/glenn-carstens-peters-npxXWgQ33ZQ-unsplash.jpg";
 import { authService } from "../services/authApi";
 import { useNavigate, Link } from "react-router-dom";
-import { useUserStore } from "../store/userStore";
+import { useUserStore } from "@/store/userStore";
 import { ResponseCodes } from "../services/api";
 
 const Login = () => {
