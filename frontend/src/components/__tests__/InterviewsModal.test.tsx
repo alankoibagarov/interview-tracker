@@ -65,6 +65,7 @@ const sampleInterview: Interview = {
   followUpDate: "2025-01-10T09:00",
   createdAt: "2024-12-01",
   updatedAt: "2024-12-01",
+  records: [],
 };
 
 const renderAndOpenModal = () => {

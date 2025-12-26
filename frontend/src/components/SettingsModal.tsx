@@ -29,7 +29,7 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
     if (file && user) {
       try {
         const response = await authService.uploadProfilePicture(file);
-        if (response.statusCode === 200) {
+        if (response?.statusCode === 200) {
           setUser({ ...user, profilePicture: response.profilePicture });
           toast.success("Profile picture updated successfully");
         }
@@ -54,7 +54,7 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
       try {
         const response = await authService.deleteProfilePicture();
-        if (response.statusCode === 200) {
+        if (response?.statusCode === 200) {
            setUser({ ...user, profilePicture: null });
            toast.success("Profile picture removed successfully");
         }

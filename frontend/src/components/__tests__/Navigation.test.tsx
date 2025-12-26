@@ -8,16 +8,22 @@ import {
   seedUserStore,
 } from "../../test/testUtils";
 import { useUserStore } from "../../store/userStore";
+import { UserRole } from "../../services/authApi";
 
 const mockSetTheme = vi.hoisted(() =>
   vi.fn().mockResolvedValue({ statusCode: 200 })
 );
 
-vi.mock("../../services/authApi", () => ({
-  authService: {
-    setTheme: mockSetTheme,
-  },
-}));
+vi.mock("../../services/authApi", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../../services/authApi")>();
+  return {
+    ...actual,
+    authService: {
+      ...actual.authService,
+      setTheme: mockSetTheme,
+    },
+  };
+});
 
 describe("Navigation", () => {
   beforeEach(() => {
@@ -35,7 +41,12 @@ describe("Navigation", () => {
   });
 
   it("toggles theme for authenticated users", async () => {
-    seedUserStore({ username: "jane", email: "jane@test.com", themeDarkMode: false });
+    seedUserStore({
+      username: "jane",
+      email: "jane@test.com",
+      themeDarkMode: false,
+      role: UserRole.USER,
+    });
 
     renderWithRouter(<Navigation type={NavigationType.DASHBOARD} />, {
       routerProps: { initialEntries: ["/interviews"] },

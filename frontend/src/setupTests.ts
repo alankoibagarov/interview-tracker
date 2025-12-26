@@ -48,6 +48,7 @@ if (!process.env.VITE_API_LINK) {
 const fetchMock = vi.fn(
   async () =>
     ({
+      ok: true,
       status: 200,
       json: async () => ({}),
     }) as Response

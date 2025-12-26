@@ -1,10 +1,11 @@
 import React from "react";
-import { render, screen, waitFor, within, act } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import DetailsModal from "../DetailsModal";
 import {
   resetInterviewsStore,
   setSelectedInterview,
+  renderWithProviders,
   seedInterviewsStore,
 } from "../../test/testUtils";
 import { InterviewStatus, InterviewType, type Interview } from "../../services/interviewsApi";
@@ -38,11 +39,12 @@ const sampleInterview: Interview = {
   followUpDate: "",
   createdAt: "2024-01-01",
   updatedAt: "2024-01-01",
+  records: [],
 };
 
 const renderAndOpenModal = () => {
     const ref = React.createRef<{ openDialog: () => void }>();
-    render(<DetailsModal ref={ref} />);
+    renderWithProviders(<DetailsModal ref={ref} />);
     const dialog = screen.getByRole("dialog", { hidden: true });
     
     // Simulate opening via ref
@@ -103,9 +105,7 @@ describe("DetailsModal", () => {
     await waitFor(() => screen.getByText("Tech Corp"));
   });
   
-  it.skip("closes when close button is clicked", async () => {
-      vi.useFakeTimers();
-      const user = userEvent.setup();
+  it("closes when close button is clicked", async () => {
       setSelectedInterview(sampleInterview);
       mockGetInterview.mockResolvedValue(sampleInterview);
       
@@ -113,13 +113,8 @@ describe("DetailsModal", () => {
       expect(dialog).toHaveAttribute("open");
       
       const closeBtn = within(dialog).getByLabelText("Close dialog");
-      await user.click(closeBtn);
-      
-      act(() => {
-        vi.runAllTimers();
-      });
+      await userEvent.click(closeBtn);
       
       await waitFor(() => expect(dialog).not.toHaveAttribute("open"));
-      vi.useRealTimers();
   });
 });

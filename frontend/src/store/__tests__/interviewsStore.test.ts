@@ -16,14 +16,16 @@ const sampleInterview: Interview = {
   followUpDate: "2025-01-10T09:00",
   createdAt: "2024-12-01",
   updatedAt: "2024-12-01",
+  records: [],
 };
 
 describe("interviewsStore", () => {
   beforeEach(() => {
-    useInterviewsStore.setState({
+    useInterviewsStore.setState((state) => ({
+      ...state,
       interviews: [],
       selectedInterview: null,
-    });
+    }));
   });
 
   it("sets interviews", () => {
@@ -32,7 +34,7 @@ describe("interviewsStore", () => {
   });
 
   it("adds an interview to the beginning of the list", () => {
-    const existingInterview = { ...sampleInterview, id: 2, company: "Old" };
+    const existingInterview: Interview = { ...sampleInterview, id: 2, company: "Old" };
     useInterviewsStore.getState().setInterviews([existingInterview]);
 
     useInterviewsStore.getState().addInterview(sampleInterview);

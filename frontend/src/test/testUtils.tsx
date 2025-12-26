@@ -6,15 +6,25 @@ import type { User } from "../services/authApi";
 import { useInterviewsStore } from "../store/interviewsStore";
 import { useUserStore } from "../store/userStore";
 
+import { ConfirmProvider } from "../components/ConfirmModal";
+
 type RouterOptions = {
   routerProps?: MemoryRouterProps;
+};
+
+export const renderWithProviders = (ui: ReactElement) => {
+  return render(<ConfirmProvider>{ui}</ConfirmProvider>);
 };
 
 export const renderWithRouter = (
   ui: ReactElement,
   { routerProps }: RouterOptions = {}
 ) => {
-  return render(<MemoryRouter {...routerProps}>{ui}</MemoryRouter>);
+  return render(
+    <ConfirmProvider>
+      <MemoryRouter {...routerProps}>{ui}</MemoryRouter>
+    </ConfirmProvider>
+  );
 };
 
 export const resetInterviewsStore = () => {

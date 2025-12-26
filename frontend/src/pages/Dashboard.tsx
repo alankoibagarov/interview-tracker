@@ -25,12 +25,16 @@ const Dashboard: React.FC = () => {
   const loadDashboardData = useCallback(async () => {
     try {
       setLoading(true);
-      const [statsData, activityData] = await Promise.all([
-        interviewsApi.getInterviewStats(),
-        interviewsApi.getRecentActivity(),
-      ]);
-      setStats(statsData);
-      setRecentActivity(activityData);
+      const statsData = await interviewsApi.getInterviewStats();
+      const activityData = await interviewsApi.getRecentActivity();
+      if (statsData) {
+        setStats(statsData);
+      }
+      if (activityData) {
+        setRecentActivity(activityData);
+      } else {
+        setRecentActivity([]);
+      }
       setError(null);
     } catch (err) {
       setError("Failed to load dashboard data");

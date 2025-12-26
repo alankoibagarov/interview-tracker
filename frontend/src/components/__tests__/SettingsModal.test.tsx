@@ -1,7 +1,8 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { screen, fireEvent, waitFor } from "@testing-library/react";
 import SettingsModal from "../SettingsModal";
 import { useUserStore } from "../../store/userStore";
 import { UserRole } from "../../services/authApi";
+import { renderWithProviders } from "../../test/testUtils";
 import { vi } from "vitest";
 
 // Mock user store
@@ -26,20 +27,20 @@ describe("SettingsModal", () => {
   });
 
   it("should not render when isOpen is false", () => {
-    render(<SettingsModal isOpen={false} onClose={mockOnClose} />);
+    renderWithProviders(<SettingsModal isOpen={false} onClose={mockOnClose} />);
     const modal = screen.queryByText("Settings");
     expect(modal).not.toBeInTheDocument();
   });
 
   it("should render when isOpen is true", async () => {
-    render(<SettingsModal isOpen={true} onClose={mockOnClose} />);
+    renderWithProviders(<SettingsModal isOpen={true} onClose={mockOnClose} />);
     
     // Wait for animation mount
     expect(await screen.findByRole("heading", { name: /Settings/i })).toBeInTheDocument();
   });
 
   it("should call onClose when close button is clicked", async () => {
-    render(<SettingsModal isOpen={true} onClose={mockOnClose} />);
+    renderWithProviders(<SettingsModal isOpen={true} onClose={mockOnClose} />);
 
     await waitFor(() => {
       expect(screen.getByText("Settings")).toBeInTheDocument();

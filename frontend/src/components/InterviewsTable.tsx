@@ -4,8 +4,8 @@ import {
   InterviewType,
   InterviewStatus,
   interviewsApi,
-} from "../services/interviewsApi";
-import { useInterviewsStore } from "../store/interviewsStore";
+} from "@/services/interviewsApi";
+import { useInterviewsStore } from "@/store/interviewsStore";
 import {
   ArrowPathIcon,
   PencilSquareIcon,
@@ -14,8 +14,8 @@ import {
   StarIcon,
   DocumentMagnifyingGlassIcon,
 } from "@heroicons/react/24/solid";
-import { capitalize } from "../helpers";
-import { interviewStatuses } from "../const/lists";
+import { capitalize } from "@/helpers";
+import { interviewStatuses } from "@/const/lists";
 import toast from 'react-hot-toast';
 import { useConfirm } from "./ConfirmModal";
 
@@ -48,7 +48,7 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({
     try {
       setLoading(true);
       const data = await interviewsApi.getInterviews();
-      if (data) {
+      if (data !== null) {
         setInterviews(data);
         setError(null);
         if (isRefresh) {
@@ -113,9 +113,10 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({
     openDetailsDialog();
   };
 
-  const exportToExcel = async () => {
+  const handleExportCsv = async () => {
     try {
       const blob = await interviewsApi.exportInterviewsCsv();
+      if (!blob) return;
       const url = globalThis.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -256,7 +257,7 @@ const InterviewsTable: React.FC<InterviewsTableProps> = ({
               <ArrowPathIcon title="Refresh" className="h-5 w-5" />
             </button>
             <button
-              onClick={exportToExcel}
+              onClick={handleExportCsv}
               className="px-4 py-2 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 transition-colors"
             >
               <ArrowDownTrayIcon

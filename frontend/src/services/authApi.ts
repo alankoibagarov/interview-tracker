@@ -28,6 +28,10 @@ class AuthService {
       body: JSON.stringify({ username, password }),
     });
 
+    if (!response) {
+      throw new Error("Login failed: No response");
+    }
+
     switch (response.statusCode) {
       case ResponseCodes.BadRequest:
         throw new Error("Invalid credentials");
@@ -47,6 +51,10 @@ class AuthService {
       body: JSON.stringify({ username, themeDarkMode }),
     });
 
+    if (!response) {
+      throw new Error("Failed to set theme: No response");
+    }
+
     switch (response.statusCode) {
       case ResponseCodes.BadRequest:
         throw new Error("Invalid credentials");
@@ -61,6 +69,10 @@ class AuthService {
     const response = await request<{ statusCode: number; user: User }>(
       "/users/getUserData"
     );
+
+    if (!response) {
+      throw new Error("Failed to get user data: No response");
+    }
 
     switch (response.statusCode) {
       case ResponseCodes.BadRequest:
@@ -90,11 +102,11 @@ class AuthService {
   }
 
 
-  async uploadProfilePicture(file: File): Promise<{ statusCode: number; profilePicture: string }> {
+  async uploadProfilePicture(file: File): Promise<{ statusCode: number; profilePicture: string } | null> {
     const formData = new FormData();
     formData.append("file", file);
 
-    const response = await request<{ statusCode: number; profilePicture: string }>(
+    const response = await request<{ statusCode: number; profilePicture: string } | null>(
       "/users/upload-profile-picture",
       {
         method: "POST",
@@ -104,8 +116,8 @@ class AuthService {
     return response;
   }
 
-  async deleteProfilePicture(): Promise<{ statusCode: number }> {
-    return request("/users/profile-picture", {
+  async deleteProfilePicture(): Promise<{ statusCode: number } | null> {
+    return request<{ statusCode: number } | null>("/users/profile-picture", {
       method: "DELETE",
     });
   }
