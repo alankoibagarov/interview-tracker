@@ -2,6 +2,7 @@ import React from "react";
 import Footer from "../components/Footer";
 import HeroSection from "../components/landing/HeroSection";
 import ProblemSection from "../components/landing/ProblemSection";
+import SolutionSection from "../components/landing/SolutionSection";
 
 const Home: React.FC = () => {
   return (
@@ -18,6 +19,9 @@ const Home: React.FC = () => {
 
       {/* Problem Section */}
       <ProblemSection />
+
+      {/* Solution Section */}
+      <SolutionSection />
 
       <Footer />
     </div>
