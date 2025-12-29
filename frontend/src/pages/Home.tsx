@@ -5,8 +5,17 @@ import ProblemSection from "../components/landing/ProblemSection";
 import SolutionSection from "../components/landing/SolutionSection";
 import ProductSection from "../components/landing/ProductSection";
 import ProjectContextSection from "../components/landing/ProjectContextSection";
+import { useNavigate } from "react-router-dom";
+import { useUserStore } from "../store/userStore";
 
 const Home: React.FC = () => {
+  const user = useUserStore((state) => state.user);
+  const navigate = useNavigate();
+
+  if (user) {
+    navigate("/interviews");
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 w-full overflow-hidden">
       {/* Background decoration */}
