@@ -3,6 +3,7 @@ import Footer from "../components/Footer";
 import HeroSection from "../components/landing/HeroSection";
 import ProblemSection from "../components/landing/ProblemSection";
 import SolutionSection from "../components/landing/SolutionSection";
+import ProductSection from "../components/landing/ProductSection";
 
 const Home: React.FC = () => {
   return (
@@ -22,6 +23,9 @@ const Home: React.FC = () => {
 
       {/* Solution Section */}
       <SolutionSection />
+
+      {/* Product Section */}
+      <ProductSection />
 
       <Footer />
     </div>
