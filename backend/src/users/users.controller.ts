@@ -33,6 +33,7 @@ interface UploadedFileType {
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('setTheme')
   signIn(@Body() signInDto: SetThemeDto) {
@@ -56,8 +57,8 @@ export class UsersController {
     };
   }
 
-  @Post('upload-profile-picture')
   @UseGuards(AuthGuard)
+  @Post('upload-profile-picture')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -82,8 +83,8 @@ export class UsersController {
     );
   }
 
-  @Delete('profile-picture')
   @UseGuards(AuthGuard)
+  @Delete('profile-picture')
   async removeProfilePicture(@Req() req: AuthenticatedRequest) {
     return this.usersService.removeProfilePicture(req.user.username);
   }

@@ -51,7 +51,10 @@ export function detectInterviewChanges(
     if (oldValue == null && newValue == null) continue;
 
     // Handle empty string vs null/undefined
-    if ((oldValue === '' || oldValue == null) && (newValue === '' || newValue == null)) {
+    if (
+      (oldValue === '' || oldValue == null) &&
+      (newValue === '' || newValue == null)
+    ) {
       continue;
     }
 
@@ -88,7 +91,10 @@ function generateChangeMessage(changes: FieldChange[]): string {
   }
 
   // More than 2 changes
-  const fields = changes.map((c) => c.displayName).slice(0, 2).join(', ');
+  const fields = changes
+    .map((c) => c.displayName)
+    .slice(0, 2)
+    .join(', ');
   const remaining = changes.length - 2;
   return `Updated ${fields}, and ${remaining} more field${remaining > 1 ? 's' : ''}`;
 }

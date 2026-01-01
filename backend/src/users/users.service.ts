@@ -62,7 +62,11 @@ export class UsersService {
     if (user.profilePicture) {
       // Delete old picture if exists
       try {
-        const oldFilePath = join(process.cwd(), 'uploads', user.profilePicture.replace('/uploads/', ''));
+        const oldFilePath = join(
+          process.cwd(),
+          'uploads',
+          user.profilePicture.replace('/uploads/', ''),
+        );
         await unlink(oldFilePath);
       } catch (error) {
         // File might not exist, ignore error
@@ -88,7 +92,11 @@ export class UsersService {
     // Delete file from disk
     if (user.profilePicture) {
       try {
-        const filePath = join(process.cwd(), 'uploads', user.profilePicture.replace('/uploads/', ''));
+        const filePath = join(
+          process.cwd(),
+          'uploads',
+          user.profilePicture.replace('/uploads/', ''),
+        );
         await unlink(filePath);
       } catch (error) {
         // File might not exist, log but continue

@@ -104,14 +104,13 @@ export class InterviewsController {
     return { ...interview, records };
   }
 
-  
-/**
- * Creates a new interview record for a user
- * @param createInterviewDto - Interview data
- * @param userId - ID of the user creating the interview
- * @returns Created interview entity with generated ID
- * @throws {ConflictException} If interview already exists
- */
+  /**
+   * Creates a new interview record for a user
+   * @param createInterviewDto - Interview data
+   * @param userId - ID of the user creating the interview
+   * @returns Created interview entity with generated ID
+   * @throws {ConflictException} If interview already exists
+   */
   @UseGuards(AuthGuard)
   @Post()
   async create(
@@ -155,10 +154,10 @@ export class InterviewsController {
     const changeResult = detectInterviewChanges(existing, updateInterviewDto);
 
     // Perform the update
-    const interview = await this.interviewsService.update(
+    const interview = (await this.interviewsService.update(
       id,
       updateInterviewDto,
-    ) as InterviewEntity;
+    )) as InterviewEntity;
 
     // Create record with change details
     if (changeResult.hasChanges) {
@@ -177,7 +176,10 @@ export class InterviewsController {
 
   @UseGuards(AuthGuard)
   @Delete(':id')
-  async remove(@Param('id') id: number,  @Req() req: Request & { user: { sub: number } },): Promise<{ message: string }> {
+  async remove(
+    @Param('id') id: number,
+    @Req() req: Request & { user: { sub: number } },
+  ): Promise<{ message: string }> {
     const existing = await this.interviewsService.findOne(id);
     if (!existing || existing.userId !== req.user.sub) {
       throw new ForbiddenException();
