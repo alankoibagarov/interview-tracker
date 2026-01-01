@@ -4,6 +4,8 @@ import {
   InterviewEntity,
   CreateInterviewDto,
   UpdateInterviewDto,
+  InterviewStatus,
+  InterviewType,
 } from './interview.entity';
 import { InterviewsService } from './interviews.service';
 import { Repository, SelectQueryBuilder } from 'typeorm';
@@ -43,23 +45,26 @@ describe('InterviewsService', () => {
 
   const sampleInterview = (
     overrides: Partial<InterviewEntity> = {},
-  ): InterviewEntity => ({
-    id: 1,
-    userId: 10,
-    company: 'Acme',
-    position: 'Engineer',
-    date: '2024-01-01',
-    status: 'scheduled',
-    type: 'phone',
-    interviewer: 'Jordan',
-    notes: 'Bring portfolio',
-    feedback: 'Great',
-    rating: 4,
-    followUpDate: '2024-01-02',
-    createdAt: '2024-01-01T00:00:00.000Z',
-    updatedAt: '2024-01-01T00:00:00.000Z',
-    ...overrides,
-  });
+  ): InterviewEntity =>
+    ({
+      id: 1,
+      userId: 10,
+      company: 'Acme',
+      position: 'Engineer',
+      date: '2024-01-01',
+      status: InterviewStatus.SCHEDULED,
+      type: InterviewType.PHONE,
+      interviewer: 'Jordan',
+      location: '',
+      callLink: '',
+      notes: 'Bring portfolio',
+      feedback: 'Great',
+      rating: 4,
+      followUpDate: '2024-01-02',
+      createdAt: '2024-01-01T00:00:00.000Z',
+      updatedAt: '2024-01-01T00:00:00.000Z',
+      ...overrides,
+    }) as InterviewEntity;
 
   it('findAll returns interviews filtered by user', async () => {
     const interviews = [sampleInterview()];
@@ -84,8 +89,8 @@ describe('InterviewsService', () => {
       company: 'Globex',
       position: 'Manager',
       date: '2024-05-01',
-      status: 'scheduled',
-      type: 'onsite',
+      status: InterviewStatus.SCHEDULED,
+      type: InterviewType.ONSITE,
       notes: 'Important',
     };
     const created = sampleInterview(dto as unknown as Partial<InterviewEntity>);
@@ -110,7 +115,9 @@ describe('InterviewsService', () => {
   it('update returns null when interview not found', async () => {
     interviewRepo.findOne.mockResolvedValue(null);
 
-    const result = await service.update(99, { status: 'completed' });
+    const result = await service.update(99, {
+      status: InterviewStatus.COMPLETED,
+    });
 
     expect(result).toBeNull();
     expect(interviewRepo.findOne).toHaveBeenCalledWith({ where: { id: 99 } });
@@ -120,11 +127,11 @@ describe('InterviewsService', () => {
   it('update merges payload and refreshes updatedAt when entity exists', async () => {
     const existing = sampleInterview();
     interviewRepo.findOne.mockResolvedValue(existing);
-    const saved = sampleInterview({ status: 'completed' });
+    const saved = sampleInterview({ status: InterviewStatus.COMPLETED });
     interviewRepo.save.mockResolvedValue(saved);
 
     const updateDto: UpdateInterviewDto = {
-      status: 'completed',
+      status: InterviewStatus.COMPLETED,
       notes: 'Updated',
     };
     const result = await service.update(existing.id, updateDto);

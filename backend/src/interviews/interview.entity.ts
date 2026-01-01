@@ -1,19 +1,28 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  IsString,
+  IsEnum,
+  IsOptional,
+  IsInt,
+  Min,
+  Max,
+  IsDateString,
+} from 'class-validator';
 
-export type InterviewStatus =
-  | 'scheduled'
-  | 'completed'
-  | 'cancelled'
-  | 'pending';
+export enum InterviewStatus {
+  SCHEDULED = 'scheduled',
+  COMPLETED = 'completed',
+  CANCELLED = 'cancelled',
+  PENDING = 'pending',
+}
 
-export type InterviewType =
-  | 'phone'
-  | 'video'
-  | 'onsite'
-  | 'technical'
-  | 'behavioral';
-
-export type InterviewRating = 1 | 2 | 3 | 4 | 5;
+export enum InterviewType {
+  PHONE = 'phone',
+  VIDEO = 'video',
+  ONSITE = 'onsite',
+  TECHNICAL = 'technical',
+  BEHAVIORAL = 'behavioral',
+}
 
 export interface Interview {
   id?: number;
@@ -27,37 +36,108 @@ export interface Interview {
   callLink?: string;
   notes?: string;
   feedback?: string;
-  rating?: InterviewRating;
+  rating?: number;
   followUpDate?: string;
   createdAt: string;
   updatedAt: string;
 }
-export interface CreateInterviewDto {
+
+export class CreateInterviewDto {
+  @IsString()
   company: string;
+
+  @IsString()
   position: string;
+
+  @IsDateString()
   date: string;
+
+  @IsEnum(InterviewStatus)
   status: InterviewStatus;
+
+  @IsEnum(InterviewType)
   type: InterviewType;
+
+  @IsOptional()
+  @IsString()
   interviewer?: string;
+
+  @IsOptional()
+  @IsString()
   location?: string;
+
+  @IsOptional()
+  @IsString()
   callLink?: string;
+
+  @IsOptional()
+  @IsString()
   notes?: string;
+
+  @IsOptional()
+  @IsString()
   feedback?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  @Max(5)
   rating?: number;
+
+  @IsOptional()
+  @IsDateString()
   followUpDate?: string;
 }
-export interface UpdateInterviewDto {
+
+export class UpdateInterviewDto {
+  @IsOptional()
+  @IsString()
   company?: string;
+
+  @IsOptional()
+  @IsString()
   position?: string;
+
+  @IsOptional()
+  @IsDateString()
   date?: string;
+
+  @IsOptional()
+  @IsEnum(InterviewStatus)
   status?: InterviewStatus;
+
+  @IsOptional()
+  @IsEnum(InterviewType)
   type?: InterviewType;
+
+  @IsOptional()
+  @IsString()
   interviewer?: string;
+
+  @IsOptional()
+  @IsString()
   location?: string;
+
+  @IsOptional()
+  @IsString()
   callLink?: string;
+
+  @IsOptional()
+  @IsString()
   notes?: string;
+
+  @IsOptional()
+  @IsString()
   feedback?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  @Max(5)
   rating?: number;
+
+  @IsOptional()
+  @IsDateString()
   followUpDate?: string;
 }
 

@@ -3,7 +3,11 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InterviewRecordsService } from './interviews.records.service';
 import { InterviewRecordEntity } from './interview-record.entity';
-import { InterviewEntity } from './interview.entity';
+import {
+  InterviewEntity,
+  InterviewStatus,
+  InterviewType,
+} from './interview.entity';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 
 describe('InterviewRecordsService', () => {
@@ -47,18 +51,26 @@ describe('InterviewRecordsService', () => {
 
   const interview = (
     overrides: Partial<InterviewEntity> = {},
-  ): InterviewEntity => ({
-    id: 1,
-    userId: 5,
-    company: 'Acme',
-    position: 'Engineer',
-    date: '2024-01-01',
-    status: 'scheduled',
-    type: 'phone',
-    createdAt: '2024-01-01',
-    updatedAt: '2024-01-01',
-    ...overrides,
-  });
+  ): InterviewEntity =>
+    ({
+      id: 1,
+      userId: 5,
+      company: 'Acme',
+      position: 'Engineer',
+      date: '2024-01-01',
+      status: InterviewStatus.SCHEDULED,
+      type: InterviewType.PHONE,
+      interviewer: '',
+      location: '',
+      callLink: '',
+      notes: '',
+      feedback: '',
+      rating: 0,
+      followUpDate: '',
+      createdAt: '2024-01-01',
+      updatedAt: '2024-01-01',
+      ...overrides,
+    }) as InterviewEntity;
 
   const record = (
     overrides: Partial<InterviewRecordEntity> = {},
