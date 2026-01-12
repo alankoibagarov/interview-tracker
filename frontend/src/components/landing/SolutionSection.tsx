@@ -2,7 +2,7 @@ import React from "react";
 import {
   Squares2X2Icon,
   ArrowPathIcon,
-  ChartBarIcon,
+  // ChartBarIcon,
 } from "@heroicons/react/24/outline";
 
 const SolutionSection: React.FC = () => {
@@ -19,12 +19,12 @@ const SolutionSection: React.FC = () => {
       icon: <ArrowPathIcon className="w-8 h-8 text-primary-400" />,
       gradient: "from-slate-800 to-slate-900",
     },
-    {
-      title: "Clear progress signals",
-      description: "See trends instead of guessing. Track your journey with data-driven insights and visual feedback.",
-      icon: <ChartBarIcon className="w-8 h-8 text-primary-400" />,
-      gradient: "from-slate-800 to-slate-900",
-    },
+    // {
+    //   title: "Clear progress signals",
+    //   description: "See trends instead of guessing. Track your journey with data-driven insights and visual feedback.",
+    //   icon: <ChartBarIcon className="w-8 h-8 text-primary-400" />,
+    //   gradient: "from-slate-800 to-slate-900",
+    // },
   ];
 
   return (
@@ -48,7 +48,7 @@ const SolutionSection: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {solutions.map((solution, index) => (
             <div
               key={index}

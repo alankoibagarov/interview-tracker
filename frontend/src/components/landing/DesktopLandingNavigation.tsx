@@ -49,7 +49,7 @@ const DesktopLandingNavigation: React.FC<DesktopLandingNavigationProps> = ({ scr
               }`}
               title="View on GitHub"
             >
-                <GithubIcon />
+                <GithubIcon className="w-6 h-6 fill-current" />
             </a>
             {(
               <Link

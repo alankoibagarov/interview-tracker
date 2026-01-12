@@ -35,7 +35,7 @@ const Home: React.FC = () => {
       <SolutionSection />
 
       {/* Product Section */}
-      <ProductSection />
+      {/* <ProductSection /> */}
 
       {/* Project Context Section */}
       <ProjectContextSection />
