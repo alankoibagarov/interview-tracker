@@ -26,7 +26,7 @@ const Footer: React.FC = () => {
           <h4 className="font-semibold text-lg mb-4 text-slate-100">Connect</h4>
           <div className="flex space-x-4">
              {/* Social placeholders */}
-             <a target='_blank' href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-yellow-400 hover:text-slate-900 transition-all">
+             <a target='_blank' href="https://www.linkedin.com/in/alankoibagarov" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-yellow-400 hover:text-slate-900 transition-all">
                <span className="sr-only">LinkedIn</span>
                <LinkedInIcon className="w-5 h-5 fill-current"/>
              </a>
@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
                <span className="sr-only">GitHub</span>
                <GithubIcon className="w-5 h-5 fill-current"/>
              </a>
-             <a target='_blank' href="https://github.com/alankoibagarov" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-yellow-400 hover:text-slate-900 transition-all">
+             <a target='_blank' href="https://t.me/akoibagarov" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-yellow-400 hover:text-slate-900 transition-all">
                <span className="sr-only">Telegram</span>
                <TelegramIcon className="w-5 h-5 fill-current"/>
              </a>

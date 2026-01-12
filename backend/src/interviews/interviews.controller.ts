@@ -17,7 +17,7 @@ import {
 } from '@nestjs/common';
 import { InterviewsService } from './interviews.service';
 import { InterviewRecordsService } from './interviews.records.service';
-import type {
+import {
   CreateInterviewDto,
   UpdateInterviewDto,
   InterviewEntity,

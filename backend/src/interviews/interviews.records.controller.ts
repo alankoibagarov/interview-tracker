@@ -10,16 +10,15 @@ import {
   UseGuards,
   NotFoundException,
 } from '@nestjs/common';
-import {
-  InterviewRecordsService,
-  type CreateInterviewRecordDto,
-} from './interviews.records.service';
+import * as interviewsRecordsService from './interviews.records.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import type { Request } from 'express';
 
 @Controller('interviews/:interviewId/records')
 export class InterviewRecordsController {
-  constructor(private readonly recordsService: InterviewRecordsService) {}
+  constructor(
+    private readonly recordsService: interviewsRecordsService.InterviewRecordsService,
+  ) {}
 
   @UseGuards(AuthGuard)
   @Get()
@@ -35,7 +34,7 @@ export class InterviewRecordsController {
   @Post()
   async create(
     @Param('interviewId', ParseIntPipe) interviewId: number,
-    @Body() dto: CreateInterviewRecordDto,
+    @Body() dto: interviewsRecordsService.CreateInterviewRecordDto,
     @Req() req: Request & { user: { sub: number; username: string } },
   ) {
     const userId = req.user.sub;
