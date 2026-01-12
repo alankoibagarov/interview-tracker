@@ -6,8 +6,8 @@ import {
   Cog6ToothIcon,
   UserIcon,
   ArrowRightStartOnRectangleIcon,
-  MoonIcon,
-  SunIcon,
+  // MoonIcon,
+  // SunIcon,
 } from "@heroicons/react/24/solid";
 import { authService } from "../services/authApi";
 import SettingsModal from "./SettingsModal";
@@ -151,7 +151,7 @@ const Navigation: React.FC<Props> = ({ type }) => {
             {user && (
               <>
                 <div className="flex gap-3">
-                  {user.themeDarkMode ? (
+                  {/* {user.themeDarkMode ? (
                     <MoonIcon
                       title="Switch to Light Mode"
                       className="h-6 w-6 text-slate-900 dark:text-white cursor-pointer"
@@ -163,7 +163,7 @@ const Navigation: React.FC<Props> = ({ type }) => {
                       className="h-6 w-6 text-slate-900 dark:text-white cursor-pointer"
                       onClick={switchTheme}
                     />
-                  )}
+                  )} */}
                   <Cog6ToothIcon
                     title="Settings"
                     className="h-6 w-6 text-slate-900 dark:text-white cursor-pointer"
@@ -192,7 +192,7 @@ const Navigation: React.FC<Props> = ({ type }) => {
                         {user.username || "User"}
                       </span>
                       <span className="text-xs text-gray-400">
-                        {user.username || ""}
+                        {user.email || ""}
                       </span>
                     </div>
                   </div>
