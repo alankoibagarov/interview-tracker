@@ -5,5 +5,5 @@
     "source.fixAll.eslint": "explicit" // Specifically ESLint
   },
   "eslint.alwaysShowStatus": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode"
+  // "editor.defaultFormatter": "eslint",
 }

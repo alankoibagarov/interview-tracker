@@ -9,7 +9,7 @@ import {
   // MoonIcon,
   // SunIcon,
 } from "@heroicons/react/24/solid";
-import { authService } from "../services/authApi";
+// import { authService } from "../services/authApi";
 import SettingsModal from "./SettingsModal";
 import { useConfirm } from "./ConfirmModal";
 
@@ -46,17 +46,17 @@ const Navigation: React.FC<Props> = ({ type }) => {
     }
   };
 
-  const switchTheme = async () => {
-    if (user) {
-      const res = await authService.setTheme(
-        user.username,
-        !user.themeDarkMode
-      );
-      if (res.statusCode === 200) {
-        await setUser({ ...user, themeDarkMode: !user.themeDarkMode });
-      }
-    }
-  };
+  // const switchTheme = async () => {
+  //   if (user) {
+  //     const res = await authService.setTheme(
+  //       user.username,
+  //       !user.themeDarkMode
+  //     );
+  //     if (res.statusCode === 200) {
+  //       await setUser({ ...user, themeDarkMode: !user.themeDarkMode });
+  //     }
+  //   }
+  // };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,29 +69,25 @@ const Navigation: React.FC<Props> = ({ type }) => {
   return (
     <>
       <nav
-        className={`z-50 transition-colors duration-300 h-[70px] ${
-          type === NavigationType.HOME &&
+        className={`z-50 transition-colors duration-300 h-[70px] ${type === NavigationType.HOME &&
           !scrolled &&
           "w-full flex fixed bg-white/0"
-        }
-      ${
-        scrolled &&
-        "w-full flex fixed bg-white/90 backdrop-blur-md border-b border-slate-300 dark:border-white/20 shadow-lg"
-      }  ${
-          type === NavigationType.DASHBOARD &&
+          }
+      ${scrolled &&
+          "w-full flex fixed bg-white/90 backdrop-blur-md border-b border-slate-300 dark:border-white/20 shadow-lg"
+          }  ${type === NavigationType.DASHBOARD &&
           "bg-white dark:bg-slate-950 backdrop-blur-md border-b border-slate-300 dark:border-white/20 shadow-lg"
-        }`}
+          }`}
       >
         <div className="w-full mx-auto px-5 flex justify-between items-center h-[70px]">
           <div className="flex items-center gap-2">
             <img className="size-[50px]" src="src/assets/logo.svg" alt="Logo" />
             <Link
               to={type === NavigationType.HOME ? "/" : "/interviews"}
-              className={`text-2xl font-bold hover:text-secondary-500 transition-colors duration-300 outline-none ${
-                scrolled
-                  ? "text-white dark:text-slate-950"
-                  : "text-slate-950 dark:text-white"
-              }`}
+              className={`text-2xl font-bold hover:text-secondary-500 transition-colors duration-300 outline-none ${scrolled
+                ? "text-white dark:text-slate-950"
+                : "text-slate-950 dark:text-white"
+                }`}
             >
               Interview Flow
             </Link>
@@ -101,11 +97,10 @@ const Navigation: React.FC<Props> = ({ type }) => {
               href="https://github.com/alankoibagarov/interview-tracker"
               target="_blank"
               rel="noopener noreferrer"
-              className={`p-2 rounded-full transition-colors duration-300 ${
-                scrolled || type === NavigationType.DASHBOARD
-                  ? "text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
-                  : "text-white hover:bg-white/10"
-              }`}
+              className={`p-2 rounded-full transition-colors duration-300 ${scrolled || type === NavigationType.DASHBOARD
+                ? "text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
+                : "text-white hover:bg-white/10"
+                }`}
               title="View on GitHub"
             >
               <svg
@@ -119,11 +114,10 @@ const Navigation: React.FC<Props> = ({ type }) => {
             {type !== NavigationType.DASHBOARD && (
               <Link
                 to="/interviews"
-                className={`px-4 py-2.5 rounded-lg font-medium transition-all duration-300 relative ${
-                  location.pathname === "/interviews"
-                    ? 'text-primary-500 bg-primary-50 font-semibold after:content-[""] after:absolute after:bottom-[-2px] after:left-1/2 after:-translate-x-1/2 after:w-5 after:h-0.5 after:bg-primary-500 after:rounded-sm'
-                    : "text-gray-700 hover:text-primary-500 hover:bg-primary-50"
-                } ${scrolled ? "text-primary-500" : "text-white"}`}
+                className={`px-4 py-2.5 rounded-lg font-medium transition-all duration-300 relative ${location.pathname === "/interviews"
+                  ? 'text-primary-500 bg-primary-50 font-semibold after:content-[""] after:absolute after:bottom-[-2px] after:left-1/2 after:-translate-x-1/2 after:w-5 after:h-0.5 after:bg-primary-500 after:rounded-sm'
+                  : "text-gray-700 hover:text-primary-500 hover:bg-primary-50"
+                  } ${scrolled ? "text-primary-500" : "text-white"}`}
               >
                 Dashboard
               </Link>
@@ -133,15 +127,13 @@ const Navigation: React.FC<Props> = ({ type }) => {
             {!user && (
               <Link
                 to="/login"
-                className={`px-4 py-2.5 rounded-lg font-medium transition-all duration-300 relative ${
-                  location.pathname === "/login"
-                    ? 'text-primary-500 bg-primary-50 font-semibold after:content-[""] after:absolute after:bottom-[-2px] after:left-1/2 after:-translate-x-1/2 after:w-5 after:h-0.5 after:bg-primary-500 after:rounded-sm'
-                    : "text-gray-700 hover:text-primary-500 hover:bg-primary-50"
-                } ${
-                  scrolled || type === NavigationType.DASHBOARD
+                className={`px-4 py-2.5 rounded-lg font-medium transition-all duration-300 relative ${location.pathname === "/login"
+                  ? 'text-primary-500 bg-primary-50 font-semibold after:content-[""] after:absolute after:bottom-[-2px] after:left-1/2 after:-translate-x-1/2 after:w-5 after:h-0.5 after:bg-primary-500 after:rounded-sm'
+                  : "text-gray-700 hover:text-primary-500 hover:bg-primary-50"
+                  } ${scrolled || type === NavigationType.DASHBOARD
                     ? "text-primary-500"
                     : "text-white"
-                }`}
+                  }`}
               >
                 Login
               </Link>

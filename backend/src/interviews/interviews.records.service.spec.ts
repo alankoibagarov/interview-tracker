@@ -15,14 +15,14 @@ describe('InterviewRecordsService', () => {
   let recordRepo: jest.Mocked<Repository<InterviewRecordEntity>>;
   let interviewRepo: jest.Mocked<Repository<InterviewEntity>>;
 
-  const createRepoMock = <T extends object>() =>
+  const createRepoMock = () =>
     ({
       find: jest.fn(),
       findOne: jest.fn(),
       create: jest.fn(),
       save: jest.fn(),
       delete: jest.fn(),
-    }) as jest.Mocked<Repository<T>>;
+    }) as any;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -30,11 +30,11 @@ describe('InterviewRecordsService', () => {
         InterviewRecordsService,
         {
           provide: getRepositoryToken(InterviewRecordEntity),
-          useValue: createRepoMock<InterviewRecordEntity>(),
+          useValue: createRepoMock(),
         },
         {
           provide: getRepositoryToken(InterviewEntity),
-          useValue: createRepoMock<InterviewEntity>(),
+          useValue: createRepoMock(),
         },
       ],
     }).compile();
@@ -70,20 +70,21 @@ describe('InterviewRecordsService', () => {
       createdAt: '2024-01-01',
       updatedAt: '2024-01-01',
       ...overrides,
-    }) as InterviewEntity;
+    }) as any;
 
   const record = (
     overrides: Partial<InterviewRecordEntity> = {},
-  ): InterviewRecordEntity => ({
-    id: 1,
-    interviewId: 1,
-    userId: 5,
-    type: 'note',
-    message: 'hello',
-    metadata: null,
-    createdAt: '2024-01-01',
-    ...overrides,
-  });
+  ): InterviewRecordEntity =>
+    ({
+      id: 1,
+      interviewId: 1,
+      userId: 5,
+      type: 'note',
+      message: 'hello',
+      metadata: null,
+      createdAt: '2024-01-01',
+      ...overrides,
+    }) as any;
 
   it('create saves record when user owns interview', async () => {
     interviewRepo.findOne.mockResolvedValue(interview());
@@ -96,7 +97,7 @@ describe('InterviewRecordsService', () => {
       message: 'Progress',
       metadata: { mood: 'good' },
     };
-    const result = await service.create(1, 5, dto);
+    const result = await service.create(1, 5, dto as any);
 
     expect(recordRepo.create).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -117,7 +118,7 @@ describe('InterviewRecordsService', () => {
     recordRepo.create.mockReturnValue(record());
     recordRepo.save.mockResolvedValue(record());
 
-    await service.create(1, 5, { type: 'note' });
+    await service.create(1, 5, { type: 'note' } as any);
 
     expect(recordRepo.create).toHaveBeenCalledWith(
       expect.objectContaining({

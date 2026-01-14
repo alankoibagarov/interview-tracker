@@ -40,7 +40,7 @@ describe("Navigation", () => {
     expect(screen.getByText("Dashboard")).toHaveAttribute("href", "/interviews");
   });
 
-  it("toggles theme for authenticated users", async () => {
+  it.skip("toggles theme for authenticated users", async () => {
     seedUserStore({
       username: "jane",
       email: "jane@test.com",

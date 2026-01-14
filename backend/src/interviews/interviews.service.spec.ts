@@ -23,7 +23,7 @@ describe('InterviewsService', () => {
       delete: jest.fn(),
       findBy: jest.fn(),
       createQueryBuilder: jest.fn(),
-    }) as jest.Mocked<Repository<InterviewEntity>>;
+    }) as any;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -64,7 +64,7 @@ describe('InterviewsService', () => {
       createdAt: '2024-01-01T00:00:00.000Z',
       updatedAt: '2024-01-01T00:00:00.000Z',
       ...overrides,
-    }) as InterviewEntity;
+    }) as any;
 
   it('findAll returns interviews filtered by user', async () => {
     const interviews = [sampleInterview()];

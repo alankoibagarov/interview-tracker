@@ -44,9 +44,8 @@ const ProductSection: React.FC = () => {
           {products.map((product, index) => (
             <div
               key={index}
-              className={`flex flex-col ${
-                index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
-              } gap-12 items-center`}
+              className={`flex flex-col ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
+                } gap-12 items-center`}
             >
               <div className="w-full lg:w-3/5">
                 <div className="relative group">

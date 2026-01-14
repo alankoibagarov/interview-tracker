@@ -3,7 +3,7 @@ import Footer from "../components/Footer";
 import HeroSection from "../components/landing/HeroSection";
 import ProblemSection from "../components/landing/ProblemSection";
 import SolutionSection from "../components/landing/SolutionSection";
-import ProductSection from "../components/landing/ProductSection";
+// import ProductSection from "../components/landing/ProductSection";
 import ProjectContextSection from "../components/landing/ProjectContextSection";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../store/userStore";

@@ -43,8 +43,8 @@ const Navigation: React.FC = () => {
 
   return (
     <>
-        <DesktopLandingNavigation scrolled={scrolled} user={user} logout={logout} />
-        <MobileLandingNavigation scrolled={scrolled} user={user} logout={logout} />
+      <DesktopLandingNavigation scrolled={scrolled} user={user} logout={logout} />
+      <MobileLandingNavigation scrolled={scrolled} user={user} logout={logout} />
     </>
   );
 };
